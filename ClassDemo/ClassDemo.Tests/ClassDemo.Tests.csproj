@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ewu\2024\WINTER\CSCD371\assn\ClassDemo\ClassDemo\ClassDemo.csproj" />
+  </ItemGroup>
+
 </Project>
