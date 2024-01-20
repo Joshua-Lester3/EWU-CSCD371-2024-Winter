@@ -4,18 +4,25 @@ namespace Logger;
 
 public class LogFactory
 {
-    public void ConfigureFileLogger(string v)
+    private string _FilePath;
+    public void ConfigureFileLogger(string filePath)
     {
-        throw new NotImplementedException();
+        _FilePath = filePath;
     }
 
-    public BaseLogger CreateLogger(string className)
+    public BaseLogger? CreateLogger(string className)
     {
-        //BaseLogger logger = new FileLogger()
-        //{
-        //    ClassName = className
-        //};
-        //return logger;
-        throw new NotImplementedException();
+        if (_FilePath == null)
+        {
+            return null;
+        } else
+        {
+            BaseLogger logger = new FileLogger()
+            {
+               ClassName = className,
+               FilePath = _FilePath
+            };
+            return logger;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.IO;
 
 namespace Logger.Tests;
 
@@ -18,6 +19,18 @@ public class LogFactoryTests
     [TestMethod]
     public void CreateLogger_FilePathExists_WritesToFile()
     {
+        string filePath = Path.Combine(Environment.CurrentDirectory, "Text.txt");
+        LogFactory logFactory = new LogFactory();
+        logFactory.ConfigureFileLogger(filePath);
+        BaseLogger fileLogger = logFactory.CreateLogger("Jeff");
+        bool containsExpectedOutput = FileLoggerTests.DoesLoggerLog(fileLogger, filePath, "hi Jim!");
+        Assert.IsTrue(containsExpectedOutput);
+    }
 
+    [TestMethod]
+    public void CreateLogger_DidNotCallConfigureFileLogger_ReturnsNull()
+    {
+        LogFactory logFactory = new LogFactory();
+        Assert.IsNull(logFactory.CreateLogger("Jeff!"));
     }
 }

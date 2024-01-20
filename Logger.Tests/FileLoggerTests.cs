@@ -36,7 +36,7 @@ public class FileLoggerTests
         };
 
         // Act
-        bool containsExpectedOutput = FileLoggerTests.DoesFileLoggerLog(fileLogger, path, loggedString);
+        bool containsExpectedOutput = FileLoggerTests.DoesLoggerLog(fileLogger, path, loggedString);
 
         // Assert
         Assert.IsTrue(containsExpectedOutput);
@@ -54,7 +54,7 @@ public class FileLoggerTests
         };
 
         // Act
-        bool containsExpectedOutput = FileLoggerTests.DoesFileLoggerLog(fileLogger, path, "hi");
+        bool containsExpectedOutput = FileLoggerTests.DoesLoggerLog(fileLogger, path, "hi");
 
         // Assert
         Assert.IsTrue(containsExpectedOutput);
@@ -62,7 +62,7 @@ public class FileLoggerTests
 
     // DoesFileLoggerLog is a public, static method to reduce repeated code
     // across FileLoggerTests.cs and LogFactoryTests.cs
-    public static bool DoesFileLoggerLog(FileLogger fileLogger, string filePath, string message)
+    public static bool DoesLoggerLog(BaseLogger fileLogger, string filePath, string message)
     {
         // Act
         fileLogger.Log(LogLevel.Information, message);
