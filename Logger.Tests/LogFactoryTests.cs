@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Logger.Tests;
 
@@ -9,7 +10,14 @@ public class LogFactoryTests
     public void CreateLogger_NonNullInputString_ReturnsBaseLogger()
     {
         LogFactory logFactory = new LogFactory();
+        logFactory.ConfigureFileLogger(Environment.CurrentDirectory + "Text.txt");
         BaseLogger logger = logFactory.CreateLogger("Jeff");
         Assert.IsTrue(logger is BaseLogger);
+    }
+
+    [TestMethod]
+    public void CreateLogger_FilePathExists_WritesToFile()
+    {
+
     }
 }

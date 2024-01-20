@@ -7,21 +7,20 @@ public class FileLogger : BaseLogger
 {
     public string FilePath
     {
-        get => _FilePath;
-        set
+        init
         {
             _FilePath = value;
             if (!File.Exists(value))
             {
-                File.Create(value);
+                File.Create(value).Dispose();
             }
         }
     }
-    private string _FilePath;
+    private readonly string _FilePath;
     public override void Log(LogLevel logLevel, string message)
     {
-        string output = DateTime.Now.ToString();
+        string output = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
         output += " " + ClassName + " " + logLevel + ": " + message;
-        File.WriteAllText(FilePath, Environment.NewLine + output);
+        File.AppendAllText(_FilePath, Environment.NewLine + output);
     }
 }
