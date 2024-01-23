@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿#nullable enable
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 
@@ -15,7 +17,7 @@ public class LogFactoryTests
         logFactory.ConfigureFileLogger(Environment.CurrentDirectory + "Text.txt");
 
         // Act
-        BaseLogger logger = logFactory.CreateLogger("Jeff");
+        BaseLogger? logger = logFactory.CreateLogger("Jeff");
 
         // Assert
         Assert.IsTrue(logger is BaseLogger);
@@ -30,7 +32,7 @@ public class LogFactoryTests
         logFactory.ConfigureFileLogger(filePath);
 
         // Act
-        BaseLogger fileLogger = logFactory.CreateLogger("Jeff");
+        BaseLogger? fileLogger = logFactory.CreateLogger("Jeff");
 
         // Assert
         bool containsExpectedOutput = FileLoggerTests.DoesLoggerLog(fileLogger, filePath, "hi Jim!");
