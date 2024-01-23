@@ -7,7 +7,7 @@ namespace Logger;
 public class LogFactory
 {
     private string? _FilePath;
-    public void ConfigureFileLogger(string filePath)
+    public void ConfigureFileLogger(string? filePath)
     {
         ArgumentNullException.ThrowIfNull(nameof(filePath));
         _FilePath = filePath;

@@ -11,7 +11,7 @@ public class LogFactoryTests
     public void CreateLogger_NonNullInputString_ReturnsBaseLogger()
     {
         // Arrange
-        LogFactory logFactory = new LogFactory();
+        LogFactory logFactory = new();
         logFactory.ConfigureFileLogger(Environment.CurrentDirectory + "Text.txt");
 
         // Act
@@ -26,7 +26,7 @@ public class LogFactoryTests
     {
         // Arrange
         string filePath = Path.Combine(Environment.CurrentDirectory, "Text.txt");
-        LogFactory logFactory = new LogFactory();
+        LogFactory logFactory = new();
         logFactory.ConfigureFileLogger(filePath);
 
         // Act
@@ -41,7 +41,7 @@ public class LogFactoryTests
     public void CreateLogger_DidNotCallConfigureFileLogger_ReturnsNull()
     {
         // Arrange
-        LogFactory logFactory = new LogFactory();
+        LogFactory logFactory = new();
 
         // Act
 
@@ -54,7 +54,7 @@ public class LogFactoryTests
     public void ConfigureLogger_FilePathNull_ThrowException()
     {
         // Arrange
-        LogFactory factory = new LogFactory();
+        LogFactory factory = new();
 
         // Act
         factory.ConfigureFileLogger(null);
