@@ -26,10 +26,7 @@ public static class BaseLoggerMixins
 
     private static void LogHelper(BaseLogger logger, LogLevel level, string message, params string[] messages)
     {
-        if (logger == null)
-        {
-            throw new ArgumentNullException(nameof(logger));
-        }
+        ArgumentNullException.ThrowIfNull(nameof(logger));
         string fullMessage = message;
         foreach (string element in messages)
         {
