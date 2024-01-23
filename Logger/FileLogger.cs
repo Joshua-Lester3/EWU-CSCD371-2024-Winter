@@ -1,10 +1,12 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.IO;
 
 namespace Logger;
 
 public class FileLogger : BaseLogger
 {
+
     public string FilePath
     {
         init
@@ -16,11 +18,11 @@ public class FileLogger : BaseLogger
             }
         }
     }
-    private readonly string _FilePath;
+    private readonly string? _FilePath;
     public override void Log(LogLevel logLevel, string message)
     {
         string output = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
         output += " " + nameof(FileLogger) + " " + logLevel + ": " + message;
-        File.AppendAllText(_FilePath, Environment.NewLine + output);
+        File.AppendAllText(_FilePath!, Environment.NewLine + output);
     }
 }

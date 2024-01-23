@@ -6,47 +6,25 @@ public static class BaseLoggerMixins
 {
     public static void Error(this BaseLogger logger, string message, params string[] messages)
     {
-        if (logger == null)
-        {
-            throw new ArgumentNullException(nameof(logger));
-        }
-        string fullMessage = message;
-        foreach (string element in messages) 
-        {
-            fullMessage += $" {element}";
-        }
-        logger.Log(LogLevel.Error, fullMessage);
+        LogHelper(logger, LogLevel.Error, message, messages);
     }
 
     public static void Warning(this BaseLogger logger, string message, params string[] messages)
     {
-        if (logger == null)
-        {
-            throw new ArgumentNullException(nameof(logger));
-        }
-        string fullMessage = message;
-        foreach (string element in messages)
-        {
-            fullMessage += $" {element}";
-        }
-        logger.Log(LogLevel.Warning, fullMessage);
+        LogHelper(logger, LogLevel.Warning, message, messages);
     }
 
     public static void Information(this BaseLogger logger, string message, params string[] messages)
     {
-        if (logger == null)
-        {
-            throw new ArgumentNullException(nameof(logger));
-        }
-        string fullMessage = message;
-        foreach (string element in messages)
-        {
-            fullMessage += $" {element}";
-        }
-        logger.Log(LogLevel.Information, fullMessage);
+        LogHelper(logger, LogLevel.Information, message, messages);
     }
 
     public static void Debug(this BaseLogger logger, string message, params string[] messages)
+    {
+        LogHelper(logger, LogLevel.Debug, message, messages);
+    }
+
+    private static void LogHelper(BaseLogger logger, LogLevel level, string message, params string[] messages)
     {
         if (logger == null)
         {
@@ -57,6 +35,6 @@ public static class BaseLoggerMixins
         {
             fullMessage += $" {element}";
         }
-        logger.Log(LogLevel.Debug, fullMessage);
+        logger.Log(level, fullMessage);
     }
 }
