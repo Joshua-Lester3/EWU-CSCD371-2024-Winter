@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
+﻿using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Globalization;
