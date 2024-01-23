@@ -9,7 +9,7 @@ public class LogFactory
     private string? _FilePath;
     public void ConfigureFileLogger(string? filePath)
     {
-        ArgumentNullException.ThrowIfNull(nameof(filePath));
+        ArgumentNullException.ThrowIfNull(filePath);
         _FilePath = filePath;
     }
 
