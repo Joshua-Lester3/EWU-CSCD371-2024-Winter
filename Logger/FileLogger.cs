@@ -20,7 +20,7 @@ public class FileLogger : BaseLogger
     public override void Log(LogLevel logLevel, string message)
     {
         string output = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
-        output += " " + ClassName + " " + logLevel + ": " + message;
+        output += " " + nameof(FileLogger) + " " + logLevel + ": " + message;
         File.AppendAllText(_FilePath, Environment.NewLine + output);
     }
 }

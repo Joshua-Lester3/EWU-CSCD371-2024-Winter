@@ -1,12 +1,18 @@
-﻿using System;
+﻿#nullable enable
+using System;
+using System.IO;
 
 namespace Logger;
 
 public class LogFactory
 {
-    private string _FilePath;
+    private string? _FilePath;
     public void ConfigureFileLogger(string filePath)
     {
+        if (filePath is null)
+        {
+            throw new ArgumentNullException("filePath is null");
+        }
         _FilePath = filePath;
     }
 
