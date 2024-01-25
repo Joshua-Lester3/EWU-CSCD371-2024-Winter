@@ -5,6 +5,10 @@ namespace Logger;
 
 public class LogFactory
 {
+    public LogFactory(string? filePath)
+    {
+        _FilePath = filePath;
+    }
     private string? _FilePath;
     public void ConfigureFileLogger(string? filePath)
     {
@@ -14,7 +18,8 @@ public class LogFactory
 
     public BaseLogger? CreateLogger(string className)
     {
-        if (_FilePath == null)
+        ConfigureFileLogger(_FilePath);
+        if (_FilePath == null || _FilePath == "")
         {
             return null;
         } else
