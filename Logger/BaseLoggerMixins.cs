@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Logger;
 
@@ -27,7 +28,7 @@ public static class BaseLoggerMixins
     private static void LogHelper(BaseLogger? logger, LogLevel level, string message, params object[] args)
     {
         ArgumentNullException.ThrowIfNull(logger);
-        string fullMessage = string.Format(message, args);
+        string fullMessage = string.Format(CultureInfo.CurrentCulture, message, args);
         logger?.Log(level, fullMessage);
     }
 }
