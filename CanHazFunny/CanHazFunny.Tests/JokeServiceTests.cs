@@ -14,12 +14,22 @@ namespace CanHazFunny.Tests
         }
 
         [TestMethod]
-        public void GetJoke_NormalConditions_ReturnsNonEmptyArray()
+        public void GetJoke_NormalConditions_ReturnsNonEmptyString()
         {
-            Assert.AreEqual("hi", _JokeService!.GetJoke());
             Assert.IsTrue(_JokeService!.GetJoke().Length > 0);
         }
 
+        [TestMethod]
+        public void GetJoke_AssignedToIJokeable_ReturnsNonEmptyString()
+        {
+            // Arrange
+            IJokeable jokeable = new JokeService();
 
+            // Act
+            string joke = jokeable.GetJoke();
+
+            // Assert
+            Assert.IsTrue(joke.Length > 0);
+        }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System.Net.Http;
+using CanHazFunny.Tests;
 
 namespace CanHazFunny
 {
-    public class JokeService
+    public class JokeService : IJokeable
     {
         private HttpClient HttpClient { get; } = new();
 
