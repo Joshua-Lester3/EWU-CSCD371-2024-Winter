@@ -1,5 +1,4 @@
 ﻿using System.Net.Http;
-using CanHazFunny.Tests;
 
 namespace CanHazFunny
 {

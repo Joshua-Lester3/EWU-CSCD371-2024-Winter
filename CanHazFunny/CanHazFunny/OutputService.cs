@@ -2,7 +2,7 @@
 
 namespace CanHazFunny
 {
-    public class OutputService
+    public class OutputService : IOutputable
     {
         public void Output(string message)
         {

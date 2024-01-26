@@ -26,7 +26,7 @@ namespace CanHazFunny.Tests
         }
 
         [TestMethod]
-        public void Output_PassInNonNullString_PrintsStringToConsole()
+        public void Output_PassInNonNullString_PrintsStringToOut()
         {
             // Arrange
 
@@ -46,6 +46,19 @@ namespace CanHazFunny.Tests
 
             // Assert
             Assert.ThrowsException<ArgumentNullException>(() => _Service!.Output(null!));
+        }
+
+        [TestMethod]
+        public void Output_AssignedToIOutputable_PrintsStringToOut()
+        {
+            // Arrange
+            IOutputable outable = _Service!;
+
+            // Act
+            outable.Output("Hello Jeff!");
+
+            // Assert
+            Assert.AreEqual("Hello Jeff!", _NewOut!.ToString());
         }
     }
 }

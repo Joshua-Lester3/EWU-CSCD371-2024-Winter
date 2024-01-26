@@ -1,4 +1,4 @@
-﻿namespace CanHazFunny.Tests
+﻿namespace CanHazFunny
 {
     public interface IJokeable
     {
