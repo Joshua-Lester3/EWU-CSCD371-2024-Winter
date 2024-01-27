@@ -1,28 +1,31 @@
 using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace CanHazFunny.Tests
 {
     [TestClass]
     public class JesterTests
     {
-        private IOutputable? _Outputable {  get; set; }
-        private IJokeable? _Jokeable { get; set; }
+        private Mock<IOutputable> _Outputable {  get; set; }
+        private Mock<IJokeable> _Jokeable { get; set; }
+        private TextWriter? _OldOut;
+        private StringWriter? _NewOut;
+        private OutputService? _Service;
 
-        [TestInitialize] public void Init()
+        public JesterTests()
         {
-            _Outputable = new OutputService();
-            _Jokeable = new JokeService();
+            _Outputable = new Mock<IOutputable>();
+            _Jokeable = new Mock<IJokeable>();
         }
 
         [TestMethod]
         public void JesterConstructor_NonNullParams_DoesNotThrowException()
         {
-            IOutputable outputable = new OutputService();
-            IJokeable jokeable = new JokeService();
             try
             {
-                Jester jester = new(outputable, jokeable);
+                Jester jester = new(_Outputable.Object, _Jokeable.Object);
             } catch (ArgumentNullException ex)
             {
                 Assert.Fail(ex.Message);
@@ -33,13 +36,24 @@ namespace CanHazFunny.Tests
         [TestMethod]
         public void JesterConstructor_NullIOutputable_ThrowsArgumentNullException()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => { Jester jester = new(null!, new JokeService()); });
+            Assert.ThrowsException<ArgumentNullException>(() => { Jester jester = new(null!, _Jokeable.Object); });
         }
 
         [TestMethod]
         public void JesterConstructor_NullIJokeable_ThrowsArgumentNullException()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => { Jester jester = new(new OutputService(), null!); });
+            Assert.ThrowsException<ArgumentNullException>(() => { Jester jester = new(_Outputable.Object, null!); });
         }
+
+        //[TestMethod]
+        //public void TellJoke_DoesNotContainChuckNorris_PrintsJoke()
+        //{
+        //    _Jokeable
+        //        .Setup(x => x.GetJoke())
+        //        .Returns("haha funny joke");
+
+        //    Jester jester = new Jester(_Outputable.Object, _Jokeable.Object);
+        //    Assert.IsTrue("haha funny joke", )
+        //}
     }
 }

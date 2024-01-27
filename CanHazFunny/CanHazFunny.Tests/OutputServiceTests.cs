@@ -10,7 +10,9 @@ namespace CanHazFunny.Tests
         private TextWriter? _OldOut;
         private StringWriter? _NewOut;
         private OutputService? _Service;
-        [TestInitialize] public void Init() 
+
+        [TestInitialize]
+        public void Init()
         {
             _OldOut = Console.Out;
             _NewOut = new StringWriter();
@@ -19,7 +21,8 @@ namespace CanHazFunny.Tests
             _Service = new OutputService();
         }
 
-        [TestCleanup] public void Cleanup()
+        [TestCleanup]
+        public void Cleanup()
         {
             Console.SetOut(_OldOut!);
             Console.SetError(_OldOut!);
