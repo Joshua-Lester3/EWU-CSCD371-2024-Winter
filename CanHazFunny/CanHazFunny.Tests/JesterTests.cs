@@ -95,6 +95,7 @@ public class JesterTests : IDisposable
 
     private void SetOut()
     {
+        ObjectDisposedException.ThrowIf(_Disposed, _NewOut!);
         _OldOut = Console.Out;
         _NewOut = new StringWriter();
         Console.SetOut(_NewOut);

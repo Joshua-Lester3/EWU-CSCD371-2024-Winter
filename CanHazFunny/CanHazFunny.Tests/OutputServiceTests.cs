@@ -15,10 +15,7 @@ public class OutputServiceTests : IDisposable
     [TestInitialize]
     public void Init()
     {
-        if (_Disposed)
-        {
-            throw new ObjectDisposedException(nameof(_NewOut));
-        }
+        ObjectDisposedException.ThrowIf(_Disposed, _NewOut!);
         _OldOut = Console.Out;
         _NewOut = new StringWriter();
         Console.SetOut(_NewOut);
@@ -73,7 +70,7 @@ public class OutputServiceTests : IDisposable
     [TestMethod]
     public void Output_PassInNonNullValue_ReturnsTrue()
     {
-        OutputService service = new OutputService();
+        OutputService service = new();
         bool result = service.Output("hi");
         Assert.IsTrue(result);
     }
