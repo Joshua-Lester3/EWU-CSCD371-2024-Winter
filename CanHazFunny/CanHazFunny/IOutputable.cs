@@ -2,6 +2,6 @@
 {
     public interface IOutputable
     {
-        public void Output(string message);
+        public bool Output(string message);
     }
 }

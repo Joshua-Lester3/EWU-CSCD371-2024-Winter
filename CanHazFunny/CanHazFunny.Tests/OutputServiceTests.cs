@@ -34,10 +34,10 @@ namespace CanHazFunny.Tests
             // Arrange
 
             // Act
-            _Service!.Output("Hello Jeff!");
+            bool result = _Service!.Output("Hello Jeff!");
 
             // Assert
-            Assert.AreEqual("Hello Jeff!", _NewOut!.ToString());
+            Assert.AreEqual<string>("Hello Jeff!", _NewOut!.ToString());
         }
 
         [TestMethod]
@@ -61,7 +61,15 @@ namespace CanHazFunny.Tests
             outable.Output("Hello Jeff!");
 
             // Assert
-            Assert.AreEqual("Hello Jeff!", _NewOut!.ToString());
+            Assert.AreEqual<string>("Hello Jeff!", _NewOut!.ToString());
+        }
+
+        [TestMethod]
+        public void Output_PassInNonNullValue_ReturnsTrue()
+        {
+            IOutputable outputable = new OutputService();
+            bool result = outputable.Output("hi");
+            Assert.IsTrue(result);
         }
     }
 }

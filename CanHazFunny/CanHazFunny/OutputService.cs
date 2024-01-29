@@ -4,10 +4,11 @@ namespace CanHazFunny
 {
     public class OutputService : IOutputable
     {
-        public void Output(string message)
+        public bool Output(string message)
         {
             ArgumentNullException.ThrowIfNull(message);
             Console.Write(message);
+            return true;
         }
     }
 }

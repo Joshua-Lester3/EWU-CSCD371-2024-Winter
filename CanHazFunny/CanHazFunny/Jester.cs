@@ -13,5 +13,15 @@ namespace CanHazFunny
             this.outputable = outputable;
             this.jokeable = jokeable;
         }
+
+        public void TellJoke()
+        {
+            string joke;
+            do
+            {
+                joke = jokeable.GetJoke();
+            } while (joke.ToLower().Contains("chuck norris"));
+            outputable.Output(joke);
+        }
     }
 }
