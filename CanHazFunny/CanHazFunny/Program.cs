@@ -1,13 +1,12 @@
 using System;
 
-namespace CanHazFunny
+namespace CanHazFunny;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Jester jester = new Jester(new OutputService(), new JokeService());
-            jester.TellJoke();
-        }
+        Jester jester = new(new OutputService(), new JokeService());
+        jester.TellJoke();
     }
 }

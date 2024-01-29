@@ -1,7 +1,6 @@
-﻿namespace CanHazFunny
+﻿namespace CanHazFunny;
+
+public class JSONRoot
 {
-    public class JSONRoot
-    {
-        public string? Joke { get; set; }
-    }
+    public string? Joke { get; set; }
 }
