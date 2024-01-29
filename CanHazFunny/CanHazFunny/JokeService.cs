@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace CanHazFunny
 {
@@ -8,8 +10,9 @@ namespace CanHazFunny
 
         public string GetJoke()
         {
-            string joke = HttpClient.GetStringAsync("https://geek-jokes.sameerkumar.website/api").Result;
-            return joke;
+            string joke = HttpClient.GetStringAsync("https://geek-jokes.sameerkumar.website/api?format=json").Result;
+            JSONRoot? root = JsonConvert.DeserializeObject<JSONRoot>(joke);
+            return root?.Joke ?? throw new ArgumentNullException(nameof(root));
         }
     }
 }

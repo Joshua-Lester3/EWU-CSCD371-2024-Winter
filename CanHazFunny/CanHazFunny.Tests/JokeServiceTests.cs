@@ -5,31 +5,31 @@ namespace CanHazFunny.Tests
     [TestClass]
     public class JokeServiceTests
     {
-        private JokeService? _JokeService;
+        private IJokeable? _Jokeable;
 
         [TestInitialize]
         public void Initialize()
         {
-            _JokeService = new();
+            _Jokeable = new JokeService();
         }
 
         [TestMethod]
         public void GetJoke_NormalConditions_ReturnsNonEmptyString()
         {
-            Assert.IsTrue(_JokeService!.GetJoke().Length > 0);
+            Assert.IsTrue(_Jokeable!.GetJoke().Length > 0);
         }
 
         [TestMethod]
         public void GetJoke_AssignedToIJokeable_ReturnsNonEmptyString()
         {
             // Arrange
-            IJokeable jokeable = new JokeService();
 
             // Act
-            string joke = jokeable.GetJoke();
+            string joke = _Jokeable!.GetJoke();
 
             // Assert
             Assert.IsTrue(joke.Length > 0);
+            Assert.AreEqual("hi", joke);
         }
     }
 }
