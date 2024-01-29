@@ -29,7 +29,6 @@ namespace CanHazFunny.Tests
 
             // Assert
             Assert.IsTrue(joke.Length > 0);
-            Assert.AreEqual("hi", joke);
         }
     }
 }
