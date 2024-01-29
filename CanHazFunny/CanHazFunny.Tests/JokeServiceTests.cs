@@ -5,7 +5,7 @@ namespace CanHazFunny.Tests;
 [TestClass]
 public class JokeServiceTests
 {
-    private IJokeable? _Jokeable;
+    private JokeService? _Jokeable;
 
     [TestInitialize]
     public void Initialize()

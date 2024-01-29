@@ -5,15 +5,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CanHazFunny.Tests;
 
 [TestClass]
-public class OutputServiceTests
+public class OutputServiceTests : IDisposable
 {
     private TextWriter? _OldOut;
     private StringWriter? _NewOut;
     private OutputService? _Service;
+    private bool _Disposed;
 
     [TestInitialize]
     public void Init()
     {
+        if (_Disposed)
+        {
+            throw new ObjectDisposedException(nameof(_NewOut));
+        }
         _OldOut = Console.Out;
         _NewOut = new StringWriter();
         Console.SetOut(_NewOut);
@@ -26,6 +31,7 @@ public class OutputServiceTests
     {
         Console.SetOut(_OldOut!);
         Console.SetError(_OldOut!);
+        Dispose();
     }
 
     [TestMethod]
@@ -55,10 +61,10 @@ public class OutputServiceTests
     public void Output_AssignedToIOutputable_PrintsStringToOut()
     {
         // Arrange
-        IOutputable outable = _Service!;
+        OutputService service = _Service!;
 
         // Act
-        outable.Output("Hello Jeff!");
+        service.Output("Hello Jeff!");
 
         // Assert
         Assert.AreEqual<string>("Hello Jeff!", _NewOut!.ToString());
@@ -67,8 +73,31 @@ public class OutputServiceTests
     [TestMethod]
     public void Output_PassInNonNullValue_ReturnsTrue()
     {
-        IOutputable outputable = new OutputService();
-        bool result = outputable.Output("hi");
+        OutputService service = new OutputService();
+        bool result = service.Output("hi");
         Assert.IsTrue(result);
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_Disposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            if (_NewOut != null)
+            {
+                _NewOut.Dispose();
+            }
+            _Disposed = true;
+        }
     }
 }

@@ -6,13 +6,14 @@ using Moq;
 namespace CanHazFunny.Tests;
 
 [TestClass]
-public class JesterTests
+public class JesterTests : IDisposable
 {
     private Mock<IOutputable> _Outputable { get; set; }
     private Mock<IJokeable> _Jokeable { get; set; }
     private TextWriter? _OldOut;
     private StringWriter? _NewOut;
-    private static int _Counter = 0;
+    private static int _Counter;
+    private bool _Disposed;
 
     public JesterTests()
     {
@@ -54,7 +55,7 @@ public class JesterTests
             .Setup(x => x.GetJoke())
             .Returns("haha funny joke");
 
-        Jester jester = new Jester(new OutputService(), _Jokeable.Object);
+        Jester jester = new(new OutputService(), _Jokeable.Object);
         jester.TellJoke();
         Assert.AreEqual<string>("haha funny joke", _NewOut!.ToString());
         ResetOut();
@@ -86,7 +87,7 @@ public class JesterTests
                 return true;
             });
 
-        Jester jester = new Jester(_Outputable.Object, _Jokeable.Object);
+        Jester jester = new(_Outputable.Object, _Jokeable.Object);
         jester.TellJoke();
         Assert.AreEqual<string>("haha funny joke", _NewOut!.ToString());
         ResetOut();
@@ -104,5 +105,29 @@ public class JesterTests
     {
         Console.SetOut(_OldOut!);
         Console.SetError(_OldOut!);
+        Dispose();
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_Disposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            if (_NewOut != null)
+            {
+                _NewOut.Dispose();
+            }
+            _Disposed = true;
+        }
     }
 }
