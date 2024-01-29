@@ -16,12 +16,13 @@ namespace CanHazFunny
 
         public void TellJoke()
         {
-            string joke;
+            string newJoke;
             do
             {
-                joke = jokeable.GetJoke();
-            } while (joke.ToLower().Contains("chuck norris"));
-            outputable.Output(joke);
+                newJoke = jokeable.GetJoke();
+            } while (newJoke.ToLower().Contains("chuck norris"));
+            outputable.Output(newJoke);
+
         }
     }
 }
