@@ -7,27 +7,31 @@ namespace CanHazFunny.Tests;
 [TestClass]
 public class OutputServiceTests : IDisposable
 {
-    private TextWriter? _OldOut;
-    private StringWriter? _NewOut;
-    private OutputService? _Service;
-    private bool _Disposed;
+    // We know OldOut and NewOut will not be null when used because they are set
+    // in the beginning of every test that utilizes them
+    #pragma warning disable CS8618
+    private TextWriter OldOut { get; set; }
+    private StringWriter NewOut { get; set; }
+    private OutputService Service { get; set; }
+    private bool Disposed { get; set; }
+    #pragma warning restore CS8618
 
     [TestInitialize]
     public void Init()
     {
-        ObjectDisposedException.ThrowIf(_Disposed, _NewOut!);
-        _OldOut = Console.Out;
-        _NewOut = new StringWriter();
-        Console.SetOut(_NewOut);
-        Console.SetError(_NewOut);
-        _Service = new OutputService();
+        ObjectDisposedException.ThrowIf(Disposed, NewOut!);
+        OldOut = Console.Out;
+        NewOut = new StringWriter();
+        Console.SetOut(NewOut);
+        Console.SetError(NewOut);
+        Service = new OutputService();
     }
 
     [TestCleanup]
     public void Cleanup()
     {
-        Console.SetOut(_OldOut!);
-        Console.SetError(_OldOut!);
+        Console.SetOut(OldOut!);
+        Console.SetError(OldOut!);
         Dispose();
     }
 
@@ -37,10 +41,10 @@ public class OutputServiceTests : IDisposable
         // Arrange
 
         // Act
-        bool result = _Service!.Output("Hello Jeff!");
+        bool result = Service.Output("Hello Jeff!");
 
         // Assert
-        Assert.AreEqual<string>("Hello Jeff!", _NewOut!.ToString());
+        Assert.AreEqual<string>("Hello Jeff!", NewOut.ToString());
     }
 
     [TestMethod]
@@ -51,27 +55,25 @@ public class OutputServiceTests : IDisposable
         // Act
 
         // Assert
-        Assert.ThrowsException<ArgumentNullException>(() => _Service!.Output(null!));
+        Assert.ThrowsException<ArgumentNullException>(() => Service.Output(null!));
     }
 
     [TestMethod]
     public void Output_AssignedToIOutputable_PrintsStringToOut()
     {
         // Arrange
-        OutputService service = _Service!;
 
         // Act
-        service.Output("Hello Jeff!");
+        Service.Output("Hello Jeff!");
 
         // Assert
-        Assert.AreEqual<string>("Hello Jeff!", _NewOut!.ToString());
+        Assert.AreEqual<string>("Hello Jeff!", NewOut.ToString());
     }
 
     [TestMethod]
     public void Output_PassInNonNullValue_ReturnsTrue()
     {
-        OutputService service = new();
-        bool result = service.Output("hi");
+        bool result = Service.Output("hi");
         Assert.IsTrue(result);
     }
 
@@ -83,18 +85,18 @@ public class OutputServiceTests : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (_Disposed)
+        if (Disposed)
         {
             return;
         }
 
         if (disposing)
         {
-            if (_NewOut != null)
+            if (NewOut != null)
             {
-                _NewOut.Dispose();
+                NewOut.Dispose();
             }
-            _Disposed = true;
+            Disposed = true;
         }
     }
 }

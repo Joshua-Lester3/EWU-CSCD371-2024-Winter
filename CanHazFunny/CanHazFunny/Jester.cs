@@ -4,14 +4,14 @@ namespace CanHazFunny;
 
 public class Jester
 {
-    public IOutputable outputable { get; set; }
-    public IJokeable jokeable { get; set; }
+    private IOutputable Outputable { get; set; }
+    private IJokeable Jokeable { get; set; }
     public Jester(IOutputable outputable, IJokeable jokeable)
     {
         ArgumentNullException.ThrowIfNull(outputable);
         ArgumentNullException.ThrowIfNull(jokeable);
-        this.outputable = outputable;
-        this.jokeable = jokeable;
+        Outputable = outputable;
+        Jokeable = jokeable;
     }
 
     public void TellJoke()
@@ -19,8 +19,8 @@ public class Jester
         string newJoke;
         do
         {
-            newJoke = jokeable.GetJoke();
+            newJoke = Jokeable.GetJoke();
         } while (newJoke.Contains("chuck norris", StringComparison.OrdinalIgnoreCase));
-        outputable.Output(newJoke);
+        Outputable.Output(newJoke);
     }
 }

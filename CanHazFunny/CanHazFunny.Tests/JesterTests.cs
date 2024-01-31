@@ -8,17 +8,17 @@ namespace CanHazFunny.Tests;
 [TestClass]
 public class JesterTests : IDisposable
 {
-    private Mock<IOutputable> _Outputable { get; set; }
-    private Mock<IJokeable> _Jokeable { get; set; }
-    private TextWriter? _OldOut;
-    private StringWriter? _NewOut;
-    private static int _Counter;
-    private bool _Disposed;
+    private Mock<IOutputable> Outputable { get; set; }
+    private Mock<IJokeable> Jokeable { get; set; }
+    private static int Counter { get; set; }
+    private bool Disposed { get; set; }
+    private TextWriter? OldOut { get; set; }
+    private StringWriter? NewOut { get; set; }
 
     public JesterTests()
     {
-        _Outputable = new Mock<IOutputable>();
-        _Jokeable = new Mock<IJokeable>();
+        Outputable = new Mock<IOutputable>();
+        Jokeable = new Mock<IJokeable>();
     }
 
     [TestMethod]
@@ -26,7 +26,7 @@ public class JesterTests : IDisposable
     {
         try
         {
-            Jester jester = new(_Outputable.Object, _Jokeable.Object);
+            Jester jester = new(Outputable.Object, Jokeable.Object);
         }
         catch (ArgumentNullException ex)
         {
@@ -38,26 +38,26 @@ public class JesterTests : IDisposable
     [TestMethod]
     public void JesterConstructor_NullIOutputable_ThrowsArgumentNullException()
     {
-        Assert.ThrowsException<ArgumentNullException>(() => { Jester jester = new(null!, _Jokeable.Object); });
+        Assert.ThrowsException<ArgumentNullException>(() => { Jester jester = new(null!, Jokeable.Object); });
     }
 
     [TestMethod]
     public void JesterConstructor_NullIJokeable_ThrowsArgumentNullException()
     {
-        Assert.ThrowsException<ArgumentNullException>(() => { Jester jester = new(_Outputable.Object, null!); });
+        Assert.ThrowsException<ArgumentNullException>(() => { Jester jester = new(Outputable.Object, null!); });
     }
 
     [TestMethod]
     public void TellJoke_DoesNotContainChuckNorris_PrintsJoke()
     {
         SetOut();
-        _Jokeable
+        Jokeable
             .Setup(x => x.GetJoke())
             .Returns("haha funny joke");
 
-        Jester jester = new(new OutputService(), _Jokeable.Object);
+        Jester jester = new(new OutputService(), Jokeable.Object);
         jester.TellJoke();
-        Assert.AreEqual<string>("haha funny joke", _NewOut!.ToString());
+        Assert.AreEqual<string>("haha funny joke", NewOut!.ToString());
         ResetOut();
     }
 
@@ -65,13 +65,13 @@ public class JesterTests : IDisposable
     public void TellJoke_ContainsChuckNorris_PrintsJoke()
     {
         SetOut();
-        _Jokeable
+        Jokeable
             .Setup(x => x.GetJoke())
             .Returns(() =>
             {
-                if (JesterTests._Counter == 0)
+                if (JesterTests.Counter == 0)
                 {
-                    JesterTests._Counter++;
+                    JesterTests.Counter++;
                     return "haha funny joke about Chuck Norris";
                 }
                 else
@@ -79,7 +79,7 @@ public class JesterTests : IDisposable
                     return "haha funny joke";
                 }
             });
-        _Outputable
+        Outputable
             .Setup(x => x.Output(It.IsAny<string>()))
             .Returns((string s) =>
             {
@@ -87,25 +87,25 @@ public class JesterTests : IDisposable
                 return true;
             });
 
-        Jester jester = new(_Outputable.Object, _Jokeable.Object);
+        Jester jester = new(Outputable.Object, Jokeable.Object);
         jester.TellJoke();
-        Assert.AreEqual<string>("haha funny joke", _NewOut!.ToString());
+        Assert.AreEqual<string>("haha funny joke", NewOut!.ToString());
         ResetOut();
     }
 
     private void SetOut()
     {
-        ObjectDisposedException.ThrowIf(_Disposed, _NewOut!);
-        _OldOut = Console.Out;
-        _NewOut = new StringWriter();
-        Console.SetOut(_NewOut);
-        Console.SetError(_NewOut);
+        ObjectDisposedException.ThrowIf(Disposed, NewOut!);
+        OldOut = Console.Out;
+        NewOut = new StringWriter();
+        Console.SetOut(NewOut);
+        Console.SetError(NewOut);
     }
 
     private void ResetOut()
     {
-        Console.SetOut(_OldOut!);
-        Console.SetError(_OldOut!);
+        Console.SetOut(OldOut!);
+        Console.SetError(OldOut!);
         Dispose();
     }
 
@@ -117,18 +117,18 @@ public class JesterTests : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (_Disposed)
+        if (Disposed)
         {
             return;
         }
 
         if (disposing)
         {
-            if (_NewOut != null)
+            if (NewOut != null)
             {
-                _NewOut.Dispose();
+                NewOut.Dispose();
             }
-            _Disposed = true;
+            Disposed = true;
         }
     }
 }
