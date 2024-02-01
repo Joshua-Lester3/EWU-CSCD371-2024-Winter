@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using Xunit.Sdk;
 //using Xunit;
 
 
@@ -26,7 +28,14 @@ public class JokeServiceTests
     [TestMethod]
     public void GetJoke_ProperlyInitializedJokeService_ReturnsJoke_Successful()
     {
-        //JokeService jokeService = new();
         Assert.IsNotNull(JokeService.GetJoke());
     }
+
+    [TestMethod]
+    public void GetJoke_HttpRequestException_ThrowsException()
+    {
+        // Act & Assert
+        Assert.ThrowsException<ArgumentNullException>(() => JokeService.GetJoke(null));
+    }
+
 }
