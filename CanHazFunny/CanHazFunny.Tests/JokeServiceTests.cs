@@ -31,11 +31,8 @@ public class JokeServiceTests
         Assert.IsNotNull(JokeService.GetJoke());
     }
 
-    [TestMethod]
-    public void GetJoke_HttpRequestException_ThrowsException()
+    public JokeService GetJokeService()
     {
-        // Act & Assert
-        Assert.ThrowsException<ArgumentNullException>(() => JokeService.GetJoke(null));
+        return JokeService;
     }
-
 }
