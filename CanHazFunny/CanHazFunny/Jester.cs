@@ -16,27 +16,15 @@ public class Jester
 
     public void TellJoke()
     {
+
         string newJoke;
         do
         {
-<<<<<<< HEAD
-            string newJoke;
-            do
-            {
-                newJoke = jokeable.GetJoke();
-            } while (newJoke.ToLower().Contains("chuck norris"));
-            outputable.Output(newJoke);
-
-        }
-
-        public void TellJoke(String key)
-        {
-            TellJoke();
-        }
-=======
             newJoke = Jokeable.GetJoke();
-        } while (newJoke.Contains("chuck norris", StringComparison.OrdinalIgnoreCase));
+        } while (newJoke.ToLower().Contains("chuck norris"));
         Outputable.Output(newJoke);
->>>>>>> origin/Assignment3
     }
+
+
+    
 }
