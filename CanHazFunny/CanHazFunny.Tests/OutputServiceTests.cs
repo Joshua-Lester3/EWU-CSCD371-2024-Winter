@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CanHazFunny.Tests;
 
 [TestClass]
-public class OutputServiceTests : IDisposable
+public class OutputServiceTests // : IDisposable
 {
     // We know OldOut and NewOut will not be null when used because they are set
     // in the beginning of every test that utilizes them
@@ -32,7 +32,7 @@ public class OutputServiceTests : IDisposable
     {
         Console.SetOut(OldOut!);
         Console.SetError(OldOut!);
-        Dispose();
+        // Dispose();
     }
 
     [TestMethod]
@@ -77,26 +77,26 @@ public class OutputServiceTests : IDisposable
         Assert.IsTrue(result);
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
+    //public void Dispose()
+    //{
+    //    Dispose(true);
+    //    GC.SuppressFinalize(this);
+    //}
 
-    protected virtual void Dispose(bool disposing)
-    {
-        if (Disposed)
-        {
-            return;
-        }
+    //protected virtual void Dispose(bool disposing)
+    //{
+    //    if (Disposed)
+    //    {
+    //        return;
+    //    }
 
-        if (disposing)
-        {
-            if (NewOut != null)
-            {
-                NewOut.Dispose();
-            }
-            Disposed = true;
-        }
-    }
+    //    if (disposing)
+    //    {
+    //        if (NewOut != null)
+    //        {
+    //            NewOut.Dispose();
+    //        }
+    //        Disposed = true;
+    //    }
+    //}
 }

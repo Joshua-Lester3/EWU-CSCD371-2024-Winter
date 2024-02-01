@@ -6,7 +6,7 @@ using Moq;
 namespace CanHazFunny.Tests;
 
 [TestClass]
-public class JesterTests : IDisposable
+public class JesterTests // : IDisposable
 {
     private Mock<IOutputable> Outputable { get; set; }
     private Mock<IJokeable> Jokeable { get; set; }
@@ -106,29 +106,29 @@ public class JesterTests : IDisposable
     {
         Console.SetOut(OldOut!);
         Console.SetError(OldOut!);
-        Dispose();
+        // Dispose();
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
+    //public void Dispose()
+    //{
+    //    Dispose(true);
+    //    GC.SuppressFinalize(this);
+    //}
 
-    protected virtual void Dispose(bool disposing)
-    {
-        if (Disposed)
-        {
-            return;
-        }
+    //protected virtual void Dispose(bool disposing)
+    //{
+    //    if (Disposed)
+    //    {
+    //        return;
+    //    }
 
-        if (disposing)
-        {
-            if (NewOut != null)
-            {
-                NewOut.Dispose();
-            }
-            Disposed = true;
-        }
-    }
+    //    if (disposing)
+    //    {
+    //        if (NewOut != null)
+    //        {
+    //            NewOut.Dispose();
+    //        }
+    //        Disposed = true;
+    //    }
+    //}
 }
