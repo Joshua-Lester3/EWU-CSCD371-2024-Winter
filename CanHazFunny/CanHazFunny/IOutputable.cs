@@ -1,7 +1,6 @@
-﻿namespace CanHazFunny
+﻿namespace CanHazFunny;
+
+public interface IOutputable
 {
-    public interface IOutputable
-    {
-        public bool Output(string message);
-    }
+    public bool Output(string message);
 }

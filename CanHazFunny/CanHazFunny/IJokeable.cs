@@ -1,7 +1,6 @@
-﻿namespace CanHazFunny
+﻿namespace CanHazFunny;
+
+public interface IJokeable
 {
-    public interface IJokeable
-    {
-        public string GetJoke();
-    }
+    public string GetJoke();
 }

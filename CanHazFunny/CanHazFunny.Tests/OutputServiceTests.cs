@@ -2,74 +2,101 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CanHazFunny.Tests
+namespace CanHazFunny.Tests;
+
+[TestClass]
+public class OutputServiceTests : IDisposable
 {
-    [TestClass]
-    public class OutputServiceTests
+    // We know OldOut and NewOut will not be null when used because they are set
+    // in the beginning of every test that utilizes them
+    #pragma warning disable CS8618
+    private TextWriter OldOut { get; set; }
+    private StringWriter NewOut { get; set; }
+    private OutputService Service { get; set; }
+    private bool Disposed { get; set; }
+    #pragma warning restore CS8618
+
+    [TestInitialize]
+    public void Init()
     {
-        private TextWriter? _OldOut;
-        private StringWriter? _NewOut;
-        private OutputService? _Service;
+        ObjectDisposedException.ThrowIf(Disposed, NewOut!);
+        OldOut = Console.Out;
+        NewOut = new StringWriter();
+        Console.SetOut(NewOut);
+        Console.SetError(NewOut);
+        Service = new OutputService();
+    }
 
-        [TestInitialize]
-        public void Init()
+    [TestCleanup]
+    public void Cleanup()
+    {
+        Console.SetOut(OldOut!);
+        Console.SetError(OldOut!);
+        Dispose();
+    }
+
+    [TestMethod]
+    public void Output_PassInNonNullString_PrintsStringToOut()
+    {
+        // Arrange
+
+        // Act
+        bool result = Service.Output("Hello Jeff!");
+
+        // Assert
+        Assert.AreEqual<string>("Hello Jeff!", NewOut.ToString());
+    }
+
+    [TestMethod]
+    public void Output_PassInNullString_ThrowsException()
+    {
+        // Arrange
+
+        // Act
+
+        // Assert
+        Assert.ThrowsException<ArgumentNullException>(() => Service.Output(null!));
+    }
+
+    [TestMethod]
+    public void Output_AssignedToIOutputable_PrintsStringToOut()
+    {
+        // Arrange
+
+        // Act
+        Service.Output("Hello Jeff!");
+
+        // Assert
+        Assert.AreEqual<string>("Hello Jeff!", NewOut.ToString());
+    }
+
+    [TestMethod]
+    public void Output_PassInNonNullValue_ReturnsTrue()
+    {
+        bool result = Service.Output("hi");
+        Assert.IsTrue(result);
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (Disposed)
         {
-            _OldOut = Console.Out;
-            _NewOut = new StringWriter();
-            Console.SetOut(_NewOut);
-            Console.SetError(_NewOut);
-            _Service = new OutputService();
+            return;
         }
 
-        [TestCleanup]
-        public void Cleanup()
+        if (disposing)
         {
-            Console.SetOut(_OldOut!);
-            Console.SetError(_OldOut!);
-        }
-
-        [TestMethod]
-        public void Output_PassInNonNullString_PrintsStringToOut()
-        {
-            // Arrange
-
-            // Act
-            bool result = _Service!.Output("Hello Jeff!");
-
-            // Assert
-            Assert.AreEqual<string>("Hello Jeff!", _NewOut!.ToString());
-        }
-
-        [TestMethod]
-        public void Output_PassInNullString_ThrowsException()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.ThrowsException<ArgumentNullException>(() => _Service!.Output(null!));
-        }
-
-        [TestMethod]
-        public void Output_AssignedToIOutputable_PrintsStringToOut()
-        {
-            // Arrange
-            IOutputable outable = _Service!;
-
-            // Act
-            outable.Output("Hello Jeff!");
-
-            // Assert
-            Assert.AreEqual<string>("Hello Jeff!", _NewOut!.ToString());
-        }
-
-        [TestMethod]
-        public void Output_PassInNonNullValue_ReturnsTrue()
-        {
-            IOutputable outputable = new OutputService();
-            bool result = outputable.Output("hi");
-            Assert.IsTrue(result);
+            if (NewOut != null)
+            {
+                NewOut.Dispose();
+            }
+            Disposed = true;
         }
     }
 }

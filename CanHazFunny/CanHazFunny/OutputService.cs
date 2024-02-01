@@ -1,14 +1,13 @@
 ﻿using System;
 
-namespace CanHazFunny
+namespace CanHazFunny;
+
+public class OutputService : IOutputable
 {
-    public class OutputService : IOutputable
+    public bool Output(string message)
     {
-        public bool Output(string message)
-        {
-            ArgumentNullException.ThrowIfNull(message);
-            Console.Write(message);
-            return true;
-        }
+        ArgumentNullException.ThrowIfNull(message);
+        Console.Write(message);
+        return true;
     }
 }

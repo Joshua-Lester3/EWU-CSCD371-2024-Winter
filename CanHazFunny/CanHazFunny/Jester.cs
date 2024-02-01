@@ -1,21 +1,25 @@
 ﻿using System;
 
-namespace CanHazFunny
-{
-    public class Jester
-    {
-        public IOutputable outputable {  get; set; }
-        public IJokeable jokeable { get; set; }
-        public Jester(IOutputable outputable, IJokeable jokeable)
-        {
-            ArgumentNullException.ThrowIfNull(outputable);
-            ArgumentNullException.ThrowIfNull(jokeable);
-            this.outputable = outputable;
-            this.jokeable = jokeable;
-        }
+namespace CanHazFunny;
 
-        public void TellJoke()
+public class Jester
+{
+    private IOutputable Outputable { get; set; }
+    private IJokeable Jokeable { get; set; }
+    public Jester(IOutputable outputable, IJokeable jokeable)
+    {
+        ArgumentNullException.ThrowIfNull(outputable);
+        ArgumentNullException.ThrowIfNull(jokeable);
+        Outputable = outputable;
+        Jokeable = jokeable;
+    }
+
+    public void TellJoke()
+    {
+        string newJoke;
+        do
         {
+<<<<<<< HEAD
             string newJoke;
             do
             {
@@ -29,5 +33,10 @@ namespace CanHazFunny
         {
             TellJoke();
         }
+=======
+            newJoke = Jokeable.GetJoke();
+        } while (newJoke.Contains("chuck norris", StringComparison.OrdinalIgnoreCase));
+        Outputable.Output(newJoke);
+>>>>>>> origin/Assignment3
     }
 }
