@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using Xunit;
+
 
 namespace CanHazFunny.Tests;
 
@@ -19,5 +21,12 @@ public class JokeServiceTests
     public void GetJoke_NormalConditions_ReturnsNonEmptyString()
     {
         Assert.IsTrue(JokeService.GetJoke().Length > 0);
+    }
+
+    [TestMethod]
+    public void GetJoke_ProperlyInitializedJokeService_ReturnsJoke_Successful()
+    {
+        //JokeService jokeService = new();
+        Assert.IsNotNull(JokeService.GetJoke());
     }
 }
