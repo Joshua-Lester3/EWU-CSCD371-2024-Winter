@@ -2,7 +2,6 @@
 using System;
 using Xunit.Sdk;
 
-
 namespace CanHazFunny.Tests;
 
 [TestClass]
@@ -28,5 +27,11 @@ public class JokeServiceTests
     public void GetJoke_ProperlyInitializedJokeService_ReturnsJoke_Successful()
     {
         Assert.IsNotNull(JokeService.GetJoke());
+    }
+
+    [TestMethod]
+    public void JokeService_ProperlyInitializedJokeService_IsJokeService()
+    {
+        Assert.IsTrue(JokeService is JokeService);
     }
 }
