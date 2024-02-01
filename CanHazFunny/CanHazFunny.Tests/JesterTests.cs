@@ -6,12 +6,11 @@ using Moq;
 namespace CanHazFunny.Tests;
 
 [TestClass]
-public class JesterTests // : IDisposable
+public class JesterTests
 {
     private Mock<IOutputable> Outputable { get; set; }
     private Mock<IJokeable> Jokeable { get; set; }
     private static int Counter { get; set; }
-    private bool Disposed { get; set; }
     private TextWriter? OldOut { get; set; }
     private StringWriter? NewOut { get; set; }
 
@@ -95,7 +94,6 @@ public class JesterTests // : IDisposable
 
     private void SetOut()
     {
-        ObjectDisposedException.ThrowIf(Disposed, NewOut!);
         OldOut = Console.Out;
         NewOut = new StringWriter();
         Console.SetOut(NewOut);
@@ -106,29 +104,5 @@ public class JesterTests // : IDisposable
     {
         Console.SetOut(OldOut!);
         Console.SetError(OldOut!);
-        // Dispose();
     }
-
-    //public void Dispose()
-    //{
-    //    Dispose(true);
-    //    GC.SuppressFinalize(this);
-    //}
-
-    //protected virtual void Dispose(bool disposing)
-    //{
-    //    if (Disposed)
-    //    {
-    //        return;
-    //    }
-
-    //    if (disposing)
-    //    {
-    //        if (NewOut != null)
-    //        {
-    //            NewOut.Dispose();
-    //        }
-    //        Disposed = true;
-    //    }
-    //}
 }

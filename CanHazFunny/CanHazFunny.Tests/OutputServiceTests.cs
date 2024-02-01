@@ -13,13 +13,11 @@ public class OutputServiceTests // : IDisposable
     private TextWriter OldOut { get; set; }
     private StringWriter NewOut { get; set; }
     private OutputService Service { get; set; }
-    private bool Disposed { get; set; }
     #pragma warning restore CS8618
 
     [TestInitialize]
     public void Init()
     {
-        ObjectDisposedException.ThrowIf(Disposed, NewOut!);
         OldOut = Console.Out;
         NewOut = new StringWriter();
         Console.SetOut(NewOut);
@@ -32,7 +30,6 @@ public class OutputServiceTests // : IDisposable
     {
         Console.SetOut(OldOut!);
         Console.SetError(OldOut!);
-        // Dispose();
     }
 
     [TestMethod]
@@ -76,27 +73,4 @@ public class OutputServiceTests // : IDisposable
         bool result = Service.Output("hi");
         Assert.IsTrue(result);
     }
-
-    //public void Dispose()
-    //{
-    //    Dispose(true);
-    //    GC.SuppressFinalize(this);
-    //}
-
-    //protected virtual void Dispose(bool disposing)
-    //{
-    //    if (Disposed)
-    //    {
-    //        return;
-    //    }
-
-    //    if (disposing)
-    //    {
-    //        if (NewOut != null)
-    //        {
-    //            NewOut.Dispose();
-    //        }
-    //        Disposed = true;
-    //    }
-    //}
 }
