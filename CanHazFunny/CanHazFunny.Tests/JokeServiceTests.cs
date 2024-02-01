@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Net.Http;
+using System;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CanHazFunny.Tests
 {
@@ -31,5 +34,13 @@ namespace CanHazFunny.Tests
             Assert.IsTrue(joke.Length > 0);
             Assert.AreEqual("hi", joke);
         }
+
+        public void GetJoke_InitializedJokeService_ReturnsJoke()
+        {
+            JokeService jokeService = new();
+            Assert.IsNotNull(jokeService.GetJoke());
+        }
+
+        
     }
 }

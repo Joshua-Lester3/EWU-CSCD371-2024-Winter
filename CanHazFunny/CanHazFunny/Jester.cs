@@ -24,5 +24,10 @@ namespace CanHazFunny
             outputable.Output(newJoke);
 
         }
+
+        public void TellJoke(String key)
+        {
+            TellJoke();
+        }
     }
 }
