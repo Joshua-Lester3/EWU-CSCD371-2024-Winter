@@ -6,6 +6,8 @@
 //     and record classes to be immutable (so their hashcode doesn't change)
 public record class FullName(string FirstName, string LastName, string? MiddleName = null)
 {
-    public string FirstName { get; init; } = FirstName ?? throw new ArgumentNullException(nameof(FirstName));
-    public string LastName { get; init; } = LastName ?? throw new ArgumentNullException(nameof(LastName));
+    public string FirstName { get; init; } = string.IsNullOrWhiteSpace(FirstName) ? 
+        throw new ArgumentException($"'{nameof(FirstName)}' cannot be null or whitespace.", nameof(FirstName)) : FirstName;
+    public string LastName { get; init; } = string.IsNullOrWhiteSpace(LastName) ?
+        throw new ArgumentException($"'{nameof(LastName)}' cannot be null or whitespace.", nameof(LastName)) : LastName;
 }
