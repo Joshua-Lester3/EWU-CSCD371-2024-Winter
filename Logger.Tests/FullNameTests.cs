@@ -19,8 +19,15 @@ public class FullNameTests
     }
 
     [Fact]
-    public void FullNameConstructor_NullParams_ThrowsArgumentNullException()
+    public void FullNameConstructor_NullLastName_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => new FullName("Jimmy?", null!));
     }
+
+    [Fact]
+    public void FullNameConstructor_NullFirstName_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => new FullName(null!, "Johns?"));
+    }
+
 }
