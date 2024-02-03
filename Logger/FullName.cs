@@ -1,17 +1,11 @@
 ﻿namespace Logger;
 
-public record class FullName
+// Full name record is a reference type because it can store three strings,
+//     which can possibly add up to be a lot of data
+// Furthermore, it is immutable because the guideline is for all value types
+//     and record classes to be immutable (so their hashcode doesn't change)
+public record class FullName(string FirstName, string LastName, string? MiddleName = null)
 {
-    public string FirstName { get; init; }
-    public string LastName { get; init; }
-    public string? MiddleName { get; init; }
-
-    public FullName(string firstName, string lastName, string? middleName = null)
-    {
-        ArgumentNullException.ThrowIfNull(firstName);
-        ArgumentNullException.ThrowIfNull(lastName);
-        FirstName = firstName;
-        LastName = lastName;
-        MiddleName = middleName;
-    }
+    public string FirstName { get; init; } = FirstName ?? throw new ArgumentNullException(nameof(FirstName));
+    public string LastName { get; init; } = LastName ?? throw new ArgumentNullException(nameof(LastName));
 }
