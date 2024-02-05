@@ -3,7 +3,7 @@
 
 namespace Logger.Entity;
 
-public record Book : BaseEntity
+public record Book : BaseEntity, IEntity
 {
-    public override string Name { get => nameof(Book); }
+    string IEntity.Name { get => nameof(Book); }
 }

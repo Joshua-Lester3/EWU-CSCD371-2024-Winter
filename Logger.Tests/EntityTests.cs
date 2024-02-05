@@ -43,4 +43,7 @@ public class EntityTests
             .Returns(guid);
         Assert.True(ientity.Object.Id.Equals(guid));
     }
+
+    [Fact]
+    public void Book
 }
