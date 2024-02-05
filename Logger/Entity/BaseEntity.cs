@@ -3,5 +3,6 @@
 public abstract record class BaseEntity(Guid Id) : IEntity
 {
     Guid IEntity.Id { get; init; } = Guid.NewGuid();
-    public abstract string Name { get; }
+    string IEntity.Name { get => CalculateName(); }
+    internal abstract string CalculateName();
 }

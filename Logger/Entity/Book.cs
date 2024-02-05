@@ -3,7 +3,10 @@
 
 namespace Logger.Entity;
 
-public record Book : BaseEntity, IEntity
+public record Book(Guid Id) : BaseEntity(Id)
 {
-    string IEntity.Name { get => nameof(Book); }
+    internal override string CalculateName()
+    {
+        return nameof(Book);
+    }
 }

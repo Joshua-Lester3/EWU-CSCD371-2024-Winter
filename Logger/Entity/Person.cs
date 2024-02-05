@@ -3,7 +3,6 @@
 namespace Logger.Entity;
 
 //for generalizing code between Employee and Student
-public record Person(Guid Id, FullName FullName) : BaseEntity, IEntity
+public abstract record Person(Guid Id, FullName FullName) : BaseEntity(Id)
 {
-    public string Name => $"{FullName.FirstName} {FullName.LastName}";
 }
