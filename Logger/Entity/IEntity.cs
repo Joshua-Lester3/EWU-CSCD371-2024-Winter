@@ -1,4 +1,4 @@
-﻿namespace Logger;
+﻿namespace Logger.Entity;
 public interface IEntity
 {
     public string Name { get; }

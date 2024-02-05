@@ -1,12 +1,13 @@
 ﻿using Xunit;
 using Moq;
+using Logger.Entity;
 
 namespace Logger.Tests;
 
-public class IEntityTests
+public class EntityTests
 {
     private Mock<IEntity> _EntityMock;
-    public IEntityTests()
+    public EntityTests()
     {
         _EntityMock = new Mock<IEntity>();
     }
@@ -29,5 +30,17 @@ public class IEntityTests
             .Setup(x => x.Id)
             .Returns(guid);
         Assert.Equal(guid, _EntityMock.Object.Id);
+    }
+
+    [Fact]
+    public void Id_Inits_IsGuid()
+    {
+        Mock<BaseEntity> baseEntity = new Mock<BaseEntity>();
+        Guid guid = Guid.NewGuid();
+        Mock<IEntity> ientity = baseEntity.As<IEntity>();
+        ientity
+            .Setup(x => (x.Id))
+            .Returns(guid);
+        Assert.True(ientity.Object.Id.Equals(guid));
     }
 }

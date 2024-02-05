@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Logger;
+namespace Logger.Entity;
 
 public record Student(Guid Id, FullName FullName) : Person(Id, FullName);
 
