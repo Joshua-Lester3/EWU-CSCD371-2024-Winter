@@ -44,13 +44,24 @@ public class EntityTests
     public void Id_Inits_IsGuid()
     {
 
-        Mock<BaseEntity> baseEntity = new Mock<BaseEntity>();
+        //Mock<BaseEntity> baseEntity = new Mock<BaseEntity>();
+        //Guid guid = Guid.NewGuid();
+        //Mock<IEntity> ientity = baseEntity.As<IEntity>();
+        //ientity
+        //    .Setup(x => x.Id)
+        //    .Returns(guid);
+        //Assert.True(ientity.Object.Id.Equals(guid));
         Guid guid = Guid.NewGuid();
-        Mock<IEntity> ientity = baseEntity.As<IEntity>();
-        ientity
-            .Setup(x => x.Id)
-            .Returns(guid);
-        Assert.True(ientity.Object.Id.Equals(guid));
+        BaseEntityTester tester = new BaseEntityTester(guid);
+        Assert.Equal(guid.ToString(), ((IEntity)tester).Id.ToString());
+    }
+    public record class BaseEntityTester(Guid Id) : BaseEntity(Id)
+    {
+        protected override string CalculateName()
+        {
+            throw new NotImplementedException();
+        }
+        
     }
     #endregion
 
@@ -59,21 +70,21 @@ public class EntityTests
     public void BookCalculateName_Instantiated_Success()
     {
         Book book = new Book(Guid.NewGuid());
-        Assert.True(Object.Equals(nameof(Book), ((IEntity)book).Name));
+        Assert.Equal(nameof(Book), ((IEntity)book).Name);
     }
 
     [Fact]
     public void StudentCalculateName_Instantiated_Success()
     {
         Student student = new Student(Guid.NewGuid(), new FullName("Jimmy", "Johns"));
-        Assert.True(Object.Equals(nameof(Student), ((IEntity)student).Name));
+        Assert.Equal(nameof(Student), ((IEntity)student).Name);
     }
 
     [Fact]
     public void EmployeeCalculateName_Instantiated_Success()
     {
         Employee employee = new Employee(Guid.NewGuid(), new FullName("James", "Johns"));
-        Assert.True(Object.Equals(nameof(Employee), ((IEntity)employee).Name));
+        Assert.Equal(nameof(Employee), ((IEntity)employee).Name);
     }
     #endregion
 }

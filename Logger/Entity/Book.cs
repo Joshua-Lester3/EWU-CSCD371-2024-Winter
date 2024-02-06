@@ -3,9 +3,13 @@
 
 namespace Logger.Entity;
 
-public record Book(Guid Id) : BaseEntity(Id)
+public record Book : BaseEntity
 {
-    internal override string CalculateName()
+    public Book(Guid id)
+    {
+        
+    }
+    protected override string CalculateName()
     {
         return nameof(Book);
     }
