@@ -3,7 +3,7 @@
 
 namespace Logger.Entity;
 
-public record Book(Guid Id) : BaseEntity(Id)
+public record Book(Guid Id) : BaseEntity(Id), IEntity
 {
     protected override string CalculateName()
     {

@@ -17,9 +17,48 @@ public class StorageTests
     }
 
     [Fact]
+    public void Contains_DoesContain_ReturnsTrue()
+    {
+        _Storage.Add(_Employee2);
+        Assert.True(_Storage.Contains(_Employee2));
+    }
+
+    [Fact]
     public void Contains_DoesNotContain_ReturnsFalse()
     {
         _Storage.Add(_Employee2);
         Assert.False(_Storage.Contains(_Employee1));
+    }
+
+    [Fact]
+    public void Remove_DoesContain_DoesNotContainAnymore()
+    {
+        _Storage.Add(_Employee2);
+        Assert.True(_Storage.Contains(_Employee2));
+        _Storage.Remove(_Employee2);
+        Assert.False(_Storage.Contains(_Employee2));
+    }
+
+    [Fact]
+    public void Add_DoesNotContain_DoesContainNow()
+    {
+        Assert.False(_Storage.Contains(_Employee1));
+        _Storage.Add(_Employee1);
+        Assert.True(_Storage.Contains(_Employee1));
+    }
+
+    [Fact]
+    public void Get_DoesNotContain_ReturnsNull()
+    {
+        _Storage.Add(_Employee1);
+        Assert.True(_Storage.Contains(_Employee1));
+        Assert.Null(_Storage.Get(((IEntity)_Employee2).Id));
+    }
+
+    [Fact]
+    public void Get_DoesContain_ReturnsEmployee1()
+    {
+        _Storage.Add(_Employee1);
+        Assert.Equal(_Employee1, _Storage.Get(((IEntity)_Employee1).Id));
     }
 }

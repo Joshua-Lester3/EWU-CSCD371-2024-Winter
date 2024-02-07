@@ -8,6 +8,8 @@ public class Storage
     public void Add(IEntity item)
     {
         Entities.Add(item);
+        Employee e = new Employee(Guid.NewGuid(), new FullName("Jim", "John"));
+        Console.Write(e.Id);
     }
 
     public void Remove(IEntity item)
