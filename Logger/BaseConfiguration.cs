@@ -1,5 +1,6 @@
 ﻿namespace Logger;
 
+// TODO: Make this class abstract because it seems it shouldn't be instantiated
 public class BaseLoggerConfiguration : ILoggerConfiguration
 {
     public BaseLoggerConfiguration(string logSource) => LogSource = string.IsNullOrWhiteSpace(logSource)
