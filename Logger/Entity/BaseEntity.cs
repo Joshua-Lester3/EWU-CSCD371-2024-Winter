@@ -2,13 +2,17 @@
 
 public abstract record class BaseEntity : IEntity
 {
+    // Id is implemented explicitly because we don't want the developers using this
+    // API to confuse it with a different Id, such as a student or employee id
+    Guid IEntity.Id { get => _InternalId; init => _InternalId = value; }
+    private Guid _InternalId = Guid.NewGuid();
+    // Name is implemented explicitly because we don't want developers using this
+    // API to confuse it with a different name, such as FullName in person
+    // and its deriving types
+    string IEntity.Name { get => CalculateName(); }
     public BaseEntity(Guid id)
     {
-        test = (IEntity)this;
-        test.Id = id;
+        _InternalId = id;
     }
-    private IEntity test;
-    Guid IEntity.Id { get; init; } = Guid.NewGuid();
-    string IEntity.Name { get => CalculateName(); }
     protected abstract string CalculateName();
 }

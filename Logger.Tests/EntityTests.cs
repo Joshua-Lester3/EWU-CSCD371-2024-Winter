@@ -43,25 +43,61 @@ public class EntityTests
     [Fact]
     public void Id_Inits_IsGuid()
     {
-
-        //Mock<BaseEntity> baseEntity = new Mock<BaseEntity>();
-        //Guid guid = Guid.NewGuid();
-        //Mock<IEntity> ientity = baseEntity.As<IEntity>();
-        //ientity
-        //    .Setup(x => x.Id)
-        //    .Returns(guid);
-        //Assert.True(ientity.Object.Id.Equals(guid));
         Guid guid = Guid.NewGuid();
-        BaseEntityTester tester = new BaseEntityTester(guid);
+        BaseEntityTester tester = new(guid);
         Assert.Equal(guid.ToString(), ((IEntity)tester).Id.ToString());
     }
-    public record class BaseEntityTester(Guid Id) : BaseEntity(Id)
+    private record class BaseEntityTester(Guid Id) : BaseEntity(Id)
     {
         protected override string CalculateName()
         {
             throw new NotImplementedException();
         }
         
+    }
+
+
+    #endregion
+
+    #region Person Tests
+
+    [Fact]
+    public void FullName_Instantiated_Success()
+    {
+        FullName fullName = new FullName("Jim", "John");
+        PersonTester tester = new(Guid.NewGuid(), fullName);
+        Assert.Equal(fullName, tester.FullName);
+    }
+
+    private record class PersonTester(Guid Id, FullName FullName) : Person(Id, FullName)
+    {
+        protected override string CalculateName()
+        {
+            throw new NotImplementedException();
+        }
+
+    }
+
+    [Fact]
+    public void PersonEquals_SameData_ReturnsTrue()
+    {
+        Guid guid = Guid.NewGuid();
+        FullName fullName = new("Jim", "John");
+        PersonTester tester1 = new(guid, fullName);
+        PersonTester tester2 = new(guid, fullName);
+        Assert.True(tester1.Equals(tester2));
+    }
+
+    [Fact]
+    public void PersonEquals_DifferentData_ReturnsFalse()
+    {
+        Guid guid1 = Guid.NewGuid();
+        Guid guid2 = Guid.NewGuid();
+        FullName fullName1 = new("Jim", "John");
+        FullName fullName2 = new("Jimmy", "John");
+        PersonTester tester1 = new(guid1, fullName1);
+        PersonTester tester2 = new(guid2, fullName2);
+        Assert.False(tester1.Equals(tester2));
     }
     #endregion
 
@@ -85,6 +121,25 @@ public class EntityTests
     {
         Employee employee = new Employee(Guid.NewGuid(), new FullName("James", "Johns"));
         Assert.Equal(nameof(Employee), ((IEntity)employee).Name);
+    }
+
+    [Fact]
+    public void BookEquals_SameData_ReturnsTrue()
+    {
+        Guid guid = Guid.NewGuid();
+        Book book1 = new(guid);
+        Book book2 = new(guid);
+        Assert.True(book1.Equals(book2));
+    }
+
+    [Fact]
+    public void BookEquals_DifferentData_ReturnsFalse()
+    {
+        Guid guid1 = Guid.NewGuid();
+        Guid guid2 = Guid.NewGuid();
+        Book book1 = new(guid1);
+        Book book2 = new(guid2);
+        Assert.False(book1.Equals(book2), guid1 + " " + guid2);
     }
     #endregion
 }
