@@ -47,7 +47,7 @@ public class EntityTests
         BaseEntityTester tester = new(guid);
         Assert.Equal(guid.ToString(), ((IEntity)tester).Id.ToString());
     }
-    private record class BaseEntityTester(Guid Id) : BaseEntity(Id)
+    private sealed record class BaseEntityTester(Guid Id) : BaseEntity(Id)
     {
         protected override string CalculateName()
         {
@@ -64,12 +64,12 @@ public class EntityTests
     [Fact]
     public void FullName_Instantiated_Success()
     {
-        FullName fullName = new FullName("Jim", "John");
+        FullName fullName = new ("Jim", "John");
         PersonTester tester = new(Guid.NewGuid(), fullName);
         Assert.Equal(fullName, tester.FullName);
     }
 
-    private record class PersonTester(Guid Id, FullName FullName) : Person(Id, FullName)
+    private sealed record class PersonTester(Guid Id, FullName FullName) : Person(Id, FullName)
     {
         protected override string CalculateName()
         {
@@ -105,21 +105,21 @@ public class EntityTests
     [Fact]
     public void BookCalculateName_Instantiated_Success()
     {
-        Book book = new Book(Guid.NewGuid());
+        Book book = new(Guid.NewGuid());
         Assert.Equal(nameof(Book), ((IEntity)book).Name);
     }
 
     [Fact]
     public void StudentCalculateName_Instantiated_Success()
     {
-        Student student = new Student(Guid.NewGuid(), new FullName("Jimmy", "Johns"));
+        Student student = new(Guid.NewGuid(), new FullName("Jimmy", "Johns"));
         Assert.Equal(nameof(Student), ((IEntity)student).Name);
     }
 
     [Fact]
     public void EmployeeCalculateName_Instantiated_Success()
     {
-        Employee employee = new Employee(Guid.NewGuid(), new FullName("James", "Johns"));
+        Employee employee = new(Guid.NewGuid(), new FullName("James", "Johns"));
         Assert.Equal(nameof(Employee), ((IEntity)employee).Name);
     }
 
