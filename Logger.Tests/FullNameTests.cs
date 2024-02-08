@@ -41,4 +41,21 @@ public class FullNameTests
     {
         Assert.Throws<ArgumentException>(() => new FullName("   ", "Johns?"));
     }
+
+    [Fact]
+    public void FullName_AllArgumentsGiven_Success()
+    {
+        //Arrange
+        string firstName = "Jimmy";
+        string lastName = "Johns";
+        string middleName = "Flippin'";
+
+        // Act
+        FullName fullName = new(firstName, lastName, middleName);
+
+        // Assert
+        Assert.Equal(firstName, fullName.FirstName);
+        Assert.Equal(lastName, fullName.LastName);
+        Assert.Equal(middleName, fullName.MiddleName);
+    }
 }
