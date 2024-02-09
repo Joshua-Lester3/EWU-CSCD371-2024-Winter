@@ -64,14 +64,14 @@ public class StorageTests
     {
         _Storage.Add(_Employee1);
         Assert.True(_Storage.Contains(_Employee1));
-        Assert.Null(_Storage.Get(((IEntity)_Employee2).Id));
+        Assert.Null(_Storage.Get(((IEntity)_Employee2).ID));
     }
 
     [Fact]
     public void EmployeeGet_DoesContain_ReturnsEmployee1()
     {
         _Storage.Add(_Employee1);
-        Assert.Equal(_Employee1, _Storage.Get(((IEntity)_Employee1).Id));
+        Assert.Equal(_Employee1, _Storage.Get(((IEntity)_Employee1).ID));
     }
     #endregion
 
@@ -113,14 +113,14 @@ public class StorageTests
     {
         _Storage.Add(_Book2);
         Assert.True(_Storage.Contains(_Book2));
-        Assert.Null(_Storage.Get(((IEntity)_Book1).Id));
+        Assert.Null(_Storage.Get(((IEntity)_Book1).ID));
     }
 
     [Fact]
     public void BookGet_DoesContain_ReturnsEmployee1()
     {
         _Storage.Add(_Book2);
-        Assert.Equal(_Book2, _Storage.Get(((IEntity)_Book2).Id));
+        Assert.Equal(_Book2, _Storage.Get(((IEntity)_Book2).ID));
     }
     #endregion
 
@@ -161,14 +161,14 @@ public class StorageTests
     {
         _Storage.Add(_Student2);
         Assert.True(_Storage.Contains(_Student2));
-        Assert.Null(_Storage.Get(((IEntity)_Student1).Id));
+        Assert.Null(_Storage.Get(((IEntity)_Student1).ID));
     }
 
     [Fact]
     public void StudentGet_DoesContain_ReturnsEmployee1()
     {
         _Storage.Add(_Student2);
-        Assert.Equal(_Student2, _Storage.Get(((IEntity)_Student2).Id));
+        Assert.Equal(_Student2, _Storage.Get(((IEntity)_Student2).ID));
     }
     #endregion
 }

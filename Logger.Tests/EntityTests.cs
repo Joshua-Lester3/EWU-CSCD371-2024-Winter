@@ -33,9 +33,9 @@ public class EntityTests
         InitIEntity();
         Guid guid = Guid.NewGuid();
         _EntityMock
-            .Setup(x => x.Id)
+            .Setup(x => x.ID)
             .Returns(guid);
-        Assert.Equal(guid, _EntityMock.Object.Id);
+        Assert.Equal(guid, _EntityMock.Object.ID);
     }
     #endregion
 
@@ -45,7 +45,7 @@ public class EntityTests
     {
         Guid guid = Guid.NewGuid();
         BaseEntityTester tester = new(guid);
-        Assert.Equal(guid.ToString(), ((IEntity)tester).Id.ToString());
+        Assert.Equal(guid.ToString(), ((IEntity)tester).ID.ToString());
     }
     private sealed record class BaseEntityTester(Guid Id) : BaseEntity(Id)
     {

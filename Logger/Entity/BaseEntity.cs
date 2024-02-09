@@ -4,7 +4,7 @@ public abstract record class BaseEntity : IEntity
 {
     // Id is implemented explicitly because we don't want the developers using this
     // API to confuse it with a different Id, such as a student or employee id
-    Guid IEntity.Id { get => _InternalId; init => _InternalId = value; }
+    Guid IEntity.ID { get => _InternalId; init => _InternalId = value; }
     private Guid _InternalId = Guid.NewGuid();
     // Name is implemented explicitly because we don't want developers using this
     // API to confuse it with a different name, such as FullName in person
