@@ -67,8 +67,18 @@ public class NodeTests
     }
 
     [Fact]
+    public void Exists_DoesExist_ReturnsTrue()
+    {
+        Node<string> node = new("Jimmy");
+        node.Append("John");
+        Assert.True(node.Exists("Jimmy"));
+    }
+
+    [Fact]
     public void Append_AppendingDuplicateValue_ThrowsInvalidOperationException()
     {
-
+        Node<string> node = new("Jimmy");
+        node.Append("John");
+        Assert.Throws<InvalidOperationException>(() => node.Append("Jimmy"));
     }
 }
