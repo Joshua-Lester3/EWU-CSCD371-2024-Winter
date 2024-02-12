@@ -1,12 +1,14 @@
-﻿using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace GenericsHomework;
-public class Node<T>
+public class Node<T> : ICollection<T>
 {
     public Node<T> Next { get; private set; }
 
     public T Element { get; }
+    public int Count { get; }
+    public bool IsReadOnly { get; }
 
     public Node(T element)
     {
@@ -52,5 +54,35 @@ public class Node<T>
             temporaryNode = temporaryNode.Next;
         } while (temporaryNode != this);
         return false;
+    }
+
+    public void Add(T item)
+    {
+        Append(item);
+    }
+
+    public bool Contains(T item)
+    {
+        return Exists(item);
+    }
+
+    public void CopyTo(T[] array, int arrayIndex)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool Remove(T item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        throw new NotImplementedException();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        throw new NotImplementedException();
     }
 }
