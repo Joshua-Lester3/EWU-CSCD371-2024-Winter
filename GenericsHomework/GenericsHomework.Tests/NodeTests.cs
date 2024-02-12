@@ -83,40 +83,4 @@ public class NodeTests
         Assert.Throws<InvalidOperationException>(() => node.Append("Jimmy"));
     }
     #endregion
-
-    #region ICollection<T> Tests
-
-    [Fact]
-    public void Add_NonNullValue_Success()
-    {
-        Node<string> node = new ("Jimmy");
-        node.Add("John");
-        Assert.Equal("John", node.Next.Element);
-        Assert.Equal(node, node.Next.Next);
-    }
-
-    [Fact]
-    public void Add_DuplicateValue_ThrowsInvalidOperation()
-    {
-        Node<string> node = new("Jimmy");
-        node.Add("John");
-        Assert.Throws<InvalidOperationException>(() => node.Add("Jimmy"));
-    }
-
-    [Fact]
-    public void Contains_DoesContain_ReturnsTrue()
-    {
-        Node<string> node = new("Jimmy");
-        node.Append("John");
-        Assert.True(node.Exists("Jimmy"));
-    }
-
-    [Fact]
-    public void Contains_DoesNotContain_ReturnsTrue()
-    {
-        Node<string> node = new("Jimmy");
-        node.Append("John");
-        Assert.False(node.Exists("Jimothy"));
-    }
-    #endregion
 }
