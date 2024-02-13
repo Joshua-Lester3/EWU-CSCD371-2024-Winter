@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericsHomework", "Generic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8D06B81F-8104-4315-B02F-0D77BFA81F97}"
 	ProjectSection(SolutionItems) = preProject
-		Solution Items\Directory.Build.props = Solution Items\Directory.Build.props
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Global
