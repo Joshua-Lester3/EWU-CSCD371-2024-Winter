@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 
 namespace GenericsHomework;
 
@@ -32,7 +33,7 @@ public class Circle<T>
         while (currentNode != Items)
         {
             string element = currentNode.Element?.ToString() ?? throw new ArgumentNullException(nameof(currentNode.Element));
-            result.Append($", {element}");
+            result.Append(CultureInfo.CurrentCulture, $", {element}");
             currentNode = currentNode.Next;
         }
         return result.ToString();

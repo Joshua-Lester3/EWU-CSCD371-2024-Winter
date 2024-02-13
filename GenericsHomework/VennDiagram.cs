@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ public class VennDiagram<T>
         while (currentNode != Circles)
         {
             string element = currentNode.Element.ToString();
-            result.Append($", {{{element}}}");
+            result.Append(CultureInfo.CurrentCulture, $", {{{element}}}");
             currentNode = currentNode.Next;
         }
         return result.ToString();

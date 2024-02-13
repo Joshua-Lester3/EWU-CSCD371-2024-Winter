@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-namespace GenericsHomework;
+﻿namespace GenericsHomework;
 public class Node<T>
 {
     public Node<T> Next { get; private set; }
