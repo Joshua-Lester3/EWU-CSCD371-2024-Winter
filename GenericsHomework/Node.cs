@@ -26,8 +26,11 @@ public class Node<T>
         {
             throw new InvalidOperationException($"This linked list already contains {element}");
         }
-        Node<T> node = new(element);
-        node.Next = Next;
+
+        Node<T> node = new(element)
+        {
+            Next = this.Next
+        };
         Next = node;
     }
 

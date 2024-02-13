@@ -5,7 +5,7 @@ namespace GenericsHomework;
 public class Circle<T>
 {
     public string Name { get; }
-    public Node<T>? Items { get; private set; } = null;
+    public Node<T>? Items { get; private set; }
 
     public Circle(string name)
     {
