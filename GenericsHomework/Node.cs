@@ -32,8 +32,11 @@ public class Node<T>
     }
 
     // You do not need to worry about garbage collection because
-    // there are no static or local variable references that you can
-    // control from this class. It would be on whoever has those references
+    //      there are no static or local variable references that you can
+    //      control from this class. It would be on whoever has those references.
+    //      Additionally, you do not need to worry about setting each Node back on
+    //      itself because as long as there are no static or local variable references
+    //      to any of them, they will be garbage collected.
     public void Clear()
     {
         Next = this;

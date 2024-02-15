@@ -56,7 +56,7 @@ public class NodeTests
         Node<string> node = new("Jimmy");
         node.Append("John");
         node.Clear();
-        Assert.Equal(node, node.Next);
+        Assert.Equal<Node<string>>(node, node.Next);
     }
 
     [Fact]
