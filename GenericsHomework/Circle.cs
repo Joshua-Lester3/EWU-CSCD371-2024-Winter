@@ -27,12 +27,12 @@ public class Circle<T>
     public string GetItems()
     {
         if (Items is null) { return string.Empty; }
-        string initialElement = Items.Element?.ToString() ?? throw new ArgumentNullException(nameof(Items.Element));
+        string initialElement = Items.Element?.ToString() ?? throw new InvalidOperationException(nameof(Items.Element));
         StringBuilder result = new(initialElement);
         Node<T> currentNode = Items.Next;
         while (currentNode != Items)
         {
-            string element = currentNode.Element?.ToString() ?? throw new ArgumentNullException(nameof(currentNode.Element));
+            string element = currentNode.Element?.ToString() ?? throw new InvalidOperationException(nameof(currentNode.Element));
             result.Append(CultureInfo.CurrentCulture, $", {element}");
             currentNode = currentNode.Next;
         }

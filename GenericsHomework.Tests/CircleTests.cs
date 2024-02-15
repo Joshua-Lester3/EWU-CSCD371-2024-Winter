@@ -56,4 +56,21 @@ public class CircleTests
         circle.AddItem("jimmy's daughter");
         Assert.Equal("Jimmy: jimmy's son, jimmy's daughter", circle.ToString());
     }
+
+    [Fact]
+    public void GetItems_InitialElementNull_ThrowsArgumentNullException()
+    {
+        Circle<string> circle = new("Jimbob");
+        circle.AddItem(null!);
+        Assert.Throws<InvalidOperationException>(() => circle.GetItems());
+    }
+
+    [Fact]
+    public void GetItems_NonInitialElementNull_ThrowsArgumentNullException()
+    {
+        Circle<string> circle = new("Jimbob");
+        circle.AddItem("Jimbobby");
+        circle.AddItem(null!);
+        Assert.Throws<InvalidOperationException>(() => circle.GetItems());
+    }
 }

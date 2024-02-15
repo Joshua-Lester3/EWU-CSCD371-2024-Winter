@@ -3,7 +3,6 @@
 namespace GenericsHomework.Tests;
 public class NodeTests
 {
-    #region Node Tests
     [Fact]
     public void Element_NodeInitialized_Success()
     {
@@ -82,5 +81,11 @@ public class NodeTests
         node.Append("John");
         Assert.Throws<InvalidOperationException>(() => node.Append("Jimmy"));
     }
-    #endregion
+
+    [Fact]
+    public void Exists_ElementIsNull_ThrowsInvalidOperationException()
+    {
+        Node<string> node = new(null!);
+        Assert.Throws<InvalidOperationException>(() => node.Exists("Jimbobby"));
+    }
 }
