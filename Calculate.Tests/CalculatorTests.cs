@@ -58,4 +58,40 @@ public class CalculatorTests
         int result;
         Assert.Throws<DivideByZeroException>(() => Calculator.Divide(0, 0, out result));
     }
+
+    [Fact]
+    public void MathematicalOperations_GetAdd_Success()
+    {
+        // Arrange
+        Calculator calculator = new();
+
+        // Act
+        Calculator.DelegateWithOut<int, int, int>? operation;
+        calculator.MathematicalOperations.TryGetValue('+', out operation);
+
+        // Assert
+        Assert.Equal(Calculator.Add, operation);
+    }
+
+    [Theory]
+    [MemberData(nameof(TestCases))]
+    public void MathematicalOperations_GetSubtract_Success(Calculator.DelegateWithOut<int, int, int> expectedOperation, char key)
+    {
+        // Arrange
+        Calculator calculator = new();
+
+        // Act
+        Calculator.DelegateWithOut<int, int, int>? operation;
+        calculator.MathematicalOperations.TryGetValue(key, out operation);
+
+        // Assert
+        Assert.Equal(expectedOperation, operation);
+    }
+
+    public static IEnumerable<object[]> TestCases = new object[][] {
+        new object[] { (Calculator.DelegateWithOut<int, int, int>)(Calculator.Add), '+' },
+        new object[] { (Calculator.DelegateWithOut<int, int, int>)(Calculator.Subtract), '-' },
+        new object[] { (Calculator.DelegateWithOut<int, int, int>)(Calculator.Multiply), '*' },
+        new object[] { (Calculator.DelegateWithOut<int, int, int>)(Calculator.Divide), '/' }
+    };
 }
