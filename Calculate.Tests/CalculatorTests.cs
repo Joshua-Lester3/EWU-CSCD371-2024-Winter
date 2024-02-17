@@ -94,4 +94,20 @@ public class CalculatorTests
         new object[] { (Calculator.DelegateWithOut<int, int, int>)(Calculator.Multiply), '*' },
         new object[] { (Calculator.DelegateWithOut<int, int, int>)(Calculator.Divide), '/' }
     };
+
+    [Fact]
+    public void TryCalculate_ValidInput_Success()
+    {
+        // Arrange
+        string input = "4 + 2";
+        Calculator calculator = new();
+        int result;
+
+        // Act
+        bool didSucceed = calculator.TryParse(input, out result);
+
+        // Assert
+        Assert.True(didSucceed);
+        Assert.Equal(6, result);
+    }
 }
