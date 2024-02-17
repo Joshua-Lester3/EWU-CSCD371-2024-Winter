@@ -96,18 +96,61 @@ public class CalculatorTests
     };
 
     [Fact]
-    public void TryCalculate_ValidInput_Success()
+    public void TryCalculate_OnlyOneOperand_ReturnsFalseAndOutParameterIsZero()
+    {
+        InvalidInputHelper("4 +  ");
+    }
+
+    [Theory]
+    [InlineData("4e + 4")]
+    [InlineData("4 + 4e")]
+    [InlineData("4e + 4e")]
+    public void TryCalculate_OperandsAreNotInt_ReturnsFalseAndOutParameterIsZero(string input)
+    {
+        InvalidInputHelper(input);
+    }
+
+    [Fact]
+    public void TryCalculate_OperantNotValid_ReturnsFalseAndOutParameterIsZero()
+    {
+        InvalidInputHelper("4 & 3");
+    }
+
+    [Fact]
+    public void TryCalculate_OperantNotAChar_ReturnsFalseAndOutParameterIsZero()
+    {
+        InvalidInputHelper("4 +++++ 4");
+    }
+
+    [Theory]
+    [InlineData(6, "4 + 2")]
+    [InlineData(2, "4 - 2")]
+    [InlineData(8, "4 * 2")]
+    [InlineData(2, "4 / 2")]
+    public void TryCalculate_ValidInput_Success(int expected, string input)
     {
         // Arrange
-        string input = "4 + 2";
         Calculator calculator = new();
         int result;
 
         // Act
-        bool didSucceed = calculator.TryParse(input, out result);
+        bool didSucceed = calculator.TryCalculate(input, out result);
 
         // Assert
         Assert.True(didSucceed);
-        Assert.Equal(6, result);
+        Assert.Equal(expected, result);
+    }
+
+    private void InvalidInputHelper(string input)
+    {
+        // Arrange
+        Calculator calculator = new();
+
+        // Act
+        bool didSucceed = calculator.TryCalculate(input, out int result);
+
+        // Assert
+        Assert.False(didSucceed);
+        Assert.Equal(0, result);
     }
 }

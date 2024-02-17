@@ -31,22 +31,26 @@ public class Calculator
 
     public static void Subtract(int left, int right, out int result) => result = left - right;
 
-    public bool TryParse(string input, out int result)
+    public bool TryCalculate(string input, out int result)
     {
         result = 0;
         string[] inputSplit = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
         if (inputSplit.Length != 3)
         {
             return false;
         }
-        if (!TryParseInt(inputSplit[0], out int operand1) || !TryParseInt(inputSplit[2], out int operand2)) {
+        if (!TryParseInt(inputSplit[0], out int operand1) || !TryParseInt(inputSplit[2], out int operand2))
+        {
             return false;
         }
-
-        char key = inputSplit[1] switch
+        if (char.TryParse(inputSplit[1], out char key)
+            && MathematicalOperations.TryGetValue(key, out DelegateWithOut<int, int, int>? operation))
         {
-            "+" => MathematicalOperations.TryGetValue("+")
-        };
+            operation(operand1, operand2, out result);
+            return true;
+        }
+        return false;
     }
 
     private bool TryParseInt(string input, out int result)
