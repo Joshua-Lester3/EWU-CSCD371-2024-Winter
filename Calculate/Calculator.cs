@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Calculate;
+﻿namespace Calculate;
 
 public class Calculator
 {
@@ -14,11 +6,13 @@ public class Calculator
 
     private static IReadOnlyDictionary<char, DelegateWithOut<int, int, int>> CreateMathematicalOperations()
     {
-        Dictionary<char, DelegateWithOut<int, int, int>> result = new();
-        result.Add('+', Add);
-        result.Add('-', Subtract);
-        result.Add('*', Multiply);
-        result.Add('/', Divide);
+        Dictionary<char, DelegateWithOut<int, int, int>> result = new()
+        {
+            { '+', Add },
+            { '-', Subtract },
+            { '*', Multiply },
+            { '/', Divide }
+        };
         return result;
     }
 

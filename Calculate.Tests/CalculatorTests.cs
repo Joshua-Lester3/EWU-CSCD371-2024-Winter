@@ -47,16 +47,14 @@ public class CalculatorTests
     [InlineData(0, 0, 4)]
     public void Divide_NonNullValues_Success(int expected, int left, int right)
     {
-        int result;
-        Calculator.Divide(left, right, out result);
+        Calculator.Divide(left, right, out int result);
         Assert.Equal(expected, result);
     }
 
     [Fact]
     public void Divide_ByZero_ThrowsDivideByZeroException()
     {
-        int result;
-        Assert.Throws<DivideByZeroException>(() => Calculator.Divide(0, 0, out result));
+        Assert.Throws<DivideByZeroException>(() => Calculator.Divide(0, 0, out int result));
     }
 
     [Fact]
@@ -66,8 +64,7 @@ public class CalculatorTests
         Calculator calculator = new();
 
         // Act
-        Calculator.DelegateWithOut<int, int, int>? operation;
-        calculator.MathematicalOperations.TryGetValue('+', out operation);
+        calculator.MathematicalOperations.TryGetValue('+', out Calculator.DelegateWithOut<int, int, int>?  operation);
 
         // Assert
         Assert.Equal(Calculator.Add, operation);
@@ -89,16 +86,16 @@ public class CalculatorTests
     }
 
     public static IEnumerable<object[]> TestCases = new object[][] {
-        new object[] { (Calculator.DelegateWithOut<int, int, int>)(Calculator.Add), '+' },
-        new object[] { (Calculator.DelegateWithOut<int, int, int>)(Calculator.Subtract), '-' },
-        new object[] { (Calculator.DelegateWithOut<int, int, int>)(Calculator.Multiply), '*' },
-        new object[] { (Calculator.DelegateWithOut<int, int, int>)(Calculator.Divide), '/' }
+        new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Add, '+' },
+        new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Subtract, '-' },
+        new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Multiply, '*' },
+        new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Divide, '/' }
     };
 
     [Fact]
     public void TryCalculate_OnlyOneOperand_ReturnsFalseAndOutParameterIsZero()
     {
-        InvalidInputHelper("4 +  ");
+        InvalidInputTest("4 +  ");
     }
 
     [Theory]
@@ -107,19 +104,19 @@ public class CalculatorTests
     [InlineData("4e + 4e")]
     public void TryCalculate_OperandsAreNotInt_ReturnsFalseAndOutParameterIsZero(string input)
     {
-        InvalidInputHelper(input);
+        InvalidInputTest(input);
     }
 
     [Fact]
     public void TryCalculate_OperantNotValid_ReturnsFalseAndOutParameterIsZero()
     {
-        InvalidInputHelper("4 & 3");
+        InvalidInputTest("4 & 3");
     }
 
     [Fact]
     public void TryCalculate_OperantNotAChar_ReturnsFalseAndOutParameterIsZero()
     {
-        InvalidInputHelper("4 +++++ 4");
+        InvalidInputTest("4 +++++ 4");
     }
 
     [Theory]
@@ -141,7 +138,7 @@ public class CalculatorTests
         Assert.Equal(expected, result);
     }
 
-    private void InvalidInputHelper(string input)
+    private void InvalidInputTest(string input)
     {
         // Arrange
         Calculator calculator = new();
