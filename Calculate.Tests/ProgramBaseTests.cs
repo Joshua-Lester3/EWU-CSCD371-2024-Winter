@@ -44,8 +44,7 @@ public class ProgramBaseTests
     }
 
     [Theory]
-    [InlineData("Jimbob is the best\r\n", "Jimbob is the best")]
-    [InlineData("\r\n", "")]
+    [MemberData(nameof(TestCases))]
     public void WriteLine_InitializedValue_Success(string expected, string actual)
     {
         // Arrange
@@ -64,6 +63,12 @@ public class ProgramBaseTests
         // Assert
         Assert.Equal(expected, newOut.ToString());
     }
+
+    public static IEnumerable<object[]> TestCases { get; } = new object[][]
+    {
+        new object[] { "Jimbob is the best" + Environment.NewLine, "Jimbob is the best" },
+        new object[] { Environment.NewLine, string.Empty }
+    };
 
     [Theory]
     [InlineData("hi", "hi")]
