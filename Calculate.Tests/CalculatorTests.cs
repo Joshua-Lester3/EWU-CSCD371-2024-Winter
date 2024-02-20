@@ -85,7 +85,7 @@ public class CalculatorTests
         Assert.Equal(expectedOperation, operation);
     }
 
-    public static IEnumerable<object[]> TestCases = new object[][] {
+    public static IEnumerable<object[]> TestCases { get; } = new object[][] {
         new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Add, '+' },
         new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Subtract, '-' },
         new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Multiply, '*' },
@@ -138,7 +138,7 @@ public class CalculatorTests
         Assert.Equal(expected, result);
     }
 
-    private void InvalidInputTest(string input)
+    private static void InvalidInputTest(string input)
     {
         // Arrange
         Calculator calculator = new();

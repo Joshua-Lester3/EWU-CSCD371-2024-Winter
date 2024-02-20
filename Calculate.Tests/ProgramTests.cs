@@ -109,7 +109,7 @@ public class ProgramTests
     }
 
     // Used for MemberData in Main_InvalidInput_AsksToTryAgain()
-    public static IEnumerable<object[]> TestCases1 = new object[][]
+    public static IEnumerable<object[]> TestCases1 { get; } = new object[][]
     {
         new object[] { $"4 e 4{Environment.NewLine}q" },
         new object[] { $"eeee{Environment.NewLine}q" }
@@ -138,7 +138,7 @@ public class ProgramTests
 
     // Used for MemberData in Main_NoInput_SuccessfullyQuits()
     // Used to simulate either no more lines to read or a Ctrl + Z shortcut to end the application
-    public static IEnumerable<object[]> TestCases2 = new object[][]
+    public static IEnumerable<object[]> TestCases2 { get; } = new object[][]
     {
         new object[] { $"4 + 4{Environment.NewLine}" },
         new object[] { $"{Environment.NewLine}" }
