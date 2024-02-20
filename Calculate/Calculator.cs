@@ -11,7 +11,7 @@ public class Calculator
             { '/', Divide }
         };
 
-    public delegate void DelegateWithOut<T, U, V>(T t, U u, out V v);
+    public delegate void DelegateWithOut<TParamOne, TParamTwo, TParamThree>(TParamOne paramOne, TParamTwo paramTwo, out TParamThree paramThree);
     public static void Add(int left, int right, out int result) => result = left + right;
 
     public static void Divide(int left, int right, out int result) => result = left / right;
@@ -57,7 +57,7 @@ public class Calculator
         return true;
     }
 
-    private int TryParseIntHelper(char character)
+    private static int TryParseIntHelper(char character)
     {
         return character switch
         {
