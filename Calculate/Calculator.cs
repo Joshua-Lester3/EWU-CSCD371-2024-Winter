@@ -30,20 +30,19 @@ public class Calculator
         result = 0;
         string[] inputSplit = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-        if (inputSplit.Length != 3)
+        if (inputSplit.Length != 3 || !TryParseInt(inputSplit[0], out int operand1) || !TryParseInt(inputSplit[2], out int operand2))
         {
             return false;
         }
-        if (!TryParseInt(inputSplit[0], out int operand1) || !TryParseInt(inputSplit[2], out int operand2))
-        {
-            return false;
-        }
+        
+
         if (char.TryParse(inputSplit[1], out char key)
             && MathematicalOperations.TryGetValue(key, out DelegateWithOut<int, int, int>? operation))
         {
             operation(operand1, operand2, out result);
             return true;
         }
+
         return false;
     }
 
@@ -56,7 +55,6 @@ public class Calculator
             int appended = TryParseIntHelper(input[index]);
             if (appended < 0)
             {
-                result = 0;
                 return false;
             }
             result += appended * multiplier;

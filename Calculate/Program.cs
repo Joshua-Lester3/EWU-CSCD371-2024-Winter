@@ -14,30 +14,53 @@ public class Program
         Calculator calculator = new();
 
         program.WriteLine("Welcome to the Calculator!");
-        program.WriteLine("Pretty please enter a calculation you would like me to do:");
+        //program.WriteLine("Pretty please enter a calculation you would like me to do:");
 
-        bool keepGoing;
-        string? input = program.ReadLine();
-        do
+        //bool keepGoing;
+        //string? input = program.ReadLine();
+        //do
+        //{
+        //    if (input is null)
+        //    {
+        //        break;
+        //    }
+        //    calculator.TryCalculate(input, out int answer);
+        //    program.WriteLine($"What a lovely calculation! The answer... is {answer}");
+        //    program.WriteLine("Now... enter a new calculation, or enter 'q' if you would like me to shut myself down...");
+        //    input = program.ReadLine();
+        //    if (input is null)
+        //    {
+        //        break;
+        //    }
+        //    else
+        //    {
+        //        keepGoing = !input.Contains('q');
+        //    }
+        //} while (keepGoing);
+
+        while (true)
         {
-            if (input is null)
+            program.WriteLine("Please enter a calculation (or 'q' to quit):");
+            string? input = program.ReadLine();
+
+            if (string.IsNullOrEmpty(input) || input.Contains('q'))
             {
+                program.WriteLine("Exiting...");
                 break;
             }
-            calculator.TryCalculate(input, out int answer);
-            program.WriteLine($"What a lovely calculation! The answer... is {answer}");
-            program.WriteLine("Now... enter a new calculation, or enter 'q' if you would like me to shut myself down...");
-            input = program.ReadLine();
-            if (input is null)
+
+            if (calculator.TryCalculate(input, out int answer))
             {
-                break;
+                program.WriteLine($"The answer is: {answer}");
             }
             else
             {
-                keepGoing = !input.Contains('q');
+                program.WriteLine("Invalid input. Please try again.");
             }
-        } while (keepGoing);
+        }
 
-        program.WriteLine("Exiting...");
+
+
+        // program.WriteLine("Exiting...");
     }
 }
