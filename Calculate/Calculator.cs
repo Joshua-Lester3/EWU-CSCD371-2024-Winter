@@ -2,19 +2,14 @@
 
 public class Calculator
 {
-    public IReadOnlyDictionary<char, DelegateWithOut<int, int, int>> MathematicalOperations { get; } = CreateMathematicalOperations();
-
-    private static IReadOnlyDictionary<char, DelegateWithOut<int, int, int>> CreateMathematicalOperations()
-    {
-        Dictionary<char, DelegateWithOut<int, int, int>> result = new()
+    public IReadOnlyDictionary<char, DelegateWithOut<int, int, int>> MathematicalOperations { get; } = 
+        new Dictionary<char, DelegateWithOut<int, int, int>>()
         {
             { '+', Add },
             { '-', Subtract },
             { '*', Multiply },
             { '/', Divide }
         };
-        return result;
-    }
 
     public delegate void DelegateWithOut<T, U, V>(T t, U u, out V v);
     public static void Add(int left, int right, out int result) => result = left + right;
@@ -30,12 +25,11 @@ public class Calculator
         result = 0;
         string[] inputSplit = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-        if (inputSplit.Length != 3 || !TryParseInt(inputSplit[0], out int operand1) 
+        if (inputSplit.Length != 3 || !TryParseInt(inputSplit[0], out int operand1)
             || !TryParseInt(inputSplit[2], out int operand2))
         {
             return false;
         }
-        
 
         if (char.TryParse(inputSplit[1], out char key)
             && MathematicalOperations.TryGetValue(key, out DelegateWithOut<int, int, int>? operation))
@@ -49,7 +43,6 @@ public class Calculator
 
     private bool TryParseInt(string input, out int result)
     {
-        
         result = 0;
         for (int index = input.Length - 1, multiplier = 1; index >= 0; index--, multiplier *= 10)
         {

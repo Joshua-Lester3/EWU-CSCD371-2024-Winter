@@ -2,115 +2,6 @@
 
 public class ProgramTests
 {
-    #region Properties Tests
-    [Theory]
-    [InlineData("Jimbob is the best\r\n", "Jimbob is the best")]
-    [InlineData("\r\n", "")]
-    public void WriteLine_DefaultValue_Success(string expected, string actual)
-    {
-        // Arrange
-        using TextWriter oldOut = Console.Out;
-        using StringWriter newOut = new StringWriter();
-        Console.SetOut(newOut);
-        Program program = new();
-
-        // Act
-        program.WriteLine(actual);
-        Console.SetOut(oldOut);
-
-        // Assert
-        Assert.Equal(expected, newOut.ToString());
-    }
-
-    [Theory]
-    [InlineData("hi", "hi")]
-    [InlineData(null, "")]
-    public void ReadLine_DefaultValue_Success(string expected, string actual)
-    {
-        // Arrange
-        using StringReader newIn = new(actual);
-        using TextReader oldIn = Console.In;
-        Console.SetIn(newIn);
-        Program program = new();
-
-        //Act
-        string? result = program.ReadLine();
-        Console.SetIn(oldIn);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("Jimbob is the best\r\n", "Jimbob is the best")]
-    [InlineData("\r\n", "")]
-    public void WriteLine_InitializedValue_Success(string expected, string actual)
-    {
-        // Arrange
-        using TextWriter oldOut = Console.Out;
-        using StringWriter newOut = new StringWriter();
-        Console.SetOut(newOut);
-        Program program = new()
-        {
-            WriteLine = WriteLineTester
-        };
-
-        // Act
-        program.WriteLine(actual);
-        Console.SetOut(oldOut);
-
-        // Assert
-        Assert.Equal(expected, newOut.ToString());
-    }
-
-    [Theory]
-    [InlineData("hi", "hi")]
-    [InlineData(null, "")]
-    public void ReadLine_InitializedValue_Success(string expected, string actual)
-    {
-        // Arrange
-        using StringReader newIn = new(actual);
-        using TextReader oldIn = Console.In;
-        Console.SetIn(newIn);
-        Program program = new()
-        {
-            ReadLine = ReadLineTester
-        };
-
-        //Act
-        string? result = program.ReadLine();
-        Console.SetIn(oldIn);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    private void WriteLineTester(object? value)
-    {
-        Console.WriteLine(value?.ToString());
-    }
-
-    private string? ReadLineTester()
-    {
-        return Console.ReadLine();
-    }
-    #endregion
-
-    #region Constructor Tests
-    [Fact]
-    public void Program_DefaultConstructor_Success()
-    {
-        // Arrange
-        Program program = new();
-
-        // Act
-
-        // Assert
-        Assert.Equal(Console.WriteLine, program.WriteLine);
-        Assert.Equal(Console.ReadLine, program.ReadLine);
-    }
-    #endregion
-
     #region Console (Main) Tests
     [Fact]
     public void Main_Welcome_Success()
@@ -126,10 +17,11 @@ public class ProgramTests
         // Act
         Program.Main();
         Console.SetOut(oldOut);
+        Console.SetIn(oldIn);
 
         // Assert
         string expected = "Welcome to the Calculator!" + Environment.NewLine
-            + "Pretty please enter a calculation you would like me to do:" + Environment.NewLine;
+            + "Please enter a calculation (or 'q' to quit):" + Environment.NewLine;
         Assert.Contains(expected, newOut.ToString());
     }
 
@@ -194,9 +86,37 @@ public class ProgramTests
         Assert.Contains("The answer... is 9", newOut.ToString());
     }
 
+    [Theory]
+    [MemberData(nameof(TestCases1))]
+    public void Main_InvalidInput_AsksToTryAgain(string input)
+    {
+        // Arrange
+        using TextReader oldIn = Console.In;
+        using StringReader newIn = new(input);
+        Console.SetIn(newIn);
+        using TextWriter oldOut = Console.Out;
+        using StringWriter newOut = new StringWriter();
+        Console.SetOut(newOut);
+
+        // Act
+        Program.Main();
+        Console.SetIn(oldIn);
+        Console.SetOut(oldOut);
+
+        // Assert
+        Assert.Contains("Invalid input. Please try again.", newOut.ToString());
+        Assert.Contains("Exiting...", newOut.ToString());
+    }
+
+    // Used for MemberData in Main_InvalidInput_AsksToTryAgain()
+    public static IEnumerable<object[]> TestCases1 = new object[][]
+    {
+        new object[] { $"4 e 4{Environment.NewLine}q" },
+        new object[] { $"eeee{Environment.NewLine}q" }
+    };
 
     [Theory]
-    [MemberData(nameof(TestCases))]
+    [MemberData(nameof(TestCases2))]
     public void Main_NoInput_SuccessfullyQuits(string input)
     {
         // Arrange
@@ -218,7 +138,7 @@ public class ProgramTests
 
     // Used for MemberData in Main_NoInput_SuccessfullyQuits()
     // Used to simulate either no more lines to read or a Ctrl + Z shortcut to end the application
-    public static IEnumerable<object[]> TestCases = new object[][]
+    public static IEnumerable<object[]> TestCases2 = new object[][]
     {
         new object[] { $"4 + 4{Environment.NewLine}" },
         new object[] { $"{Environment.NewLine}" }

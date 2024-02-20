@@ -12,10 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleUtilities", "ConsoleUtilities", "{FCBFA1F8-1298-4D1D-9863-89C781A13C08}"
-	ProjectSection(SolutionItems) = preProject
-		ProgramBase.cs = ProgramBase.cs
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleUtilities", "ConsoleUtilities\ConsoleUtilities.csproj", "{F17AE0D2-5743-46B4-A61C-A27670FB3BE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,12 +28,13 @@ Global
 		{E7F79A4F-2C55-48B8-8441-FF7E6968E542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7F79A4F-2C55-48B8-8441-FF7E6968E542}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7F79A4F-2C55-48B8-8441-FF7E6968E542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F17AE0D2-5743-46B4-A61C-A27670FB3BE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F17AE0D2-5743-46B4-A61C-A27670FB3BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F17AE0D2-5743-46B4-A61C-A27670FB3BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F17AE0D2-5743-46B4-A61C-A27670FB3BE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{FCBFA1F8-1298-4D1D-9863-89C781A13C08} = {EC7A58AF-B22B-4FA1-AA68-064E01EDD8A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE21F4EF-D56C-4855-AEF9-54369550D010}
