@@ -5,11 +5,16 @@ VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calculate", "Calculate\Calculate.csproj", "{A6D0CA3F-0C88-4D8D-AD55-C96938DE2193}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculate.Tests", "Calculate.Tests\Calculate.Tests.csproj", "{E7F79A4F-2C55-48B8-8441-FF7E6968E542}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calculate.Tests", "Calculate.Tests\Calculate.Tests.csproj", "{E7F79A4F-2C55-48B8-8441-FF7E6968E542}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EC7A58AF-B22B-4FA1-AA68-064E01EDD8A4}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleUtilities", "ConsoleUtilities", "{FCBFA1F8-1298-4D1D-9863-89C781A13C08}"
+	ProjectSection(SolutionItems) = preProject
+		ProgramBase.cs = ProgramBase.cs
 	EndProjectSection
 EndProject
 Global
@@ -29,6 +34,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FCBFA1F8-1298-4D1D-9863-89C781A13C08} = {EC7A58AF-B22B-4FA1-AA68-064E01EDD8A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE21F4EF-D56C-4855-AEF9-54369550D010}

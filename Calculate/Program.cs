@@ -64,3 +64,26 @@ public class Program
         // program.WriteLine("Exiting...");
     }
 }
+
+
+
+
+
+//if we refactor for extra credit;
+
+
+
+//namespace Calculate
+//{
+//    using ConsoleUtilities;
+
+//    public class Program
+//    {
+//        public static void Main()
+//        {
+//            ProgramBase program = new ProgramBase();
+//            program.Run();
+//        }
+//    }
+//}
+
