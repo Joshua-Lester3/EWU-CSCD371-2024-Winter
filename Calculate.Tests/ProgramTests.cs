@@ -7,11 +7,11 @@ public class ProgramTests
     public void Main_Welcome_Success()
     {
         // Arrange
-        using TextWriter oldOut = Console.Out;
-        using StringWriter newOut = new StringWriter();
+        TextWriter oldOut = Console.Out;
+        StringWriter newOut = new StringWriter();
         Console.SetOut(newOut);
-        using TextReader oldIn = Console.In;
-        using StringReader newIn = new(""); // Used to make program quit because of no new lines
+        TextReader oldIn = Console.In;
+        StringReader newIn = new("q" + Environment.NewLine);
         Console.SetIn(newIn);
 
         // Act
@@ -29,11 +29,11 @@ public class ProgramTests
     public void Main_ProgramCalculates_Success()
     {
         // Arrange
-        using TextReader oldIn = Console.In;
-        using StringReader newIn = new("4 + 2");
+        TextReader oldIn = Console.In;
+        StringReader newIn = new("4 + 2" + Environment.NewLine + "q" + Environment.NewLine);
         Console.SetIn(newIn);
-        using TextWriter oldOut = Console.Out;
-        using StringWriter newOut = new StringWriter();
+        TextWriter oldOut = Console.Out;
+        StringWriter newOut = new StringWriter();
         Console.SetOut(newOut);
 
         // Act
@@ -49,11 +49,11 @@ public class ProgramTests
     public void Main_ProgramQuit_Success()
     {
         // Arrange
-        using TextReader oldIn = Console.In;
-        using StringReader newIn = new($"4 + 2{Environment.NewLine}q{Environment.NewLine}");
+        TextReader oldIn = Console.In;
+        StringReader newIn = new($"4 + 2{Environment.NewLine}q{Environment.NewLine}");
         Console.SetIn(newIn);
-        using TextWriter oldOut = Console.Out;
-        using StringWriter newOut = new StringWriter();
+        TextWriter oldOut = Console.Out;
+        StringWriter newOut = new StringWriter();
         Console.SetOut(newOut);
 
         // Act
@@ -69,11 +69,11 @@ public class ProgramTests
     public void Main_ProgramRepeat_Success()
     {
         // Arrange
-        using TextReader oldIn = Console.In;
-        using StringReader newIn = new($"4 + 2{Environment.NewLine}5 + 4{Environment.NewLine}");
+        TextReader oldIn = Console.In;
+        StringReader newIn = new($"4 + 2{Environment.NewLine}5 + 4{Environment.NewLine}q{Environment.NewLine}");
         Console.SetIn(newIn);
         using TextWriter oldOut = Console.Out;
-        using StringWriter newOut = new StringWriter();
+        StringWriter newOut = new StringWriter();
         Console.SetOut(newOut);
 
         // Act
@@ -91,11 +91,11 @@ public class ProgramTests
     public void Main_InvalidInput_AsksToTryAgain(string input)
     {
         // Arrange
-        using TextReader oldIn = Console.In;
-        using StringReader newIn = new(input);
+        TextReader oldIn = Console.In;
+        StringReader newIn = new(input);
         Console.SetIn(newIn);
-        using TextWriter oldOut = Console.Out;
-        using StringWriter newOut = new StringWriter();
+        TextWriter oldOut = Console.Out;
+        StringWriter newOut = new StringWriter();
         Console.SetOut(newOut);
 
         // Act
@@ -120,11 +120,11 @@ public class ProgramTests
     public void Main_NoInput_SuccessfullyQuits(string input)
     {
         // Arrange
-        using TextReader oldIn = Console.In;
-        using StringReader newIn = new(input);
+        TextReader oldIn = Console.In;
+        StringReader newIn = new(input);
         Console.SetIn(newIn);
-        using TextWriter oldOut = Console.Out;
-        using StringWriter newOut = new StringWriter();
+        TextWriter oldOut = Console.Out;
+        StringWriter newOut = new StringWriter();
         Console.SetOut(newOut);
 
         // Act
@@ -140,8 +140,8 @@ public class ProgramTests
     // Used to simulate either no more lines to read or a Ctrl + Z shortcut to end the application
     public static IEnumerable<object[]> TestCases2 { get; } = new object[][]
     {
-        new object[] { $"4 + 4{Environment.NewLine}" },
-        new object[] { $"{Environment.NewLine}" }
+        new object[] { $"4 + 4{Environment.NewLine}q" },
+        new object[] { $"{Environment.NewLine}q" }
     };
     #endregion
 }

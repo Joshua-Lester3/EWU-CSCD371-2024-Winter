@@ -11,8 +11,8 @@ public class ProgramBaseTests
     public void WriteLine_DefaultValue_Success(string expected, string actual)
     {
         // Arrange
-        using TextWriter oldOut = Console.Out;
-        using StringWriter newOut = new StringWriter();
+        TextWriter oldOut = Console.Out;
+        StringWriter newOut = new StringWriter();
         Console.SetOut(newOut);
         ProgramBase program = new();
 
@@ -30,8 +30,8 @@ public class ProgramBaseTests
     public void ReadLine_DefaultValue_Success(string expected, string actual)
     {
         // Arrange
-        using StringReader newIn = new(actual);
-        using TextReader oldIn = Console.In;
+        StringReader newIn = new(actual);
+        TextReader oldIn = Console.In;
         Console.SetIn(newIn);
         ProgramBase program = new();
 
@@ -49,8 +49,8 @@ public class ProgramBaseTests
     public void WriteLine_InitializedValue_Success(string expected, string actual)
     {
         // Arrange
-        using TextWriter oldOut = Console.Out;
-        using StringWriter newOut = new StringWriter();
+        TextWriter oldOut = Console.Out;
+        StringWriter newOut = new StringWriter();
         Console.SetOut(newOut);
         ProgramBase program = new()
         {
@@ -71,8 +71,8 @@ public class ProgramBaseTests
     public void ReadLine_InitializedValue_Success(string expected, string actual)
     {
         // Arrange
-        using StringReader newIn = new(actual);
-        using TextReader oldIn = Console.In;
+        StringReader newIn = new(actual);
+        TextReader oldIn = Console.In;
         Console.SetIn(newIn);
         ProgramBase program = new()
         {
