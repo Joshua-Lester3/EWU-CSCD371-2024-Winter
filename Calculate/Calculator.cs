@@ -41,7 +41,7 @@ public class Calculator
         return false;
     }
 
-    private bool TryParseInt(string input, out int result)
+    private static bool TryParseInt(string input, out int result)
     {
         result = 0;
         for (int index = input.Length - 1, multiplier = 1; index >= 0; index--, multiplier *= 10)
