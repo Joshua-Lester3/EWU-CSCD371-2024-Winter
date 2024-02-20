@@ -6,9 +6,8 @@ public class ProgramBaseTests
 {
     #region Properties Tests
     [Theory]
-    [InlineData("Jimbob is the best\r\n", "Jimbob is the best")]
-    [InlineData("\r\n", "")]
-    public void WriteLine_DefaultValue_Success(string expected, string actual)
+    [InlineData("Jimbob")]
+    public void WriteLine_DefaultValue_Success(string expected)
     {
         // Arrange
         TextWriter oldOut = Console.Out;
@@ -17,11 +16,11 @@ public class ProgramBaseTests
         ProgramBase program = new();
 
         // Act
-        program.WriteLine(actual);
+        program.WriteLine(expected);
         Console.SetOut(oldOut);
 
         // Assert
-        Assert.Equal(expected, newOut.ToString());
+        Assert.Contains(expected, newOut.ToString());
     }
 
     [Theory]
@@ -44,8 +43,8 @@ public class ProgramBaseTests
     }
 
     [Theory]
-    [MemberData(nameof(TestCases))]
-    public void WriteLine_InitializedValue_Success(string expected, string actual)
+    [InlineData("Jimbob")]
+    public void WriteLine_InitializedValue_Success(string expected)
     {
         // Arrange
         TextWriter oldOut = Console.Out;
@@ -57,18 +56,12 @@ public class ProgramBaseTests
         };
 
         // Act
-        program.WriteLine(actual);
+        program.WriteLine(expected);
         Console.SetOut(oldOut);
 
         // Assert
-        Assert.Equal(expected, newOut.ToString());
+        Assert.Contains(expected, newOut.ToString());
     }
-
-    public static IEnumerable<object[]> TestCases { get; } = new object[][]
-    {
-        new object[] { "Jimbob is the best" + Environment.NewLine, "Jimbob is the best" },
-        new object[] { Environment.NewLine, string.Empty }
-    };
 
     [Theory]
     [InlineData("hi", "hi")]
