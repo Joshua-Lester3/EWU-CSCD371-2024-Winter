@@ -20,7 +20,7 @@ public class ProgramBaseTests
     }
 
     [Fact]
-    public void ReadLine_DefaultValue_Success()
+    public void ReadLine_InitializedValue_Success()
     {
         // Arrange
         ProgramBase program = new()
@@ -32,6 +32,21 @@ public class ProgramBaseTests
 
         // Assert
         Assert.Equal("hi", program.ReadLine());
+    }
+
+    [Fact]
+    public void ReadLine_DefaultValue_Success()
+    {
+        // Arrange
+        ProgramBase program = new();
+        string view = "<<hi>>";
+        string? input = null;
+
+        // Act
+
+        // Assert
+        ConsoleAssert.Expect(view, () => input = program.ReadLine());
+        Assert.Equal("hi", input);
     }
     #endregion
 
