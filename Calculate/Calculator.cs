@@ -25,14 +25,14 @@ public class Calculator
         string[] inputSplit = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
         if (inputSplit.Length != 3 || !TryParseInt(inputSplit[0], out int operand1)
-            || !TryParseInt(inputSplit[2], out int operand2))
+            || !TryParseInt(inputSplit[2], out int operand2) || inputSplit[1].Length > 1)
         {
             return false;
         }
-
-        if (char.TryParse(inputSplit[1], out char key)
-            && MathematicalOperations.TryGetValue(key, out Func<int, int, int>? operation))
+        char key = inputSplit[1][0];
+        if (MathematicalOperations.ContainsKey(key))
         {
+            Func<int, int, int>? operation = MathematicalOperations[key];
             result = operation(operand1, operand2);
             return true;
         }
