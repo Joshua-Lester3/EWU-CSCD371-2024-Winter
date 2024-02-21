@@ -29,7 +29,7 @@ Exiting...";
 Please enter a calculation (or 'q' to quit):<<4 + 2
 >>
 What a lovely calculation! The answer... is 6
-Please enter a calculation (or 'q' to quit):<<
+Please enter a calculation (or 'q' to quit):<<q
 >>
 Exiting...";
         // Act
@@ -92,14 +92,14 @@ Exiting...";
 Please enter a calculation (or 'q' to quit):<<4eee4
 >>
 Invalid input. Please try again.
-Please enter a calculation (or 'q' to quit):<<
+Please enter a calculation (or 'q' to quit):<<q
 >>
 Exiting..." },
         new object[] { @"Welcome to the Calculator!
 Please enter a calculation (or 'q' to quit):<<eee 4
 >>
 Invalid input. Please try again.
-Please enter a calculation (or 'q' to quit):<<
+Please enter a calculation (or 'q' to quit):<<q
 >>
 Exiting..." }
     };

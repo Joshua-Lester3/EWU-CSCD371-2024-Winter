@@ -15,7 +15,7 @@ public class Program
             programBase.WriteLine("Please enter a calculation (or 'q' to quit):");
             string? input = programBase.ReadLine();
 
-            if (string.IsNullOrEmpty(input) || input.Contains('q'))
+            if (input is null || input.Contains('q'))
             {
                 programBase.WriteLine("Exiting...");
                 break;

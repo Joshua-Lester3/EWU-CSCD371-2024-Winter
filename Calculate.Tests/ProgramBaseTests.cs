@@ -20,6 +20,23 @@ public class ProgramBaseTests
     }
 
     [Fact]
+    public void WriteLine_InitializedValue_Success()
+    {
+        // Arrange
+        string? input = null;
+        ProgramBase program = new()
+        {
+            WriteLine = (toWrite) => input = toWrite
+        };
+
+        // Act
+        program.WriteLine("hi jimbob");
+
+        // Assert
+        Assert.Equal("hi jimbob", input);
+    }
+
+    [Fact]
     public void ReadLine_InitializedValue_Success()
     {
         // Arrange
