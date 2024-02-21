@@ -9,8 +9,7 @@ public class CalculatorTests
     [InlineData(-4, -2, -2)]
     public void Add_NonNullValues_Success(int expected, int left, int right)
     {
-        int result;
-        Calculator.Add(left, right, out result);
+        int result = Calculator.Add(left, right);
         Assert.Equal(expected, result);
     }
 
@@ -21,8 +20,7 @@ public class CalculatorTests
     [InlineData(0, -2, -2)]
     public void Subtract_NonNullValues_Success(int expected, int left, int right)
     {
-        int result;
-        Calculator.Subtract(left, right, out result);
+        int result = Calculator.Subtract(left, right);
         Assert.Equal(expected, result);
     }
 
@@ -34,8 +32,7 @@ public class CalculatorTests
     [InlineData(0, 0, 4)]
     public void Multiply_NonNullValues_Success(int expected, int left, int right)
     {
-        int result;
-        Calculator.Multiply(left, right, out result);
+        int result = Calculator.Multiply(left, right);
         Assert.Equal(expected, result);
     }
 
@@ -47,38 +44,25 @@ public class CalculatorTests
     [InlineData(0, 0, 4)]
     public void Divide_NonNullValues_Success(int expected, int left, int right)
     {
-        Calculator.Divide(left, right, out int result);
+        int result = Calculator.Divide(left, right);
         Assert.Equal(expected, result);
     }
 
     [Fact]
     public void Divide_ByZero_ThrowsDivideByZeroException()
     {
-        Assert.Throws<DivideByZeroException>(() => Calculator.Divide(0, 0, out int result));
-    }
-
-    [Fact]
-    public void MathematicalOperations_GetAdd_Success()
-    {
-        // Arrange
-        Calculator calculator = new();
-
-        // Act
-        calculator.MathematicalOperations.TryGetValue('+', out Calculator.DelegateWithOut<int, int, int>?  operation);
-
-        // Assert
-        Assert.Equal(Calculator.Add, operation);
+        Assert.Throws<DivideByZeroException>(() => Calculator.Divide(0, 0));
     }
 
     [Theory]
     [MemberData(nameof(TestCases))]
-    public void MathematicalOperations_GetSubtract_Success(Calculator.DelegateWithOut<int, int, int> expectedOperation, char key)
+    public void MathematicalOperations_GetOperations_Success(Func<int, int, int> expectedOperation, char key)
     {
         // Arrange
         Calculator calculator = new();
 
         // Act
-        Calculator.DelegateWithOut<int, int, int>? operation;
+        Func<int, int, int>? operation;
         calculator.MathematicalOperations.TryGetValue(key, out operation);
 
         // Assert
@@ -86,10 +70,10 @@ public class CalculatorTests
     }
 
     public static IEnumerable<object[]> TestCases { get; } = new object[][] {
-        new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Add, '+' },
-        new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Subtract, '-' },
-        new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Multiply, '*' },
-        new object[] { (Calculator.DelegateWithOut<int, int, int>)Calculator.Divide, '/' }
+        new object[] { (Func<int, int, int>)Calculator.Add, '+' },
+        new object[] { (Func<int, int, int>)Calculator.Subtract, '-' },
+        new object[] { (Func<int, int, int>)Calculator.Multiply, '*' },
+        new object[] { (Func<int, int, int>)Calculator.Divide, '/' }
     };
 
     [Fact]

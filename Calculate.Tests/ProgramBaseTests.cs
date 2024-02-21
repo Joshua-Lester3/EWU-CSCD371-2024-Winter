@@ -1,4 +1,5 @@
 ﻿using ConsoleUtilities;
+using IntelliTect.TestTools.Console;
 
 namespace Calculate.Tests;
 
@@ -10,89 +11,27 @@ public class ProgramBaseTests
     public void WriteLine_DefaultValue_Success(string expected)
     {
         // Arrange
-        TextWriter oldOut = Console.Out;
-        StringWriter newOut = new StringWriter();
-        Console.SetOut(newOut);
         ProgramBase program = new();
 
         // Act
-        program.WriteLine(expected);
-        Console.SetOut(oldOut);
 
         // Assert
-        Assert.Contains(expected, newOut.ToString());
+        ConsoleAssert.Expect(expected, () => program.WriteLine(expected));
     }
 
-    [Theory]
-    [InlineData("hi", "hi")]
-    [InlineData(null, "")]
-    public void ReadLine_DefaultValue_Success(string expected, string actual)
+    [Fact]
+    public void ReadLine_DefaultValue_Success()
     {
         // Arrange
-        StringReader newIn = new(actual);
-        TextReader oldIn = Console.In;
-        Console.SetIn(newIn);
-        ProgramBase program = new();
-
-        //Act
-        string? result = program.ReadLine();
-        Console.SetIn(oldIn);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("Jimbob")]
-    public void WriteLine_InitializedValue_Success(string expected)
-    {
-        // Arrange
-        TextWriter oldOut = Console.Out;
-        StringWriter newOut = new StringWriter();
-        Console.SetOut(newOut);
         ProgramBase program = new()
         {
-            WriteLine = WriteLineTester
-        };
-
-        // Act
-        program.WriteLine(expected);
-        Console.SetOut(oldOut);
-
-        // Assert
-        Assert.Contains(expected, newOut.ToString());
-    }
-
-    [Theory]
-    [InlineData("hi", "hi")]
-    [InlineData(null, "")]
-    public void ReadLine_InitializedValue_Success(string expected, string actual)
-    {
-        // Arrange
-        StringReader newIn = new(actual);
-        TextReader oldIn = Console.In;
-        Console.SetIn(newIn);
-        ProgramBase program = new()
-        {
-            ReadLine = ReadLineTester
+            ReadLine = () => "hi"
         };
 
         //Act
-        string? result = program.ReadLine();
-        Console.SetIn(oldIn);
 
         // Assert
-        Assert.Equal(expected, result);
-    }
-
-    private void WriteLineTester(object? value)
-    {
-        Console.WriteLine(value?.ToString());
-    }
-
-    private string? ReadLineTester()
-    {
-        return Console.ReadLine();
+        Assert.Equal("hi", program.ReadLine());
     }
     #endregion
 

@@ -2,8 +2,8 @@
 
 public class Calculator
 {
-    public IReadOnlyDictionary<char, DelegateWithOut<int, int, int>> MathematicalOperations { get; } = 
-        new Dictionary<char, DelegateWithOut<int, int, int>>()
+    public IReadOnlyDictionary<char, Func<int, int, int>> MathematicalOperations { get; } = 
+        new Dictionary<char, Func<int, int, int>>()
         {
             { '+', Add },
             { '-', Subtract },
@@ -11,14 +11,13 @@ public class Calculator
             { '/', Divide }
         };
 
-    public delegate void DelegateWithOut<TParamOne, TParamTwo, TParamThree>(TParamOne paramOne, TParamTwo paramTwo, out TParamThree paramThree);
-    public static void Add(int left, int right, out int result) => result = left + right;
+    public static int Add(int left, int right) => left + right;
 
-    public static void Divide(int left, int right, out int result) => result = left / right;
+    public static int Divide(int left, int right) => left / right;
 
-    public static void Multiply(int left, int right, out int result) => result = left * right;
+    public static int Multiply(int left, int right) => left * right;
 
-    public static void Subtract(int left, int right, out int result) => result = left - right;
+    public static int Subtract(int left, int right) => left - right;
 
     public bool TryCalculate(string input, out int result)
     {
@@ -32,9 +31,9 @@ public class Calculator
         }
 
         if (char.TryParse(inputSplit[1], out char key)
-            && MathematicalOperations.TryGetValue(key, out DelegateWithOut<int, int, int>? operation))
+            && MathematicalOperations.TryGetValue(key, out Func<int, int, int>? operation))
         {
-            operation(operand1, operand2, out result);
+            result = operation(operand1, operand2);
             return true;
         }
 
