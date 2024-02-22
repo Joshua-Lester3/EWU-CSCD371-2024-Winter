@@ -29,7 +29,7 @@ public class Calculator
         {
             return false;
         }
-        char key = inputSplit[1][0];
+        char key = inputSplit[1][0]; // Takes first char in the second string from .Split() return
         if (MathematicalOperations.ContainsKey(key))
         {
             Func<int, int, int>? operation = MathematicalOperations[key];
