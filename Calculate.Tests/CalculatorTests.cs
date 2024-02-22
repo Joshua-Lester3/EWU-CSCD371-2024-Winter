@@ -122,6 +122,19 @@ public class CalculatorTests
         Assert.Equal(expected, result);
     }
 
+    [Fact]
+    public void TryCalculate_DividesByZero_CatchesExceptionAndReturnsNullAndZero()
+    {
+        // Arrange
+        Calculator calculator = new();
+
+        // Act
+
+        // Assert
+        Assert.False(calculator.TryCalculate("0 / 0", out int result));
+        Assert.Equal(0, result);
+    }
+
     private static void InvalidInputTest(string input)
     {
         // Arrange

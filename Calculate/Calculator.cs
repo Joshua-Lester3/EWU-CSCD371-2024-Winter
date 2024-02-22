@@ -2,7 +2,7 @@
 
 public class Calculator
 {
-    public IReadOnlyDictionary<char, Func<int, int, int>> MathematicalOperations { get; } = 
+    public IReadOnlyDictionary<char, Func<int, int, int>> MathematicalOperations { get; } =
         new Dictionary<char, Func<int, int, int>>()
         {
             { '+', Add },
@@ -33,7 +33,13 @@ public class Calculator
         if (MathematicalOperations.ContainsKey(key))
         {
             Func<int, int, int>? operation = MathematicalOperations[key];
-            result = operation(operand1, operand2);
+            try
+            {
+                result = operation(operand1, operand2);
+            } catch (DivideByZeroException)
+            {
+                return false;
+            }
             return true;
         }
 
