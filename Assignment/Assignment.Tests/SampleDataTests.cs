@@ -61,8 +61,6 @@ public class SampleDataTests
         Assert.Equal(data.ToArray(), sampleData.CsvRows.ToArray());
     }
 
-    //TODO: 1. test uniqueness for req2; 2. test sortedness for req2
-
     [Fact]
     public void GetUniqueSortedListOfStatesGivenCsvRows_NormalCondition_SuccessfullyContainsCorrectItems()
     {
