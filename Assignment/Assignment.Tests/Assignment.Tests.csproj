@@ -20,4 +20,10 @@
     <ProjectReference Include="..\Assignment\Assignment.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestingCsv.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
