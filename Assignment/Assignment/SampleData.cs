@@ -8,20 +8,13 @@ namespace Assignment
     public class SampleData : ISampleData
     {
         // 1.
-        public IEnumerable<string> CsvRows 
-        { 
-            get
-            {
-                return File.ReadLines("People.csv").
-                    Skip(1);
-            } 
-        }
+        public IEnumerable<string> CsvRows => File.ReadLines("People.csv").Skip(1);
 
          
 
         // 2.
         public IEnumerable<string> GetUniqueSortedListOfStatesGivenCsvRows() 
-            => throw new NotImplementedException();
+            => CsvRows;
 
         // 3.
         public string GetAggregateSortedListOfStatesUsingCsvRows()
