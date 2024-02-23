@@ -26,7 +26,7 @@ public class SampleDataTests
         // Act
 
         // Assert
-        Assert.Equal(expected, sampleData.CsvRows);
+        Assert.Equal(expected.ToArray(), sampleData.CsvRows.ToArray());
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public class SampleDataTests
         // Act
 
         // Assert
-        Assert.Equal(expected, sampleData.CsvRows);
+        Assert.Equal(expected.ToArray(), sampleData.CsvRows.ToArray());
     }
     #endregion
 
@@ -58,7 +58,7 @@ public class SampleDataTests
         // Act
 
         // Assert
-        Assert.Equal(data, sampleData.CsvRows);
+        Assert.Equal(data.ToArray(), sampleData.CsvRows.ToArray());
     }
 
     //TODO: 1. test uniqueness for req2; 2. test sortedness for req2
@@ -70,15 +70,6 @@ public class SampleDataTests
         SampleData sampleData = new("TestingCsv.csv");
 
         // Act
-        //IEnumerable<string> data = new string[] {
-        //    "AL", "AK", "AZ", "AR",
-        //    "CA","CO","CT","DE","DC","FL","GA","HI",
-        //    "ID","IL","IN","IA","KS","KY","LA","ME", "MD",
-        //    "MA","MI","MN","MS","MO","MT","NE","NV",
-        //    "NH","NJ","NM","NY","NC","ND","OH","OK",
-        //    "OR","PA","RI","SC","SD","TN","TX","UT",
-        //    "VT","VA","WA","WV","WI","WY"
-        //};
         IEnumerable<string> data = new string[] {
             "CA", "FL", "GA", "MT"
         };
@@ -92,23 +83,51 @@ public class SampleDataTests
     [Fact]
     public void GetUniqueSortedListOfStatesGivenCsvRows_NormalCondition_SuccessfullySorts()
     {
+        // Arrange
+        SampleData sampleData = new("TestingCsv.csv");
 
+        // Act
+        string? previousItem = null;
+        bool isOrdered = true;
+        IEnumerable<string> data = sampleData.GetUniqueSortedListOfStatesGivenCsvRows()
+            .Select(item =>
+            {
+                if (!ComparePreviousItem(previousItem, item))
+                {
+                    isOrdered = false;
+                }
+                previousItem = item;
+                return item;
+            })
+            .ToArray();
+
+        Assert.True(isOrdered);
+    }
+
+    private static bool ComparePreviousItem(string? previousItem, string currentItem)
+    {
+        if (previousItem == null)
+        {
+            return true;
+        }
+        return previousItem.CompareTo(currentItem) <= 0;
     }
 
     [Fact]
     public void GetUniqueSortedListOfStatesGivenCsvRows_NormalCondition_ItemsAreUnique()
     {
         // Arrange
-        SampleData sampleData = new("TestingCsv.csv");
+        SampleData sampleData = new("TestingCsv.csv"); // Given .csv has duplicate states
 
         // Act
         IEnumerable<string> data = new string[] {
             "CA", "FL", "GA", "MT"
         };
 
-
         // Assert
-        Assert.True(sampleData.GetUniqueSortedListOfStatesGivenCsvRows().SequenceEqual(data));
+        IEnumerable<string> uniqueSortedStates = sampleData.GetUniqueSortedListOfStatesGivenCsvRows().ToArray();
+        data = data.ToArray();
+        Assert.True(uniqueSortedStates.SequenceEqual(data));
     }
     #endregion
 }
