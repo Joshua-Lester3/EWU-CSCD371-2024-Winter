@@ -128,4 +128,29 @@ public class SampleDataTests
         Assert.True(uniqueSortedStates.SequenceEqual(data));
     }
     #endregion
+    //for number 4
+    [Fact]
+    public void Person_Initialize_FilePath()
+    {
+        SampleData sampleData = new("TestingCsv.csv");
+
+        //Address address = new("7884 Corry Way", "Helena", "MT", "70577");
+
+        //Person person = new("Priscilla", "Jenyns", address, "pjenyns0@state.gov");
+
+
+        Assert.NotEmpty(sampleData.People);
+    }
+    //for number 5
+    [Fact]
+    public void FilterByEmailAddress_FirstAndLastName_Match()
+    {
+        SampleData sampleData = new("TestingCsv.csv");
+        IEnumerable<string> data = new string[] {
+            "Priscilla Jenyns", "Karin Joder", "Chadd Stennine", "Fremont Pallaske", "Jimbob,Pallaske"
+        };
+        
+        Predicate<string> filterEmail = sampleData.FilterByEmailAddress();
+        
+    }
 }
