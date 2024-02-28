@@ -151,19 +151,24 @@ public class SampleDataTests
         // Assert
         Assert.Equal(expected, states);
     }
-    #endregion
+
     //for number 4
     [Fact]
     public void Person_Initialize_FilePath()
     {
         SampleData sampleData = new("TestingCsv.csv");
 
-        //Address address = new("7884 Corry Way", "Helena", "MT", "70577");
+        Address address = new("7884 Corry Way", "Helena", "MT", "70577");
 
-        //Person person = new("Priscilla", "Jenyns", address, "pjenyns0@state.gov");
+        Person person = new("Priscilla", "Jenyns", address, "pjenyns0@state.gov");
+
+        IEnumerable<IPerson> persons = new IPerson[]
+        {
+            person
+        };
 
 
-        Assert.NotEmpty(sampleData.People);
+        Assert.Equal(persons, sampleData.People.ToArray());
     }
     //for number 5
     //[Fact] // commented to make code compile
@@ -173,8 +178,25 @@ public class SampleDataTests
     //    IEnumerable<string> data = new string[] {
     //        "Priscilla Jenyns", "Karin Joder", "Chadd Stennine", "Fremont Pallaske", "Jimbob,Pallaske"
     //    };
-        
+
     //    Predicate<string> filterEmail = sampleData.FilterByEmailAddress();
-        
+
     //}
+
+    // req 6
+    [Fact]
+    public void GetAggregateListOfStatesGivenPeopleCollection_TestCsv_Success()
+    {
+        // Arrange
+        SampleData sampleData = new("TestingCsv.csv");
+
+        // Act
+        IEnumerable<IPerson> persons = sampleData.People;
+        string aggregateList = sampleData.GetAggregateListOfStatesGivenPeopleCollection(persons);
+
+        // Assert
+        string expected = "CA, FL, GA, MT";
+        Assert.Equal(expected, aggregateList);
+    }
+    #endregion
 }
