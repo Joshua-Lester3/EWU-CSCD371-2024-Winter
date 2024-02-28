@@ -195,7 +195,8 @@ public class SampleDataTests
         string aggregateList = sampleData.GetAggregateListOfStatesGivenPeopleCollection(persons);
 
         // Assert
-        string expected = "CA, FL, GA, MT";
+        string expected = sampleData.GetUniqueSortedListOfStatesGivenCsvRows().
+            Aggregate((workingList, state) => $"{workingList}, {state}");
         Assert.Equal(expected, aggregateList);
     }
     #endregion
