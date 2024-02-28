@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using System;
-using System.Reflection.PortableExecutable;
 
 namespace Assignment.Tests;
 
