@@ -79,38 +79,20 @@ public class Node<T> : IEnumerable<T>
 
     // This method is complicated because the requirements say to go off
     // of Assignment5's Node implementation, which specified we must Append
-    // each new element after the initial element
+    // each new element after the initial Node. It makes making a sub-linked list
+    // a little more difficult than it should be.
+    // I'm also returning another linked list because it makes sense to me that
+    // a Node class would return an IEnumerable with underlying type Node.
     public IEnumerable<T> ChildItems(int maximum)
     {
-        //Node<T> currentNode = Next;
-        //if (currentNode == this)
-        //{
-        //    return Array.Empty<T>();
-        //}
-        //Node<T> children = new(currentNode.Element);
-        //Stack<T> stack = new();
-        //currentNode = currentNode.Next;
-        //int counter = 2;
-        //while (currentNode != this && counter < maximum)
-        //{
-        //    stack.Push(currentNode.Element);
-        //    currentNode = currentNode.Next;
-        //    counter++;
-        //}
-
-        //if (stack.Count > 0)
-        //{
-        //    while (stack.TryPop(out T? element))
-        //    {
-        //        children.Append(element);
-        //    }
-        //}
-        //return children;
-
+        if (maximum < 1)
+        {
+            throw new ArgumentException($"{nameof(maximum)} cannot be less than 1.");
+        }
         Node<T> currentNode = Next;
         if (currentNode == this)
         {
-            return Array.Empty<T>();
+            return new List<T>(0);
         }
         Node<T> children = new(currentNode.Element);
         int counter = 2;
