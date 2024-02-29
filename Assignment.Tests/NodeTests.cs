@@ -55,12 +55,12 @@ public class NodeTests
 
         // Act
         IEnumerable<string> childItems = node.ChildItems(4);
-        IEnumerable<string> expected = new[]
-        {
-            "jimbob", "I'm", "jimbobby"
-        };
 
         // Assert
+        IEnumerable<string> expected = new[]
+        {
+            "jimbob", "I'm", "jimbobbyy"
+        };
         Assert.Equal(expected, childItems);
     }
 }
