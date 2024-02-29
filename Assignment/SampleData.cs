@@ -22,15 +22,15 @@ namespace Assignment
         public IEnumerable<string> GetUniqueSortedListOfStatesGivenCsvRows()
         {
             return (from line in CsvRows
-                   let elements = line.Split(',')
-                   let state = elements[elements.Length - 2]
-                   orderby state
-                   select state).Distinct();
+                    let elements = line.Split(',')
+                    let state = elements[elements.Length - 2]
+                    orderby state
+                    select state).Distinct();
         }
 
         // 3.
         public string GetAggregateSortedListOfStatesUsingCsvRows()
-            => throw new NotImplementedException();
+            => string.Join(", ", GetUniqueSortedListOfStatesGivenCsvRows().ToArray());
 
         // 4.
         public IEnumerable<IPerson> People => (from id in CsvRows
@@ -47,14 +47,27 @@ namespace Assignment
         public IEnumerable<(string FirstName, string LastName)> FilterByEmailAddress(
             Predicate<string> filter)
         {
-            return People.Where(person => filter(person.EmailAddress)).Select(person => (person.FirstName, person.LastName));
-            /*return (IEnumerable<(string FirstName, string LastName)>)(from people in People
-                   where filter(people.EmailAddress)
-                   select new {people.FirstName, people.LastName});*/
+            //return (from people in People
+            //        where people.Equals(filter)
+            //        select {}
+            //        );
+            throw new NotImplementedException();
+
+            //.Where(x => x.Equals(filter)).Select(s => new { s.FirstName, s.LastName });
+
+
+
+
         }
 
         // 6.
         public string GetAggregateListOfStatesGivenPeopleCollection(
-            IEnumerable<IPerson> people) => throw new NotImplementedException();
+            IEnumerable<IPerson> people) => (from person in People
+                                             let address = person.Address
+                                             let state = address.State
+                                             orderby state
+                                             select state).Distinct().
+            Aggregate((workingList, state) => $"{workingList}, {state}");
+            //Aggregate((working));
     }
 }

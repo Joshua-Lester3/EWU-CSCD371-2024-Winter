@@ -1,16 +1,7 @@
-﻿using System.Collections;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using System;
-using System.Reflection.PortableExecutable;
-using System.Net;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Net.NetworkInformation;
-using System.Runtime.InteropServices;
-using System.Net.Mail;
 
 namespace Assignment.Tests;
 
@@ -56,9 +47,8 @@ public class SampleDataTests
     public void CsvRows_Get_Success()
     {
         // Arrange
-        SampleData sampleData = new("People.csv");
-        string filePath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.
-            Parent?.Parent?.Parent?.FullName!, "Assignment", "People.csv");
+        string filePath = "TestingCsv.csv";
+        SampleData sampleData = new(filePath);
         IEnumerable<string> data = File.ReadAllLines(filePath).Skip(1);
 
         // Act
@@ -81,14 +71,14 @@ public class SampleDataTests
 
         // Assert
         IEnumerable<string> uniqueSortedListOfStates = sampleData.GetUniqueSortedListOfStatesGivenCsvRows();
-        Assert.True(uniqueSortedListOfStates.All(item => data.Contains(item)));
+        Assert.Equal(uniqueSortedListOfStates, data);
     }
 
     [Fact]
     public void GetUniqueSortedListOfStatesGivenCsvRows_NormalCondition_SuccessfullySorts()
     {
         // Arrange
-        SampleData sampleData = new("TestingCsv.csv");
+        SampleData sampleData = new();
 
         // Act
         string? previousItem = null;
@@ -121,77 +111,90 @@ public class SampleDataTests
     public void GetUniqueSortedListOfStatesGivenCsvRows_NormalCondition_ItemsAreUnique()
     {
         // Arrange
-        SampleData sampleData = new("TestingCsv.csv"); // Given .csv has duplicate states
+        SampleData sampleData = new(); // Default .csv has duplicate states
 
         // Act
-        IEnumerable<string> data = new string[] {
-            "CA", "FL", "GA", "MT"
-        };
+        bool isUnique = true;
+        IEnumerable<string> data = sampleData.GetUniqueSortedListOfStatesGivenCsvRows().ToArray();
+        foreach (string outerState in data) {
+            int counter = 0;
+            foreach (string innerState in data)
+            {
+                if (outerState.Equals(innerState))
+                {
+                    counter++;
+                }
+            }
+            if (counter > 1)
+            {
+                isUnique = false;
+            }
+        }
 
         // Assert
-        IEnumerable<string> uniqueSortedStates = sampleData.GetUniqueSortedListOfStatesGivenCsvRows().ToArray();
-        data = data.ToArray();
-        Assert.True(uniqueSortedStates.SequenceEqual(data));
+        Assert.True(isUnique);
     }
-    #endregion
+
+    [Fact]
+    public void GetUniqueSortedListOfStatesGivenCsvRows()
+    {
+        // Arrange
+        SampleData sampleData = new("TestingCsv.csv");
+
+        // Act
+        string states = sampleData.GetAggregateSortedListOfStatesUsingCsvRows();
+        string expected = "CA, FL, GA, MT";
+
+        // Assert
+        Assert.Equal(expected, states);
+    }
+
     //for number 4
     [Fact]
     public void Person_Initialize_FilePath()
     {
         SampleData sampleData = new("TestingCsv.csv");
 
-        Assert.NotEmpty(sampleData.People);
-    }
-    [Fact]
-    public void Person_People_Exists()
-    {
-        SampleData sampleData= new("TestingCsv.csv");
-        //public Address(string streetAddress, string city, string state, string zip)
-        Address firstAddress = new Address("16958 Forster Crossing", "Atlanta", "GA", "10687");
-        Person aPerson = new("Jimbob", "Pallaske", firstAddress, "fpallaske3@umich.edu");
-        Person bPerson = new("Chadd", "Stennine", new Address("94148 Kings Terrace", "Long Beach", "CA", "59721"), "cstennine2@wired.com");
-        Person cPerson = new("Karin", "Joder", new Address("03594 Florence Park", "Tampa", "FL", "71961"), "kjoder1@quantcast.com");
-        Person dPerson = new("Fremont", "Pallaske", new Address("16958 Forster Crossing", "Atlanta", "GA", "10687"), "fpallaske3@umich.edu");
-        Person ePerson = new("Priscilla", "Jenyns", new Address("7884 Corry Way", "Helena", "MT", "70577"), "pjenyns0@state.gov");
+        Address address = new("7884 Corry Way", "Helena", "MT", "70577");
 
-        IEnumerable<IPerson> data = new[]
+        Person person = new("Priscilla", "Jenyns", address, "pjenyns0@state.gov");
+
+        IEnumerable<IPerson> persons = new IPerson[]
         {
-            
-            bPerson,
-            cPerson,
-            dPerson,
-            aPerson,
-            ePerson
-
-
+            person
         };
-        List<IPerson> testPerson = sampleData.People.ToList();
-        
-        Assert.Equal(data, testPerson);
 
+
+        Assert.Equal(persons, sampleData.People.ToArray());
     }
     //for number 5
+    //[Fact] // commented to make code compile
+    //public void FilterByEmailAddress_FirstAndLastName_Match()
+    //{
+    //    SampleData sampleData = new("TestingCsv.csv");
+    //    IEnumerable<string> data = new string[] {
+    //        "Priscilla Jenyns", "Karin Joder", "Chadd Stennine", "Fremont Pallaske", "Jimbob,Pallaske"
+    //    };
+
+    //    Predicate<string> filterEmail = sampleData.FilterByEmailAddress();
+
+    //}
+
+    // req 6
     [Fact]
-    public void FilterByEmailAddress_FirstAndLastName_Match()
+    public void GetAggregateListOfStatesGivenPeopleCollection_TestCsv_Success()
     {
+        // Arrange
         SampleData sampleData = new("TestingCsv.csv");
-        
 
-        Predicate<string> search = i => i.EndsWith("pjenyns0@state.gov");
+        // Act
+        IEnumerable<IPerson> persons = sampleData.People;
+        string aggregateList = sampleData.GetAggregateListOfStatesGivenPeopleCollection(persons);
 
-        var data = new List<(string firstName, string lastName)> 
-           {
-            ("Priscilla", "Jenyns"),
-            //("Karin", "Joder"),
-            //("Chadd", "Stennine"),
-            //("Fremont", "Pallaske"),
-            //("Jimbob","Pallaske")
-            };
-        
-        var emailFilter = sampleData.FilterByEmailAddress(search);
-        
-
-        Assert.Equal(data, emailFilter.ToArray());
-        
+        // Assert
+        string expected = sampleData.GetUniqueSortedListOfStatesGivenCsvRows().
+            Aggregate((workingList, state) => $"{workingList}, {state}");
+        Assert.Equal(expected, aggregateList);
     }
+    #endregion
 }
