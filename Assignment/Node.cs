@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 namespace Assignment;
 public class Node<T> : IEnumerable<T>
@@ -73,5 +74,24 @@ public class Node<T> : IEnumerable<T>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+
+    public IEnumerable<T> ChildItems(int maximum)
+    {
+        Node<T> currentNode = Next;
+        int counter = 0;
+        T[] arrayOfChildren = new T[maximum - 1];
+        while (currentNode != this && counter < maximum - 1)
+        {
+            arrayOfChildren[counter] = currentNode.Element;
+            currentNode = currentNode.Next;
+            counter++;
+        }
+        Node<T> childrenResult = new(arrayOfChildren[0]);
+        for (counter = arrayOfChildren.Count() - 1; counter > 0; counter--)
+        {
+            childrenResult.Append(arrayOfChildren[counter]);
+        }
+        return childrenResult;
     }
 }
