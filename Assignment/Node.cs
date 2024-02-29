@@ -52,7 +52,7 @@ public class Node<T> : IEnumerable<T>
         Node<T> temporaryNode = this;
         do
         {
-            bool isFound = temporaryNode.Element?.Equals(element) ?? throw new InvalidOperationException(nameof(Element));
+            bool isFound = temporaryNode.Element?.Equals(element) ?? false;
             if (isFound)
             {
                 return true;
