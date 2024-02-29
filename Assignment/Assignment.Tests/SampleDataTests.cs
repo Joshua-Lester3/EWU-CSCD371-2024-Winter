@@ -5,6 +5,12 @@ using System.Linq;
 using Xunit;
 using System;
 using System.Reflection.PortableExecutable;
+using System.Net;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
+using System.Net.Mail;
 
 namespace Assignment.Tests;
 
@@ -134,23 +140,58 @@ public class SampleDataTests
     {
         SampleData sampleData = new("TestingCsv.csv");
 
-        //Address address = new("7884 Corry Way", "Helena", "MT", "70577");
-
-        //Person person = new("Priscilla", "Jenyns", address, "pjenyns0@state.gov");
-
-
         Assert.NotEmpty(sampleData.People);
+    }
+    [Fact]
+    public void Person_People_Exists()
+    {
+        SampleData sampleData= new("TestingCsv.csv");
+        //public Address(string streetAddress, string city, string state, string zip)
+        Address firstAddress = new Address("16958 Forster Crossing", "Atlanta", "GA", "10687");
+        Person aPerson = new("Jimbob", "Pallaske", firstAddress, "fpallaske3@umich.edu");
+        Person bPerson = new("Chadd", "Stennine", new Address("94148 Kings Terrace", "Long Beach", "CA", "59721"), "cstennine2@wired.com");
+        Person cPerson = new("Karin", "Joder", new Address("03594 Florence Park", "Tampa", "FL", "71961"), "kjoder1@quantcast.com");
+        Person dPerson = new("Fremont", "Pallaske", new Address("16958 Forster Crossing", "Atlanta", "GA", "10687"), "fpallaske3@umich.edu");
+        Person ePerson = new("Priscilla", "Jenyns", new Address("7884 Corry Way", "Helena", "MT", "70577"), "pjenyns0@state.gov");
+
+        IEnumerable<IPerson> data = new[]
+        {
+            
+            bPerson,
+            cPerson,
+            dPerson,
+            aPerson,
+            ePerson
+
+
+        };
+        List<IPerson> testPerson = sampleData.People.ToList();
+        
+        Assert.Equal(data, testPerson);
+
     }
     //for number 5
     [Fact]
     public void FilterByEmailAddress_FirstAndLastName_Match()
     {
         SampleData sampleData = new("TestingCsv.csv");
-        IEnumerable<string> data = new string[] {
-            "Priscilla Jenyns", "Karin Joder", "Chadd Stennine", "Fremont Pallaske", "Jimbob,Pallaske"
-        };
         
-        Predicate<string> filterEmail = sampleData.FilterByEmailAddress();
+
+        Predicate<string> search = i => i.EndsWith("pjenyns0@state.gov");
+
+        var data = new List<(string firstName, string lastName)> 
+           {
+            ("Priscilla", "Jenyns"),
+            //("Karin", "Joder"),
+            //("Chadd", "Stennine"),
+            //("Fremont", "Pallaske"),
+            //("Jimbob","Pallaske")
+            };
+        
+        var emailFilter = sampleData.FilterByEmailAddress(search);
+        
+
+        Assert.Equal(data, emailFilter.ToArray());
         
     }
 }
