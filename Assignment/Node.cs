@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Collections;
 
-namespace GenericsHomework;
-public class Node<T>
+namespace Assignment;
+public class Node<T> : IEnumerable<T>
 {
     public Node<T> Next { get; private set; }
 
@@ -12,7 +14,6 @@ public class Node<T>
         Element = element;
         Next = this;
     }
-
 
     public override string? ToString()
     {
@@ -57,5 +58,20 @@ public class Node<T>
             temporaryNode = temporaryNode.Next;
         } while (temporaryNode != this);
         return false;
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        Node<T> currentNode = this;
+        do
+        {
+            yield return currentNode.Element;
+            currentNode = currentNode.Next;
+        } while (currentNode != this);
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
