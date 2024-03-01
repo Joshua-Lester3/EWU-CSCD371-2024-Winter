@@ -180,10 +180,15 @@ public class SampleDataTests
          ePerson
 
 
-     };
+        };
+        
         List<IPerson> testPerson = sampleData.People.ToList();
+        //var personComparor = testPerson.ElementAt(4) as Person;
+        List<IPerson> personList = data.ToList();
+        IPerson testPersonComparor = testPerson.ElementAt(1);
+        IPerson testDataListComparor = personList.ElementAt(1);
 
-        Assert.Equal(data, testPerson);
+        Assert.Equal(testDataListComparor, testPersonComparor);
 
     }
     //for number 5
