@@ -172,7 +172,7 @@ public class SampleDataTests
         Person dPerson = new("Fremont", "Pallaske", new Address("16958 Forster Crossing", "Atlanta", "GA", "10687"), "fpallaske3@umich.edu");
         Person ePerson = new("Priscilla", "Jenyns", new Address("7884 Corry Way", "Helena", "MT", "70577"), "pjenyns0@state.gov");
 
-        IEnumerable<IPerson> data = new List<IPerson>
+        IEnumerable<IPerson> expected = new List<IPerson>
         {
 
          bPerson,
@@ -184,13 +184,32 @@ public class SampleDataTests
 
         };
 
-        List<IPerson> testPerson = sampleData.People.ToList();
-        //var personComparor = testPerson.ElementAt(4) as Person;
-        List<IPerson> personList = data.ToList();
-        IPerson testPersonComparor = testPerson.ElementAt(1);
-        IPerson testDataListComparor = personList.ElementAt(1);
-        testPersonComparor.Equals(testDataListComparor);
-        Assert.Equal(data, testPerson);
+        List<IPerson> actual = sampleData.People.ToList();
+
+        IEnumerator<IPerson> expectedEnumerator = expected.GetEnumerator();
+        IEnumerator<IPerson> actualEnumerator = actual.GetEnumerator();
+
+        while (expectedEnumerator.MoveNext() && actualEnumerator.MoveNext())
+        {
+            IPerson expectedPerson = expectedEnumerator.Current;
+            IPerson actualPerson = actualEnumerator.Current;
+            Assert.True(PersonEquals(expectedPerson, actualPerson));
+        };
+    }
+
+    private bool PersonEquals(IPerson person1, IPerson person2)
+    {
+        bool firstNameEquals = person1.FirstName.Equals(person2.FirstName);
+        bool lastNameEquals = person1.LastName.Equals(person2.LastName);
+        bool emailAddressEquals = person1.EmailAddress.Equals(person2.EmailAddress);
+        IAddress address1 = person1.Address;
+        IAddress address2 = person2.Address;
+        bool cityEquals = address1.City.Equals(address2.City);
+        bool stateEquals = address1.State.Equals(address2.State);
+        bool zipEquals = address1.Zip.Equals(address2.Zip);
+        bool streetAddressEquals = address1.StreetAddress.Equals(address2.StreetAddress);
+        bool addressEquals = cityEquals && stateEquals && zipEquals && streetAddressEquals;
+        return firstNameEquals && lastNameEquals && emailAddressEquals && addressEquals;
     }
 
     //for number 5

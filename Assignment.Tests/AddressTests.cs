@@ -1,8 +1,7 @@
 
-namespace Assignment.Tests
-{
-    public class AddressTests
-    {
+namespace Assignment.Tests;
 
-    }
+public class AddressTests
+{
+
 }
