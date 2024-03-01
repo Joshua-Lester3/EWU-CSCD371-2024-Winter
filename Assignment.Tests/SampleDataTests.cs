@@ -117,7 +117,8 @@ public class SampleDataTests
         // Act
         bool isUnique = true;
         IEnumerable<string> data = sampleData.GetUniqueSortedListOfStatesGivenCsvRows().ToArray();
-        foreach (string outerState in data) {
+        foreach (string outerState in data)
+        {
             int counter = 0;
             foreach (string innerState in data)
             {

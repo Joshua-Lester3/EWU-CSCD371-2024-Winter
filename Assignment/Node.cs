@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using System.Diagnostics.Metrics;
 
 namespace Assignment;
 public class Node<T> : IEnumerable<T>
@@ -51,7 +52,7 @@ public class Node<T> : IEnumerable<T>
         Node<T> temporaryNode = this;
         do
         {
-            bool isFound = temporaryNode.Element?.Equals(element) ?? throw new InvalidOperationException(nameof(Element));
+            bool isFound = temporaryNode.Element?.Equals(element) ?? false;
             if (isFound)
             {
                 return true;
@@ -76,22 +77,34 @@ public class Node<T> : IEnumerable<T>
         return GetEnumerator();
     }
 
+    // This method is complicated because the requirements say to go off
+    // of Assignment5's Node implementation, which specified we must Append
+    // each new element after the initial Node. It makes making a sub-linked list
+    // a little more difficult than it should be.
+    // I'm also returning another linked list because it makes sense to me that
+    // a Node class would return an IEnumerable with underlying type Node.
     public IEnumerable<T> ChildItems(int maximum)
     {
-        Node<T> currentNode = Next;
-        int counter = 0;
-        T[] arrayOfChildren = new T[maximum - 1];
-        while (currentNode != this && counter < maximum - 1)
+        if (maximum < 1)
         {
-            arrayOfChildren[counter] = currentNode.Element;
+            throw new ArgumentException($"{nameof(maximum)} cannot be less than 1.");
+        }
+        Node<T> currentNode = Next;
+        if (currentNode == this)
+        {
+            return new List<T>(0);
+        }
+        Node<T> children = new(currentNode.Element);
+        int counter = 2;
+        currentNode = currentNode.Next;
+        while (currentNode != this && counter < maximum)
+        {
+            children.Append(currentNode.Element);
+            children = children.Next;
             currentNode = currentNode.Next;
             counter++;
         }
-        Node<T> childrenResult = new(arrayOfChildren[0]);
-        for (counter = arrayOfChildren.Count() - 1; counter > 0; counter--)
-        {
-            childrenResult.Append(arrayOfChildren[counter]);
-        }
-        return childrenResult;
+        children = children.Next;
+        return children;
     }
 }
