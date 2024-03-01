@@ -159,6 +159,7 @@ public class SampleDataTests
 
         Assert.NotEmpty(sampleData.People);
     }
+
     [Fact]
     public void Person_People_Exists()
     {
@@ -171,7 +172,7 @@ public class SampleDataTests
         Person dPerson = new("Fremont", "Pallaske", new Address("16958 Forster Crossing", "Atlanta", "GA", "10687"), "fpallaske3@umich.edu");
         Person ePerson = new("Priscilla", "Jenyns", new Address("7884 Corry Way", "Helena", "MT", "70577"), "pjenyns0@state.gov");
 
-        IEnumerable<IPerson> data = new[]
+        IEnumerable<IPerson> data = new List<IPerson>
         {
 
          bPerson,
@@ -182,16 +183,16 @@ public class SampleDataTests
 
 
         };
-        
+
         List<IPerson> testPerson = sampleData.People.ToList();
         //var personComparor = testPerson.ElementAt(4) as Person;
         List<IPerson> personList = data.ToList();
         IPerson testPersonComparor = testPerson.ElementAt(1);
         IPerson testDataListComparor = personList.ElementAt(1);
-
-        Assert.Equal(testDataListComparor, testPersonComparor);
-
+        testPersonComparor.Equals(testDataListComparor);
+        Assert.Equal(data, testPerson);
     }
+
     //for number 5
     [Fact]
     public void FilterByEmailAddress_FirstAndLastName_Match()

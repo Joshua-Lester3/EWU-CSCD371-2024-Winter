@@ -59,6 +59,5 @@ namespace Assignment
                                              orderby state
                                              select state).Distinct().
             Aggregate((workingList, state) => $"{workingList}, {state}");
-            //Aggregate((working));
     }
 }
