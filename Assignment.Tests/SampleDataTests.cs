@@ -55,7 +55,7 @@ public class SampleDataTests
         // Act
 
         // Assert
-        Assert.Equal(data.ToArray(), sampleData.CsvRows.ToArray());
+        Assert.Equal(data, sampleData.CsvRows);
     }
 
     [Fact]
