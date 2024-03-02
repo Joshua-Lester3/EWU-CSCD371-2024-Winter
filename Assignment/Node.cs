@@ -89,11 +89,11 @@ public class Node<T> : IEnumerable<T>
         {
             throw new ArgumentException($"{nameof(maximum)} cannot be less than 1.");
         }
-        Node<T> currentNode = Next;
-        if (currentNode == this)
+        if (Next == this)
         {
             return new List<T>(0);
         }
+        Node<T> currentNode = Next;
         Node<T> children = new(currentNode.Element);
         int counter = 2;
         currentNode = currentNode.Next;

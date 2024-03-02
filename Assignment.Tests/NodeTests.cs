@@ -98,7 +98,7 @@ public class NodeTests
         Assert.Empty(children);
     }
 
-    private Node<string> CreateTestNode()
+    private static Node<string> CreateTestNode()
     {
         Node<string> node = new("Hi");
         node.Append("jimbobby");

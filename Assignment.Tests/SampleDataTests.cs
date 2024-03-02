@@ -219,21 +219,17 @@ public class SampleDataTests
         SampleData sampleData = new("TestingCsv.csv");
 
 
-        Predicate<string> search = i => i.EndsWith("pjenyns0@state.gov");
+        Predicate<string> search = i => i.Equals("pjenyns0@state.gov");
 
-        var data = new List<(string firstName, string lastName)>
+        List<(string firstName, string lastName)> data = new List<(string firstName, string lastName)>
         {
-         ("Priscilla", "Jenyns"),
-         //("Karin", "Joder"),
-         //("Chadd", "Stennine"),
-         //("Fremont", "Pallaske"),
-         //("Jimbob","Pallaske")
-         };
+            ("Priscilla", "Jenyns"),
+        };
 
         var emailFilter = sampleData.FilterByEmailAddress(search);
 
 
-        Assert.Equal(data, emailFilter.ToArray());
+        Assert.Equal(data, emailFilter);
 
     }
 
