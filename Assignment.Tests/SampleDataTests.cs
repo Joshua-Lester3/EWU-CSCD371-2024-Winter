@@ -107,7 +107,7 @@ public class SampleDataTests
         {
             return true;
         }
-        return previousItem.CompareTo(currentItem) <= 0;
+        return string.Compare(previousItem, currentItem, StringComparison.CurrentCulture) <= 0;
     }
 
     [Fact]
@@ -124,7 +124,7 @@ public class SampleDataTests
             int counter = 0;
             foreach (string innerState in data)
             {
-                if (outerState.Equals(innerState))
+                if (outerState.Equals(innerState, StringComparison.Ordinal))
                 {
                     counter++;
                 }
@@ -184,14 +184,14 @@ public class SampleDataTests
     }
     private static bool PersonComparer(IPerson person, List<string> listPeople) 
     {
-        bool firstNameEq = person.FirstName.Equals(listPeople[1]);
-        bool lastNameEq = person.LastName.Equals(listPeople[2]);
-        bool emailAddressEq = person.EmailAddress.Equals(listPeople[3]);
+        bool firstNameEq = person.FirstName.Equals(listPeople[1], StringComparison.Ordinal);
+        bool lastNameEq = person.LastName.Equals(listPeople[2], StringComparison.Ordinal);
+        bool emailAddressEq = person.EmailAddress.Equals(listPeople[3], StringComparison.Ordinal);
         IAddress address = person.Address;
-        bool streetEq = address.StreetAddress.Equals(listPeople[4]);
-        bool cityEq = address.City.Equals(listPeople[5]);
-        bool stateEq = address.State.Equals(listPeople[6]);
-        bool zipEq = address.Zip.Equals(listPeople[7]);
+        bool streetEq = address.StreetAddress.Equals(listPeople[4], StringComparison.Ordinal);
+        bool cityEq = address.City.Equals(listPeople[5], StringComparison.Ordinal);
+        bool stateEq = address.State.Equals(listPeople[6], StringComparison.Ordinal);
+        bool zipEq = address.Zip.Equals(listPeople[7], StringComparison.Ordinal);
         bool equality = firstNameEq && lastNameEq && emailAddressEq && streetEq && cityEq && zipEq && stateEq;
         return equality;
     }
@@ -203,7 +203,7 @@ public class SampleDataTests
         SampleData sampleData = new("TestingCsv.csv");
 
 
-        Predicate<string> search = i => i.Equals("pjenyns0@state.gov");
+        Predicate<string> search = i => i.Equals("pjenyns0@state.gov", StringComparison.Ordinal);
 
         List<(string firstName, string lastName)> data = new List<(string firstName, string lastName)>
         {
