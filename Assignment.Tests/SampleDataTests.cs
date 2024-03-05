@@ -44,6 +44,7 @@ public class SampleDataTests
     #endregion
 
     #region Requirements 1-7 Tests
+    // Requirement 1
     [Fact]
     public void CsvRows_Get_Success()
     {
@@ -58,6 +59,7 @@ public class SampleDataTests
         Assert.Equal(data, sampleData.CsvRows);
     }
 
+    // Requirement 2
     [Fact]
     public void GetUniqueSortedListOfStatesGivenCsvRows_NormalCondition_SuccessfullyContainsCorrectItems()
     {
@@ -137,8 +139,9 @@ public class SampleDataTests
         Assert.True(isUnique);
     }
 
+    // Requirement 3
     [Fact]
-    public void GetUniqueSortedListOfStatesGivenCsvRows()
+    public void GetAggregateSortedListOfStatesUsingCsvRows()
     {
         // Arrange
         SampleData sampleData = new("TestingCsv.csv");
@@ -151,7 +154,7 @@ public class SampleDataTests
         Assert.Equal(expected, states);
     }
 
-    //for number 4
+    // Requirement 4
     [Fact]
     public void Person_Initialize_FilePath()
     {
@@ -161,76 +164,26 @@ public class SampleDataTests
     }
 
     [Fact]
-    public void Person_People_Exists()
-    {
-        SampleData sampleData = new("TestingCsv.csv");
-        //public Address(string streetAddress, string city, string state, string zip)
-        Address firstAddress = new Address("16958 Forster Crossing", "Atlanta", "GA", "10687");
-        Person aPerson = new("Jimbob", "Pallaske", firstAddress, "fpallaske3@umich.edu");
-        Person bPerson = new("Chadd", "Stennine", new Address("94148 Kings Terrace", "Long Beach", "CA", "59721"), "cstennine2@wired.com");
-        Person cPerson = new("Karin", "Joder", new Address("03594 Florence Park", "Tampa", "FL", "71961"), "kjoder1@quantcast.com");
-        Person dPerson = new("Fremont", "Pallaske", new Address("16958 Forster Crossing", "Atlanta", "GA", "10687"), "fpallaske3@umich.edu");
-        Person ePerson = new("Priscilla", "Jenyns", new Address("7884 Corry Way", "Helena", "MT", "70577"), "pjenyns0@state.gov");
-
-        IEnumerable<IPerson> expected = new List<IPerson>
-        {
-
-         bPerson,
-         cPerson,
-         dPerson,
-         aPerson,
-         ePerson
-
-
-        };
-
-        List<IPerson> actual = sampleData.People.ToList();
-
-        IEnumerator<IPerson> expectedEnumerator = expected.GetEnumerator();
-        IEnumerator<IPerson> actualEnumerator = actual.GetEnumerator();
-
-        while (expectedEnumerator.MoveNext() && actualEnumerator.MoveNext())
-        {
-            IPerson expectedPerson = expectedEnumerator.Current;
-            IPerson actualPerson = actualEnumerator.Current;
-            Assert.True(PersonEquals(expectedPerson, actualPerson));
-        };
-    }
-    [Fact]
     public void PeopleProperty_CheckExpected_Orderby()
     {
         SampleData sampleData = new("TestingCsv.csv");
 
-        List<List<string>> sampleList = sampleData.CsvRows.Select(row => row.Split(',').ToList()).ToList();
-        List<List<string>> orderList = sampleList.OrderBy(row => row[6]).ThenBy(row => row[5]).ThenBy(row => row[4]).ToList();
-        List<IPerson> sortList = sampleData.People.ToList();
+        List<List<string>> expectedList = sampleData.CsvRows.
+            Select(row => row.Split(',').ToList()).
+            OrderBy(row => row[6]).ThenBy(row => row[5]).
+            ThenBy(row => row[4]).ToList();
+        List<IPerson> actualList = sampleData.People.ToList();
         
      
-        for(int j = 0; j < sortList.Count && j < orderList.Count; j++) 
+        for(int j = 0; j < actualList.Count && j < expectedList.Count; j++) 
         {
-            IPerson person = sortList[j];
-            List<string> orderPerson = orderList[j];
-            Assert.True(personComparor(person, orderPerson));
+            IPerson person = actualList[j];
+            List<string> orderPerson = expectedList[j];
+            Assert.True(PersonComparer(person, orderPerson));
         }
-        //int i = 0;
-        /*foreach(List<string> s in orderList)
-        {
-
-
-                IPerson person = sortList.ElementAt(i);
-                string orderPerson = s[i];
-
-
-                Assert.True(personComparor(person, orderPerson));
-                i++;
-            
-        }*/
-
     }
-    private bool personComparor(IPerson person, List<string> listPeople) 
+    private static bool PersonComparer(IPerson person, List<string> listPeople) 
     {
-        //string[] splitter = listPeople.Split(',');
-      
         bool firstNameEq = person.FirstName.Equals(listPeople[1]);
         bool lastNameEq = person.LastName.Equals(listPeople[2]);
         bool emailAddressEq = person.EmailAddress.Equals(listPeople[3]);
@@ -241,26 +194,9 @@ public class SampleDataTests
         bool zipEq = address.Zip.Equals(listPeople[7]);
         bool equality = firstNameEq && lastNameEq && emailAddressEq && streetEq && cityEq && zipEq && stateEq;
         return equality;
-        
-    
     }
 
-    private bool PersonEquals(IPerson person1, IPerson person2)
-    {
-        bool firstNameEquals = person1.FirstName.Equals(person2.FirstName);
-        bool lastNameEquals = person1.LastName.Equals(person2.LastName);
-        bool emailAddressEquals = person1.EmailAddress.Equals(person2.EmailAddress);
-        IAddress address1 = person1.Address;
-        IAddress address2 = person2.Address;
-        bool cityEquals = address1.City.Equals(address2.City);
-        bool stateEquals = address1.State.Equals(address2.State);
-        bool zipEquals = address1.Zip.Equals(address2.Zip);
-        bool streetAddressEquals = address1.StreetAddress.Equals(address2.StreetAddress);
-        bool addressEquals = cityEquals && stateEquals && zipEquals && streetAddressEquals;
-        return firstNameEquals && lastNameEquals && emailAddressEquals && addressEquals;
-    }
-
-    //for number 5
+    // Requirement 5
     [Fact]
     public void FilterByEmailAddress_FirstAndLastName_Match()
     {
@@ -282,7 +218,7 @@ public class SampleDataTests
     }
 
 
-    // req 6
+    // Requirment 6
     [Fact]
     public void GetAggregateListOfStatesGivenPeopleCollection_TestCsv_Success()
     {
