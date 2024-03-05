@@ -196,6 +196,54 @@ public class SampleDataTests
             Assert.True(PersonEquals(expectedPerson, actualPerson));
         };
     }
+    [Fact]
+    public void PeopleProperty_CheckExpected_Orderby()
+    {
+        SampleData sampleData = new("TestingCsv.csv");
+
+        List<List<string>> sampleList = sampleData.CsvRows.Select(row => row.Split(',').ToList()).ToList();
+        List<List<string>> orderList = sampleList.OrderBy(row => row[6]).ThenBy(row => row[5]).ThenBy(row => row[4]).ToList();
+        List<IPerson> sortList = sampleData.People.ToList();
+        
+     
+        for(int j = 0; j < sortList.Count && j < orderList.Count; j++) 
+        {
+            IPerson person = sortList[j];
+            List<string> orderPerson = orderList[j];
+            Assert.True(personComparor(person, orderPerson));
+        }
+        //int i = 0;
+        /*foreach(List<string> s in orderList)
+        {
+
+
+                IPerson person = sortList.ElementAt(i);
+                string orderPerson = s[i];
+
+
+                Assert.True(personComparor(person, orderPerson));
+                i++;
+            
+        }*/
+
+    }
+    private bool personComparor(IPerson person, List<string> listPeople) 
+    {
+        //string[] splitter = listPeople.Split(',');
+      
+        bool firstNameEq = person.FirstName.Equals(listPeople[1]);
+        bool lastNameEq = person.LastName.Equals(listPeople[2]);
+        bool emailAddressEq = person.EmailAddress.Equals(listPeople[3]);
+        IAddress address = person.Address;
+        bool streetEq = address.StreetAddress.Equals(listPeople[4]);
+        bool cityEq = address.City.Equals(listPeople[5]);
+        bool stateEq = address.State.Equals(listPeople[6]);
+        bool zipEq = address.Zip.Equals(listPeople[7]);
+        bool equality = firstNameEq && lastNameEq && emailAddressEq && streetEq && cityEq && zipEq && stateEq;
+        return equality;
+        
+    
+    }
 
     private bool PersonEquals(IPerson person1, IPerson person2)
     {

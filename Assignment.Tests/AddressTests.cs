@@ -12,7 +12,7 @@ public class AddressTests
     public void CheckAddressConstructor_CSVAddress_Is_The_Same()
     {
         var address = new Address("94148 Kings Terrace", "Long Beach", "CA", "59721");
-        SampleData data = new SampleData("TestingCsv.csv");
+        SampleData data = new("TestingCsv.csv");
 
         List<string> dataList = data.CsvRows.ToList();
         string element = dataList[2].Split(',')[4];
