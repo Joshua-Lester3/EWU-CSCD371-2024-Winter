@@ -107,7 +107,7 @@ public class SampleDataTests
         {
             return true;
         }
-        return string.Compare(previousItem, currentItem, StringComparison.CurrentCulture) <= 0;
+        return string.Compare(previousItem, currentItem, StringComparison.Ordinal) <= 0;
     }
 
     [Fact]
