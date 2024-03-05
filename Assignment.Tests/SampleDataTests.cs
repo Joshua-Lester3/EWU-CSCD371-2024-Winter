@@ -101,7 +101,7 @@ public class SampleDataTests
         Assert.True(isOrdered);
     }
 
-    private static bool ComparePreviousItem(string? previousItem, string currentItem)
+    private static bool ComparePreviousItem(string? previousItem, string? currentItem)
     {
         if (previousItem == null)
         {
