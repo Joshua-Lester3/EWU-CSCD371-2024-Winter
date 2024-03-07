@@ -5,15 +5,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Assignment;
-public class SampleData : ISampleData
+public class SampleData(string FilePath = "People.csv") : ISampleData
 {
-    public string FilePath { get; set; }
-    public SampleData(string filePath)
-    {
-        FilePath = filePath;
-    }
-    public SampleData() : this("People.csv") { }
-
     // 1.
     public IEnumerable<string> CsvRows => File.ReadLines(FilePath).Skip(1);
 
