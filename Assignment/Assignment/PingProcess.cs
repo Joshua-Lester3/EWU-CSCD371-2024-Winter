@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,20 +32,31 @@ public class PingProcess
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
             (stringBuilder ??= new StringBuilder()).AppendLine(line);
-        Task<PingResult> process = Task.Run<PingResult>(() =>
+        Task<PingResult> task = Task.Run<PingResult>(() =>
         {
             Process process = RunProcessInternal(StartInfo, updateStdOutput, default, default);
             return new PingResult(process.ExitCode, stringBuilder?.ToString());
         });
-        return process;
+        return task;
     }
 
     async public Task<PingResult> RunAsync(
         string hostNameOrAddress, CancellationToken cancellationToken = default)
     {
-        Task task = null!;
-        await task;
-        throw new NotImplementedException();
+        //Task task = null!;
+        //await task;
+        //throw new NotImplementedException();
+
+        StartInfo.Arguments = hostNameOrAddress;
+        StringBuilder? stringBuilder = null;
+        void updateStdOutput(string? line) =>
+            (stringBuilder ??= new StringBuilder()).AppendLine(line);
+        Task<Process> task = Task.Run<Process>(() =>
+        {
+            return RunProcessInternal(StartInfo, updateStdOutput, default, default);
+        });
+        Process process = await task;
+        return new PingResult(process.ExitCode, stringBuilder?.ToString());
     }
 
     async public Task<PingResult> RunAsync(params string[] hostNameOrAddresses)
