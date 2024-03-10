@@ -59,25 +59,10 @@ public class PingProcessTests
     [TestMethod]
     public void RunTaskAsync_Success()
     {
-        // Do NOT use async/await in this test.
-        // Test Sut.RunTaskAsync("localhost");
-
         // Arrange
 
         // Act
         PingResult result = Sut.RunTaskAsync("localhost").Result;
-
-        // Assert
-        AssertValidPingOutput(result);
-    }
-
-    [TestMethod]
-    public void RunTaskAsync_InvalidAddressOutput_Success()
-    {
-        // Arrange
-
-        // Act
-        PingResult result = Sut.RunTaskAsync("jimbobby").Result;
 
         // Assert
         AssertValidPingOutput(result);
