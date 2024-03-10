@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Assignment.Tests;
@@ -62,11 +64,23 @@ public class PingProcessTests
 
         // Arrange
 
-
         // Act
+        PingResult result = Sut.RunTaskAsync("localhost").Result;
 
         // Assert
+        AssertValidPingOutput(result);
+    }
 
+    [TestMethod]
+    public void RunTaskAsync_InvalidAddressOutput_Success()
+    {
+        // Arrange
+
+        // Act
+        PingResult result = Sut.RunTaskAsync("jimbobby").Result;
+
+        // Assert
+        AssertValidPingOutput(result);
     }
 
     [TestMethod]
