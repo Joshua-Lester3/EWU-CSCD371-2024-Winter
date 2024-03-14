@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -179,6 +181,45 @@ public class PingProcessTests
         numbers.AsParallel().ForAll(item => stringBuilder.AppendLine(""));
         int lineCount = stringBuilder.ToString().Split(Environment.NewLine).Length;
         Assert.AreNotEqual(lineCount, numbers.Count()+1);
+    }
+    //4
+    [TestMethod]
+    async public Task RunAsync_ReturnsCorrectResult()
+    {
+        // Arrange
+        var cancellationToken = CancellationToken.None;
+        var hostNamesOrAddresses = new List<string> { "localhost", "localhost", "localhost", "localhost" };
+        var expectedTotal = hostNamesOrAddresses.Count;
+
+        //Act
+        PingResult result = await Sut.RunAsync(hostNamesOrAddresses, cancellationToken);
+
+        //Assert
+        Assert.AreEqual(expectedTotal, result.StdOutput?.Length);
+
+    }
+
+    //5
+    [TestMethod]
+    public async void RunLongRunningAsync_StratProcess()
+    {
+        //Arrange
+        var cancellationToken = new CancellationTokenSource(); ;
+        var startInfo = new ProcessStartInfo();
+        var pingProcess = new PingProcess();
+        
+
+        var output = new Action<string?>((output) => Console.WriteLine($"Output: {output}"));
+        var error = new Action<string?>((error) => Console.WriteLine($"Error: {error}"));
+
+
+        //Act
+        var resultTask = Sut.RunLongRunningAsync(startInfo, output, error, cancellationToken.Token);
+
+        var result = await resultTask;
+
+        //Assert
+        Assert.Equals(1, result);
     }
 
     readonly string PingOutputLikeExpression = @"
