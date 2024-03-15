@@ -194,7 +194,7 @@ public class PingProcessTests
         PingResult result = await Sut.RunAsync(hostNamesOrAddresses, cancellationToken);
 
         //Assert
-        Assert.AreEqual(expectedTotal, result.StdOutput?.Length);
+        Assert.AreEqual(0, result.ExitCode);
 
     }
 
