@@ -200,25 +200,30 @@ public class PingProcessTests
 
     //5
     [TestMethod]
-    public async void RunLongRunningAsync_StratProcess()
+    public async Task RunLongRunningAsync_PositivePingResult()
     {
         //Arrange
         var cancellationToken = new CancellationTokenSource(); ;
-        var startInfo = new ProcessStartInfo();
-        var pingProcess = new PingProcess();
-        
-
-        var output = new Action<string?>((output) => Console.WriteLine($"Output: {output}"));
-        var error = new Action<string?>((error) => Console.WriteLine($"Error: {error}"));
-
 
         //Act
-        var resultTask = Sut.RunLongRunningAsync(startInfo, output, error, cancellationToken.Token);
+        var resultTask = await Sut.RunLongRunningAsync("localhost", cancellationToken.Token);
 
-        var result = await resultTask;
 
         //Assert
-        Assert.Equals(1, result);
+        Assert.AreEqual(0, resultTask.ExitCode);
+    }
+    [TestMethod]
+    public void RunLongRunningAsync_ShouldCancel()
+    {
+        // Arrange
+        var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.CancelAfter(100); // Cancel after 100 milliseconds
+
+        // Act & Assert
+        _ = Assert.ThrowsExceptionAsync<TaskCanceledException>(async () =>
+        {
+            var pingResult = await Sut.RunLongRunningAsync("localhost", cancellationTokenSource.Token);
+        });
     }
 
     readonly string PingOutputLikeExpression = @"

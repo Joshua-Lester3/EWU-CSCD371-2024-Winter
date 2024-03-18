@@ -97,6 +97,7 @@ public class PingProcess
     {
         StartInfo.Arguments = hostNameOrAddress;
         StringBuilder? stringBuilder = null;
+        //should have left this as updateStdOuput..¯\_(ツ)_/¯
         void taskCreation(string? line) =>
             (stringBuilder ??= new StringBuilder()).AppendLine(line);
         void taskSchedular(string? line) =>
@@ -104,7 +105,7 @@ public class PingProcess
         Task<Process> task = Task.Factory.StartNew(() =>
         {
             
-            return RunProcessInternal(StartInfo,taskCreation ,taskSchedular, token);
+            return RunProcessInternal(StartInfo,taskCreation ,taskSchedular, default);
         }, token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         Process process = await task;
         return new PingResult(process.ExitCode, stringBuilder?.ToString());
