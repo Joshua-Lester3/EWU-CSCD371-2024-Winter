@@ -186,7 +186,7 @@ public class PingProcessTests
     }
     //4
     [TestMethod]
-     public void RunAsync_ReturnsCorrectResult()
+     public async Task RunAsync_ReturnsCorrectResult()
     {
         // Arrange
         CancellationToken cancellationToken = default;
@@ -195,7 +195,7 @@ public class PingProcessTests
         //var expectedTotal = hostNamesOrAddresses.Count;
 
         //Act
-        PingResult result = Sut.RunAsync(hostNamesOrAddresses, cancellationToken);
+        PingResult result = await Sut.RunAsync(hostNamesOrAddresses, cancellationToken);
 
         //Assert
         //Assert.AreEqual(0, result.ExitCode);
@@ -203,36 +203,36 @@ public class PingProcessTests
 
     }
     //4
-    //[TestMethod]
-    //[ExpectedException(typeof(TaskCanceledException))]
-    //public void RunAsync_ParallelQuery_WithCancellation()
-    //{
-    //    // Arrange
-    //    CancellationTokenSource cancellationTokenSource = new();
-    //    cancellationTokenSource.Cancel();
-    //    var hostNamesOrAddresses = new List<string> { "localhost", "localhost", "localhost", "localhost" };
-    //    //var expectedTotal = hostNamesOrAddresses.Count;
+    [TestMethod]
+    [ExpectedException(typeof(TaskCanceledException))]
+    public void RunAsync_ParallelQuery_WithCancellation()
+    {
+        // Arrange
+        CancellationTokenSource cancellationTokenSource = new();
+        cancellationTokenSource.Cancel();
+        var hostNamesOrAddresses = new List<string> { "localhost", "localhost", "localhost", "localhost" };
+        //var expectedTotal = hostNamesOrAddresses.Count;
 
-    //    //Act
-    //    Task<PingResult> result = Sut.RunAsync(hostNamesOrAddresses, cancellationTokenSource.Token);
+        //Act
+        Task<PingResult> result = Sut.RunAsync(hostNamesOrAddresses, cancellationTokenSource.Token);
 
-    //    //Assert
-    //    try
-    //    {
-    //        result.Wait();
-    //    }
-    //    catch (AggregateException aggregateException)
-    //    {
-    //        foreach (Exception ex in aggregateException.InnerExceptions)
-    //        {
-    //            if (ex is TaskCanceledException)
-    //            {
-    //                ExceptionDispatchInfo.Capture(ex).Throw();
-    //            }
-    //        }
-    //    }
+        //Assert
+        try
+        {
+            result.Wait();
+        }
+        catch (AggregateException aggregateException)
+        {
+            foreach (Exception ex in aggregateException.InnerExceptions)
+            {
+                if (ex is TaskCanceledException)
+                {
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+                }
+            }
+        }
 
-    //}
+    }
 
     //5
     /*[TestMethod]

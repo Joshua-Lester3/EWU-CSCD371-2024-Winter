@@ -75,10 +75,10 @@ public class PingProcess
         return new PingResult(total, stringBuilder?.ToString());
     }*/
     //4
-     public PingResult RunAsync(IEnumerable<string> hostNameOrAddresses, CancellationToken cancellationToken = default)
+    public async Task<PingResult> RunAsync(IEnumerable<string> hostNameOrAddresses, CancellationToken cancellationToken = default)
     {
         object sync = new();
-        ParallelQuery<PingResult> results = hostNameOrAddresses.AsParallel().WithCancellation(cancellationToken).Select(item =>
+        ParallelQuery<Task<PingResult>> allResults = hostNameOrAddresses.AsParallel().WithCancellation(cancellationToken).Select(async item =>
         {
             //Task<PingResult> task;
             //lock (sync)
@@ -90,16 +90,20 @@ public class PingProcess
             void updateStdOutput(string? line) =>
                 (stringBuilder ??= new StringBuilder()).AppendLine(line);
             cancellationToken.ThrowIfCancellationRequested();
-            Process process;
-            lock (sync)
+            Task<PingResult> task = Task.Run(() =>
             {
-                StartInfo.Arguments = item;
-                process = RunProcessInternal(StartInfo, updateStdOutput, default, default);
-            }
-            return new PingResult(process.ExitCode, stringBuilder?.ToString());
+                Process process;
+                lock (sync)
+                {
+                    StartInfo.Arguments = item;
+                    process = RunProcessInternal(StartInfo, updateStdOutput, default, default);
+                }
+                return new PingResult(process.ExitCode, stringBuilder?.ToString());
+            });
+            return await task;
         });
 
-        //IEnumerable<PingResult> results = await Task.WhenAll(allResults);
+        IEnumerable<PingResult> results = await Task.WhenAll(allResults);
         int total = results.Aggregate(0, (total, item) => total + item.ExitCode);
         StringBuilder stringBuilder = new StringBuilder();
         foreach (PingResult result in results)
