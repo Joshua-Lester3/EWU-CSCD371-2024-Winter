@@ -186,15 +186,33 @@ public class PingProcessTests
     async public Task RunAsync_ReturnsCorrectResult()
     {
         // Arrange
-        var cancellationToken = CancellationToken.None;
+        CancellationToken cancellationToken = default;
+        
         var hostNamesOrAddresses = new List<string> { "localhost", "localhost", "localhost", "localhost" };
-        var expectedTotal = hostNamesOrAddresses.Count;
+        //var expectedTotal = hostNamesOrAddresses.Count;
 
         //Act
         PingResult result = await Sut.RunAsync(hostNamesOrAddresses, cancellationToken);
 
         //Assert
         Assert.AreEqual(0, result.ExitCode);
+
+    }
+    //4
+    [TestMethod]
+    public void RunAsync_ParallelQuery_WithCancellation()
+    {
+        // Arrange
+        var cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = cancellationTokenSource.Token;
+        var hostNamesOrAddresses = new List<string> { "localhost", "localhost", "localhost", "localhost" };
+        //var expectedTotal = hostNamesOrAddresses.Count;
+
+        //Act
+        Task<PingResult> result = Sut.RunAsync(hostNamesOrAddresses, cancellationToken);
+
+        //Assert
+        result.Wait();
 
     }
 
