@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -76,22 +77,29 @@ public class PingProcess
     //4
     async public Task<PingResult> RunAsync(IEnumerable<string> hostNameOrAddresses, CancellationToken cancellationToken = default)
     {
-        StringBuilder? stringBuilder = null;
+        StringBuilder stringBuilder = new();
+
+        //Object lockObject= new Object();
+        int count = 0;
         ParallelQuery<Task<int>>? all = hostNameOrAddresses.AsParallel().WithCancellation(cancellationToken).Select( async item =>
         {
-            
+
             Task<PingResult> task = Task.Run(() => RunAsync(item));
-            
+
             // ...
-            
-            await task.WaitAsync(default(CancellationToken));
+             lock(stringBuilder)
+            {
+                stringBuilder.AppendLine(task.Result.StdOutput?.Trim());
+                count += task.Result.ExitCode;
+            }
+            await task.WaitAsync(cancellationToken);
             return task.Result.ExitCode;
         }
         ); 
 
         await Task.WhenAll(all);
         int total = all.Aggregate(0, (total, item) => total + item.Result);
-        return new PingResult(total, stringBuilder?.ToString());
+        return new PingResult(count, stringBuilder?.ToString());
     }
     //5
     /*public async Task<PingResult> RunLongRunningAsync(string hostNameOrAddress, CancellationToken token = default)

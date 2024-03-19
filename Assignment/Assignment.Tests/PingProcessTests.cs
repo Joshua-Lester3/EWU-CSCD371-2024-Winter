@@ -158,7 +158,7 @@ public class PingProcessTests
         string[] hostNames = new string[] { "localhost", "localhost", "localhost", "localhost" };
         int expectedLineCount = PingOutputLikeExpression.Split(Environment.NewLine).Length*hostNames.Length;
         PingResult result = await Sut.RunAsync(hostNames);
-        int? lineCount = result.StdOutput?.Split(Environment.NewLine).Length;
+        int lineCount = result.StdOutput!.Split(Environment.NewLine).Length;
         Assert.AreEqual(expectedLineCount, lineCount);
     }
 
@@ -203,19 +203,33 @@ public class PingProcessTests
     }
     //4
     [TestMethod]
+    [ExpectedException(typeof(TaskCanceledException))]
     public void RunAsync_ParallelQuery_WithCancellation()
     {
         // Arrange
-        var cancellationTokenSource = new CancellationTokenSource();
-        var cancellationToken = cancellationTokenSource.Token;
+        CancellationTokenSource cancellationTokenSource = new();
+        cancellationTokenSource.Cancel();
         var hostNamesOrAddresses = new List<string> { "localhost", "localhost", "localhost", "localhost" };
         //var expectedTotal = hostNamesOrAddresses.Count;
 
         //Act
-        Task<PingResult> result = Sut.RunAsync(hostNamesOrAddresses, cancellationToken);
+        Task<PingResult> result = Sut.RunAsync(hostNamesOrAddresses, cancellationTokenSource.Token);
 
         //Assert
-        result.Wait();
+        try
+        {
+            result.Wait();
+        }
+        catch (AggregateException aggregateException)
+        {
+            foreach (Exception ex in aggregateException.InnerExceptions)
+            {
+                if (ex is TaskCanceledException)
+                {
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+                }
+            }
+        }
 
     }
 
