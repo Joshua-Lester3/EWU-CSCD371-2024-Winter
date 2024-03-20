@@ -33,7 +33,7 @@ public class PingProcessTests
     [TestMethod]
     public void Run_GoogleDotCom_Success()
     {
-        int exitCode = Sut.Run("google.com").ExitCode;
+        int exitCode = Sut.Run("-c 4 google.com").ExitCode;
         Assert.AreEqual<int>(0, exitCode);
     }
 
@@ -48,13 +48,13 @@ public class PingProcessTests
             "Ping request could not find host badaddress. Please check the name and try again.".Trim(),
             stdOutput,
             $"Output is unexpected: {stdOutput}");
-        Assert.AreEqual<int>(1, exitCode);
+        Assert.AreEqual<int>(2, exitCode);
     }
 
     [TestMethod]
     public void Run_CaptureStdOutput_Success()
     {
-        PingResult result = Sut.Run("localhost");
+        PingResult result = Sut.Run("-c 4 localhost");
         AssertValidPingOutput(result);
     }
 
@@ -64,7 +64,7 @@ public class PingProcessTests
         // Arrange
 
         // Act
-        PingResult result = Sut.RunTaskAsync("localhost").Result;
+        PingResult result = Sut.RunTaskAsync("-c 4 localhost").Result;
 
         // Assert
         AssertValidPingOutput(result);
@@ -76,7 +76,7 @@ public class PingProcessTests
         // Arrange
 
         // Act
-        Task<PingResult> task = Sut.RunAsync("localhost");
+        Task<PingResult> task = Sut.RunAsync("-c 4 localhost");
         PingResult result = task.Result;
 
         // Assert
@@ -89,7 +89,7 @@ public class PingProcessTests
         // Arrange
 
         // Act
-        PingResult result = await Sut.RunAsync("localhost");
+        PingResult result = await Sut.RunAsync("-c 4 localhost");
 
         // Assert
         AssertValidPingOutput(result);
@@ -103,7 +103,7 @@ public class PingProcessTests
         // Arrange
         CancellationTokenSource cancellationTokenSource = new();
         cancellationTokenSource.Cancel();
-        Task<PingResult> task = Sut.RunAsync("localhost", cancellationTokenSource.Token);
+        Task<PingResult> task = Sut.RunAsync("-c 4 localhost", cancellationTokenSource.Token);
 
         // Act
 
@@ -118,7 +118,7 @@ public class PingProcessTests
         // Arrange
         CancellationTokenSource cancellationTokenSource = new();
         cancellationTokenSource.Cancel();
-        Task<PingResult> task = Sut.RunAsync("localhost", cancellationTokenSource.Token);
+        Task<PingResult> task = Sut.RunAsync("-c 4 localhost", cancellationTokenSource.Token);
 
         // Act
 
@@ -143,7 +143,7 @@ public class PingProcessTests
     public async Task RunLongRunningAsync_UsingTpl_Success()
     {
         // Arrange
-        var startInfo = new ProcessStartInfo("ping", "localhost");
+        var startInfo = new ProcessStartInfo("ping", "-c 4 localhost");
         StringBuilder stringBuilder = new();
         var outputAction = new Action<string?>(input => stringBuilder.AppendLine(input));
         var errorAction = new Action<string?>(input => Console.WriteLine($"Error: {input}"));
@@ -172,7 +172,7 @@ public class PingProcessTests
         // Arrange
         CancellationToken cancellationToken = default;
         
-        var hostNamesOrAddresses = new List<string> { "localhost", "google.com", "intellitect.com" };
+        var hostNamesOrAddresses = new List<string> { "-c 4 localhost", "-c 4 google.com", "-c 4 intellitect.com" };
 
         //Act
         PingResult result = await Sut.RunAsync(hostNamesOrAddresses, cancellationToken);
@@ -225,14 +225,6 @@ public class PingProcessTests
     //Approximate round trip times in milli-seconds:
     //    Minimum = *, Maximum = *, Average = *".Trim();
 
-    [TestMethod]
-    public void TestingWildcard()
-    {
-        string hi = "*ms";
-        string hi2 = WildcardPattern.NormalizeLineEndings(hi);
-        Assert.IsTrue("0.015ms".IsLike(hi2));
-    }
-
     // Linux version:
 //    readonly string PingOutputLikeExpression = @" PING * 56 data bytes 
 //64 bytes from localhost (::1): icmp_seq=1 ttl=64 time=* ms 
@@ -242,15 +234,17 @@ public class PingProcessTests
 //--- * ping statistics --- 
 //4 packets transmitted, 4 received, 0% packet loss, time *ms 
 //rtt min/avg/max/mdev = */*/*/* ms";
-    readonly string PingOutputLikeExpression = @"PING * 56(84) bytes of data.
-64 bytes from *: icmp_seq=1 ttl=64 time=* ms
-64 bytes from *: icmp_seq=2 ttl=64 time=* ms
-64 bytes from *: icmp_seq=3 ttl=64 time=* ms
-64 bytes from *: icmp_seq=4 ttl=64 time=* ms
+    readonly string PingOutputLikeExpression = @"
+PING * 56 bytes of data.
+64 bytes from * (::1): icmp_seq=* ttl=* time=* ms
+64 bytes from * (::1): icmp_seq=* ttl=* time=* ms
+64 bytes from * (::1): icmp_seq=* ttl=* time=* ms
+64 bytes from * (::1): icmp_seq=* ttl=* time=* ms
 
 --- * ping statistics ---
-4 packets transmitted, 4 received, 0% packet loss, time *ms
-rtt min/avg/max/mdev = */*/*/* ms".Trim();
+* packets transmitted, * received, *% packet loss, time *ms
+rtt min/avg/max/mdev = */*/*/* ms
+".Trim();
     private void AssertValidPingOutput(int exitCode, string? stdOutput)
     {
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));

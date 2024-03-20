@@ -15,11 +15,6 @@ public class PingProcess
 {
     private ProcessStartInfo StartInfo { get; } = new("ping");
 
-    public PingProcess()
-    {
-        StartInfo.Arguments = "-c 4 ";
-    }
-
     public PingResult Run(string hostNameOrAddress)
     {
 
