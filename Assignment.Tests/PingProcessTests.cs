@@ -212,17 +212,25 @@ public class PingProcessTests
 
     }
 
-//    readonly string PingOutputLikeExpression = @"
-//Pinging * with 32 bytes of data:
-//Reply from ::1: time<*
-//Reply from ::1: time<*
-//Reply from ::1: time<*
-//Reply from ::1: time<*
+    //    readonly string PingOutputLikeExpression = @"
+    //Pinging * with 32 bytes of data:
+    //Reply from ::1: time<*
+    //Reply from ::1: time<*
+    //Reply from ::1: time<*
+    //Reply from ::1: time<*
 
-//Ping statistics for ::1:
-//    Packets: Sent = *, Received = *, Lost = 0 (0% loss),
-//Approximate round trip times in milli-seconds:
-//    Minimum = *, Maximum = *, Average = *".Trim();
+    //Ping statistics for ::1:
+    //    Packets: Sent = *, Received = *, Lost = 0 (0% loss),
+    //Approximate round trip times in milli-seconds:
+    //    Minimum = *, Maximum = *, Average = *".Trim();
+
+    [TestMethod]
+    public void TestingWildcard()
+    {
+        string hi = "*ms";
+        string hi2 = WildcardPattern.NormalizeLineEndings(hi);
+        Assert.IsTrue("0.015ms".IsLike(hi2));
+    }
 
     readonly string PingOutputLikeExpression = @"PING * 56 data bytes
 64 bytes from localhost (::1): icmp_seq=1 ttl=64 time=* ms
@@ -231,7 +239,7 @@ public class PingProcessTests
 64 bytes from localhost (::1): icmp_seq=4 ttl=64 time=* ms
 --- localhost ping statistics ---
 4 packets transmitted, 4 received, 0% packet loss, time *ms
-rtt min/avg/max/mdev = */*/*/* ms".Trim();
+rtt min/avg/max/mdev = */*/*/* ms";
     private void AssertValidPingOutput(int exitCode, string? stdOutput)
     {
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
