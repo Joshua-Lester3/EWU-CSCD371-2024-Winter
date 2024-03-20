@@ -13,11 +13,11 @@ public record struct PingResult(int ExitCode, string? StdOutput);
 
 public class PingProcess
 {
-    private ProcessStartInfo StartInfo { get; } = new("ping");
+    private ProcessStartInfo StartInfo { get; } = new("/bin/bash");
 
     public PingProcess()
     {
-        StartInfo.Arguments = "-c 4 ";
+        StartInfo.Arguments = "ping -c 4 ";
     }
 
     public PingResult Run(string hostNameOrAddress)
