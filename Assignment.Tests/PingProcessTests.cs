@@ -16,27 +16,35 @@ public class PingProcessTests
 {
     PingProcess Sut { get; set; } = new();
 
+    // PingParameter will never be null because it is set in TestInitialize
+#pragma warning disable CS8618
+    string PingParameter { get; set; }
+    bool IsUnix { get; set; }
+#pragma warning restore CS8618
+
     [TestInitialize]
     public void TestInitialize()
     {
         Sut = new();
+        IsUnix = Environment.OSVersion.Platform is PlatformID.Unix;
+        PingParameter = IsUnix ? "-c" : "-n";
     }
 
     [TestMethod]
     public void Start_PingProcess_Success()
     {
-        Process process = Process.Start("ping", "-c 4 localhost");
+        Process process = Process.Start("ping", $"{PingParameter} 4 localhost");
         process.WaitForExit();
         Assert.AreEqual<int>(0, process.ExitCode);
     }
 
-    //Commented out because GitHub actions vm does not have access to internet
-    //[TestMethod]
-    //public void Run_GoogleDotCom_Success()
-    //{
-    //    int exitCode = Sut.Run("-c 4 google.com").ExitCode;
-    //    Assert.AreEqual<int>(0, exitCode);
-    //}
+    [TestMethod]
+    public void Run_GoogleDotCom_Success()
+    {
+        int expectedExitCode = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") is null ? 0 : 2;
+        int exitCode = Sut.Run($"{PingParameter} 4 google.com").ExitCode;
+        Assert.AreEqual<int>(expectedExitCode, exitCode);
+    }
 
 
     [TestMethod]
@@ -45,17 +53,18 @@ public class PingProcessTests
         (int exitCode, string? stdOutput) = Sut.Run("badaddress");
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
         stdOutput = WildcardPattern.NormalizeLineEndings(stdOutput!.Trim());
-        Assert.AreEqual<string?>(
-            "Ping request could not find host badaddress. Please check the name and try again.".Trim(),
-            stdOutput,
+        string expectedOutput = IsUnix ? "ping: badaddress: Name or service not known" :
+            "Ping request could not find host badaddress. Please check the name and try again.";
+        Assert.AreEqual<string?>(expectedOutput, stdOutput,
             $"Output is unexpected: {stdOutput}");
-        Assert.AreEqual<int>(2, exitCode);
+        int expectedExitCode = IsUnix ? 2 : 1;
+        Assert.AreEqual<int>(expectedExitCode, exitCode);
     }
 
     [TestMethod]
     public void Run_CaptureStdOutput_Success()
     {
-        PingResult result = Sut.Run("-c 4 localhost");
+        PingResult result = Sut.Run($"{PingParameter} 4 localhost");
         AssertValidPingOutput(result);
     }
 
@@ -65,7 +74,7 @@ public class PingProcessTests
         // Arrange
 
         // Act
-        PingResult result = Sut.RunTaskAsync("-c 4 localhost").Result;
+        PingResult result = Sut.RunTaskAsync($"{PingParameter} 4 localhost").Result;
 
         // Assert
         AssertValidPingOutput(result);
@@ -77,7 +86,7 @@ public class PingProcessTests
         // Arrange
 
         // Act
-        Task<PingResult> task = Sut.RunAsync("-c 4 localhost");
+        Task<PingResult> task = Sut.RunAsync($"{PingParameter} 4 localhost");
         PingResult result = task.Result;
 
         // Assert
@@ -90,7 +99,7 @@ public class PingProcessTests
         // Arrange
 
         // Act
-        PingResult result = await Sut.RunAsync("-c 4 localhost");
+        PingResult result = await Sut.RunAsync($"{PingParameter} 4 localhost");
 
         // Assert
         AssertValidPingOutput(result);
@@ -104,7 +113,7 @@ public class PingProcessTests
         // Arrange
         CancellationTokenSource cancellationTokenSource = new();
         cancellationTokenSource.Cancel();
-        Task<PingResult> task = Sut.RunAsync("-c 4 localhost", cancellationTokenSource.Token);
+        Task<PingResult> task = Sut.RunAsync($"{PingParameter} 4 localhost", cancellationTokenSource.Token);
 
         // Act
 
@@ -119,7 +128,7 @@ public class PingProcessTests
         // Arrange
         CancellationTokenSource cancellationTokenSource = new();
         cancellationTokenSource.Cancel();
-        Task<PingResult> task = Sut.RunAsync("-c 4 localhost", cancellationTokenSource.Token);
+        Task<PingResult> task = Sut.RunAsync($"{PingParameter} 4 localhost", cancellationTokenSource.Token);
 
         // Act
 
@@ -144,7 +153,7 @@ public class PingProcessTests
     public async Task RunLongRunningAsync_UsingTpl_Success()
     {
         // Arrange
-        var startInfo = new ProcessStartInfo("ping", "-c 4 localhost");
+        var startInfo = new ProcessStartInfo("ping", $"{PingParameter} 4 localhost");
         StringBuilder stringBuilder = new();
         var outputAction = new Action<string?>(input => stringBuilder.AppendLine(input));
         var errorAction = new Action<string?>(input => Console.WriteLine($"Error: {input}"));
@@ -173,7 +182,7 @@ public class PingProcessTests
         // Arrange
         CancellationToken cancellationToken = default;
         
-        var hostNamesOrAddresses = new List<string> { "-c 4 localhost", "-c 4 localhost", "-c 4 localhost" };
+        var hostNamesOrAddresses = new List<string> { $"{PingParameter} 4 localhost", $"{PingParameter} 4 localhost", $"{PingParameter} 4 localhost" };
 
         //Act
         PingResult result = await Sut.RunAsync(hostNamesOrAddresses, cancellationToken);
@@ -190,7 +199,7 @@ public class PingProcessTests
         // Arrange
         CancellationTokenSource cancellationTokenSource = new();
         cancellationTokenSource.Cancel();
-        var hostNamesOrAddresses = new List<string> { "localhost", "localhost", "localhost", "localhost" };
+        var hostNamesOrAddresses = new List<string> { $"{PingParameter} 4 localhost", $"{PingParameter} 4 localhost", $"{PingParameter} 4 localhost", $"{PingParameter} 4 localhost" };
 
         //Act
         Task<PingResult> result = Sut.RunAsync(hostNamesOrAddresses, cancellationTokenSource.Token);
@@ -214,28 +223,21 @@ public class PingProcessTests
     }
 
     // Windows version:
-    //    readonly string PingOutputLikeExpression = @"
-    //Pinging * with 32 bytes of data:
-    //Reply from ::1: time<*
-    //Reply from ::1: time<*
-    //Reply from ::1: time<*
-    //Reply from ::1: time<*
+    readonly string WindowsPingOutputLikeExpression = @"
+Pinging * with 32 bytes of data:
+Reply from ::1: time<*
+Reply from ::1: time<*
+Reply from ::1: time<*
+Reply from ::1: time<*
 
-    //Ping statistics for ::1:
-    //    Packets: Sent = *, Received = *, Lost = 0 (0% loss),
-    //Approximate round trip times in milli-seconds:
-    //    Minimum = *, Maximum = *, Average = *".Trim();
+Ping statistics for ::1:
+    Packets: Sent = *, Received = *, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = *ms, Maximum = *ms, Average = *ms
+".Trim();
 
-    // Linux version:
-//    readonly string PingOutputLikeExpression = @" PING * 56 data bytes 
-//64 bytes from localhost (::1): icmp_seq=1 ttl=64 time=* ms 
-//64 bytes from localhost (::1): icmp_seq=2 ttl=64 time=* ms 
-//64 bytes from localhost (::1): icmp_seq=3 ttl=64 time=* ms 
-//64 bytes from localhost (::1): icmp_seq=4 ttl=64 time=* ms 
-//--- * ping statistics --- 
-//4 packets transmitted, 4 received, 0% packet loss, time *ms 
-//rtt min/avg/max/mdev = */*/*/* ms";
-    readonly string PingOutputLikeExpression = @"
+    // Unix version:
+    readonly string UnixPingOutputLikeExpression = @"
 PING * * bytes*
 64 bytes from * (*): icmp_seq=* ttl=* time=* ms
 64 bytes from * (*): icmp_seq=* ttl=* time=* ms
@@ -249,7 +251,8 @@ rtt min/avg/max/mdev = */*/*/* ms
     {
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
         stdOutput = WildcardPattern.NormalizeLineEndings(stdOutput!.Trim());
-        Assert.IsTrue(stdOutput?.IsLike(PingOutputLikeExpression)??false,
+        string pingOutputLikeExpression = IsUnix ? UnixPingOutputLikeExpression : WindowsPingOutputLikeExpression;
+        Assert.IsTrue(stdOutput?.IsLike(pingOutputLikeExpression)??false,
             $"Output is unexpected: {stdOutput}");
         Assert.AreEqual<int>(0, exitCode);
     }

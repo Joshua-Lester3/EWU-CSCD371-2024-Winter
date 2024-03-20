@@ -17,8 +17,7 @@ public class PingProcess
 
     public PingResult Run(string hostNameOrAddress)
     {
-
-        StartInfo.Arguments += hostNameOrAddress;
+        StartInfo.Arguments = hostNameOrAddress;
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
             (stringBuilder ??= new StringBuilder()).AppendLine(line);
@@ -28,26 +27,17 @@ public class PingProcess
 
     public Task<PingResult> RunTaskAsync(string hostNameOrAddress)
     {
-        StartInfo.Arguments += hostNameOrAddress;
-        StringBuilder? stringBuilder = null;
-        void updateStdOutput(string? line) =>
-            (stringBuilder ??= new StringBuilder()).AppendLine(line);
-        Task<PingResult> task = Task.Run<PingResult>(() =>
-        {
-            Process process = RunProcessInternal(StartInfo, updateStdOutput, default, default);
-            return new PingResult(process.ExitCode, stringBuilder?.ToString());
-        });
+        Task<PingResult> task = Task.Run<PingResult>(() => Run(hostNameOrAddress));
         return task;
     }
 
     async public Task<PingResult> RunAsync(
         string hostNameOrAddress, CancellationToken cancellationToken = default)
     {
-        StartInfo.Arguments += hostNameOrAddress;
+        StartInfo.Arguments = hostNameOrAddress;
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
             (stringBuilder ??= new StringBuilder()).AppendLine(line);
-        cancellationToken.ThrowIfCancellationRequested();
         Task<Process> task = Task.Run(() =>
         {
             return RunProcessInternal(StartInfo, updateStdOutput, default, default);
@@ -65,17 +55,16 @@ public class PingProcess
             StringBuilder? stringBuilder = null;
             void updateStdOutput(string? line) =>
                 (stringBuilder ??= new StringBuilder()).AppendLine(line);
-            cancellationToken.ThrowIfCancellationRequested();
             Task<PingResult> task = Task.Run(() =>
             {
                 Process process;
                 lock (sync)
                 {
-                    StartInfo.Arguments += item;
+                    StartInfo.Arguments = item;
                     process = RunProcessInternal(StartInfo, updateStdOutput, default, default);
                 }
                 return new PingResult(process.ExitCode, stringBuilder?.ToString());
-            });
+            }, cancellationToken);
             return await task;
         });
 
