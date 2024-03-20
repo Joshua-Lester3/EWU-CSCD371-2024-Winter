@@ -25,7 +25,7 @@ public class PingProcessTests
     [TestMethod]
     public void Start_PingProcess_Success()
     {
-        Process process = Process.Start("/bin/bash", "ping -c 4 localhost");
+        Process process = Process.Start("ping", "localhost -c 4");
         process.WaitForExit();
         Assert.AreEqual<int>(0, process.ExitCode);
     }

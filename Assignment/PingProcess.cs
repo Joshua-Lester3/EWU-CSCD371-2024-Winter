@@ -13,17 +13,17 @@ public record struct PingResult(int ExitCode, string? StdOutput);
 
 public class PingProcess
 {
-    private ProcessStartInfo StartInfo { get; } = new("/bin/bash");
+    private ProcessStartInfo StartInfo { get; } = new("ping");
 
     public PingProcess()
     {
-        StartInfo.Arguments = "ping -c 4 ";
+        StartInfo.Arguments = " -c 4";
     }
 
     public PingResult Run(string hostNameOrAddress)
     {
 
-        StartInfo.Arguments += hostNameOrAddress;
+        StartInfo.Arguments = hostNameOrAddress + StartInfo.Arguments;
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
             (stringBuilder ??= new StringBuilder()).AppendLine(line);
@@ -33,7 +33,7 @@ public class PingProcess
 
     public Task<PingResult> RunTaskAsync(string hostNameOrAddress)
     {
-        StartInfo.Arguments += hostNameOrAddress;
+        StartInfo.Arguments = hostNameOrAddress + StartInfo.Arguments;
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
             (stringBuilder ??= new StringBuilder()).AppendLine(line);
@@ -48,7 +48,7 @@ public class PingProcess
     async public Task<PingResult> RunAsync(
         string hostNameOrAddress, CancellationToken cancellationToken = default)
     {
-        StartInfo.Arguments += hostNameOrAddress;
+        StartInfo.Arguments = hostNameOrAddress + StartInfo.Arguments;
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
             (stringBuilder ??= new StringBuilder()).AppendLine(line);
@@ -76,7 +76,7 @@ public class PingProcess
                 Process process;
                 lock (sync)
                 {
-                    StartInfo.Arguments += item;
+                    StartInfo.Arguments = item + StartInfo.Arguments;
                     process = RunProcessInternal(StartInfo, updateStdOutput, default, default);
                 }
                 return new PingResult(process.ExitCode, stringBuilder?.ToString());
