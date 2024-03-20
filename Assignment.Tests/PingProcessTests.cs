@@ -234,14 +234,23 @@ public class PingProcessTests
     }
 
     // Linux version:
-    readonly string PingOutputLikeExpression = @" PING * 56 data bytes 
-64 bytes from localhost (::1): icmp_seq=1 ttl=64 time=* ms 
-64 bytes from localhost (::1): icmp_seq=2 ttl=64 time=* ms 
-64 bytes from localhost (::1): icmp_seq=3 ttl=64 time=* ms 
-64 bytes from localhost (::1): icmp_seq=4 ttl=64 time=* ms 
---- * ping statistics --- 
-4 packets transmitted, 4 received, 0% packet loss, time *ms 
-rtt min/avg/max/mdev = */*/*/* ms";
+//    readonly string PingOutputLikeExpression = @" PING * 56 data bytes 
+//64 bytes from localhost (::1): icmp_seq=1 ttl=64 time=* ms 
+//64 bytes from localhost (::1): icmp_seq=2 ttl=64 time=* ms 
+//64 bytes from localhost (::1): icmp_seq=3 ttl=64 time=* ms 
+//64 bytes from localhost (::1): icmp_seq=4 ttl=64 time=* ms 
+//--- * ping statistics --- 
+//4 packets transmitted, 4 received, 0% packet loss, time *ms 
+//rtt min/avg/max/mdev = */*/*/* ms";
+    readonly string PingOutputLikeExpression = @"PING * 56(84) bytes of data.
+64 bytes from *: icmp_seq=1 ttl=64 time=* ms
+64 bytes from *: icmp_seq=2 ttl=64 time=* ms
+64 bytes from *: icmp_seq=3 ttl=64 time=* ms
+64 bytes from *: icmp_seq=4 ttl=64 time=* ms
+
+--- * ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time *ms
+rtt min/avg/max/mdev = */*/*/* ms".Trim();
     private void AssertValidPingOutput(int exitCode, string? stdOutput)
     {
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
