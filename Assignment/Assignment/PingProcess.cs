@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,35 +54,13 @@ public class PingProcess
         Process process = await task;
         return new PingResult(process.ExitCode, stringBuilder?.ToString());
     }
-    //4
-    /*async public Task<PingResult> RunAsync(params string[] hostNameOrAddresses)
-    {
-        StringBuilder? stringBuilder = null;
-        ParallelQuery<Task<int>>? all = hostNameOrAddresses.AsParallel().Select(async item =>
-        {
-            Task<PingResult> task = null!;
-            // ...
 
-            await task.WaitAsync(default(CancellationToken));
-            return task.Result.ExitCode;
-        });
-
-        await Task.WhenAll(all);
-        int total = all.Aggregate(0, (total, item) => total + item.Result);
-        return new PingResult(total, stringBuilder?.ToString());
-    }*/
     //4
     public async Task<PingResult> RunAsync(IEnumerable<string> hostNameOrAddresses, CancellationToken cancellationToken = default)
     {
         object sync = new();
         ParallelQuery<Task<PingResult>> allResults = hostNameOrAddresses.AsParallel().WithCancellation(cancellationToken).Select(async item =>
         {
-            //Task<PingResult> task;
-            //lock (sync)
-            //{
-            //    task = RunAsync(item);
-            //}
-            //return await task;
             StringBuilder? stringBuilder = null;
             void updateStdOutput(string? line) =>
                 (stringBuilder ??= new StringBuilder()).AppendLine(line);
@@ -113,24 +88,6 @@ public class PingProcess
         return new PingResult(total, stringBuilder.ToString());
     }
     //5
-    /*public async Task<PingResult> RunLongRunningAsync(string hostNameOrAddress, CancellationToken token = default)
-    {
-        StartInfo.Arguments = hostNameOrAddress;
-        StringBuilder? stringBuilder = null;
-        //should have left this as updateStdOuput..¯\_(ツ)_/¯
-        void taskCreation(string? line) =>
-            (stringBuilder ??= new StringBuilder()).AppendLine(line);
-        void taskSchedular(string? line) =>
-            (stringBuilder ??= new StringBuilder()).AppendLine(line);
-        Task<Process> task = Task.Factory.StartNew(() =>
-        {
-            
-            return RunProcessInternal(StartInfo,taskCreation ,taskSchedular, default);
-        }, token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
-        Process process = await task;
-        return new PingResult(process.ExitCode, stringBuilder?.ToString());
-    }*/
-    //5 from the steps
     public async Task<int> RunLongRunningAsync(ProcessStartInfo startInfo, Action<string?>? progressOutput,
        Action<string?>? progressError, CancellationToken token)
     {
