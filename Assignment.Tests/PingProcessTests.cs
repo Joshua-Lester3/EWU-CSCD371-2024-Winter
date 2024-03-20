@@ -212,6 +212,7 @@ public class PingProcessTests
 
     }
 
+    // Windows version:
     //    readonly string PingOutputLikeExpression = @"
     //Pinging * with 32 bytes of data:
     //Reply from ::1: time<*
@@ -232,13 +233,14 @@ public class PingProcessTests
         Assert.IsTrue("0.015ms".IsLike(hi2));
     }
 
-    readonly string PingOutputLikeExpression = @"PING * 56 data bytes
-64 bytes from localhost (::1): icmp_seq=1 ttl=64 time=* ms
-64 bytes from localhost (::1): icmp_seq=2 ttl=64 time=* ms
-64 bytes from localhost (::1): icmp_seq=3 ttl=64 time=* ms
-64 bytes from localhost (::1): icmp_seq=4 ttl=64 time=* ms
---- * ping statistics ---
-4 packets transmitted, 4 received, 0% packet loss, time *ms
+    // Linux version:
+    readonly string PingOutputLikeExpression = @"PING * 56 data bytes 
+64 bytes from localhost (::1): icmp_seq=1 ttl=64 time=* ms 
+64 bytes from localhost (::1): icmp_seq=2 ttl=64 time=* ms 
+64 bytes from localhost (::1): icmp_seq=3 ttl=64 time=* ms 
+64 bytes from localhost (::1): icmp_seq=4 ttl=64 time=* ms 
+--- * ping statistics --- 
+4 packets transmitted, 4 received, 0% packet loss, time *ms 
 rtt min/avg/max/mdev = */*/*/* ms";
     private void AssertValidPingOutput(int exitCode, string? stdOutput)
     {
