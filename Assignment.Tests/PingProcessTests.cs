@@ -234,7 +234,7 @@ public class PingProcessTests
     }
 
     // Linux version:
-    readonly string PingOutputLikeExpression = @"PING * 56 data bytes 
+    readonly string PingOutputLikeExpression = @" PING * 56 data bytes 
 64 bytes from localhost (::1): icmp_seq=1 ttl=64 time=* ms 
 64 bytes from localhost (::1): icmp_seq=2 ttl=64 time=* ms 
 64 bytes from localhost (::1): icmp_seq=3 ttl=64 time=* ms 
