@@ -218,7 +218,6 @@ Reply from ::1: time<*
 Reply from ::1: time<*
 Reply from ::1: time<*
 Reply from ::1: time<*
-
 Ping statistics for ::1:
     Packets: Sent = *, Received = *, Lost = 0 (0% loss),
 Approximate round trip times in milli-seconds:
