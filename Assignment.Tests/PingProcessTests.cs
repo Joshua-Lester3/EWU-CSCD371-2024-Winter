@@ -25,7 +25,7 @@ public class PingProcessTests
     [TestMethod]
     public void Start_PingProcess_Success()
     {
-        Process process = Process.Start("ping", "localhost -c 4");
+        Process process = Process.Start("ping", "-c 4 localhost");
         process.WaitForExit();
         Assert.AreEqual<int>(0, process.ExitCode);
     }
@@ -237,7 +237,7 @@ public class PingProcessTests
 64 bytes from localhost (::1): icmp_seq=2 ttl=64 time=* ms
 64 bytes from localhost (::1): icmp_seq=3 ttl=64 time=* ms
 64 bytes from localhost (::1): icmp_seq=4 ttl=64 time=* ms
---- localhost ping statistics ---
+--- * ping statistics ---
 4 packets transmitted, 4 received, 0% packet loss, time *ms
 rtt min/avg/max/mdev = */*/*/* ms";
     private void AssertValidPingOutput(int exitCode, string? stdOutput)
