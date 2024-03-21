@@ -54,9 +54,8 @@ public class PingProcessTests
         string? output = IsUnix ? stdError : stdOutput;
         Assert.IsFalse(string.IsNullOrWhiteSpace(output));
         stdOutput = WildcardPattern.NormalizeLineEndings(output!.Trim());
-        string expectedOutput = IsUnix ? @"ping: badaddress: Temporary failure in name resolution
-" : @"Ping request could not find host badaddress. Please check the name and try again.
-";
+        string expectedOutput = IsUnix ? @"ping: badaddress: Temporary failure in name resolution" : @"Ping request could not find host badaddress. Please check the name and try again.";
+        expectedOutput = WildcardPattern.NormalizeLineEndings(expectedOutput);
         Assert.AreEqual<string?>(expectedOutput, output,
             $"Output is unexpected: {output}");
         int expectedExitCode = IsUnix ? 2 : 1;
