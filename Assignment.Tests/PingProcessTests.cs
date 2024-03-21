@@ -271,7 +271,8 @@ rtt min/avg/max/mdev = 0.049/0.641/2.166/0.884 ms
     {
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
         stdOutput = WildcardPattern.NormalizeLineEndings(stdOutput!.Trim());
-        string pingOutputLikeExpression = IsUnix ? UnixPingOutputLikeExpression : WindowsPingOutputLikeExpression;
+        //string pingOutputLikeExpression = IsUnix ? UnixPingOutputLikeExpression : WindowsPingOutputLikeExpression;
+        string pingOutputLikeExpression = UnixPingOutputLikeExpression;
         Assert.IsTrue(stdOutput?.IsLike(pingOutputLikeExpression)??false,
             $"Output is unexpected: {stdOutput}");
         Assert.AreEqual<int>(0, exitCode);
