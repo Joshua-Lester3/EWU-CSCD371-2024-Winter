@@ -26,6 +26,7 @@ public class PingProcessTests
     public void TestInitialize()
     {
         Sut = new();
+        // Change arguments based on OS
         IsUnix = Environment.OSVersion.Platform is PlatformID.Unix;
         PingParameter = IsUnix ? "-c" : "-n";
     }
@@ -41,6 +42,7 @@ public class PingProcessTests
     [TestMethod]
     public void Run_GoogleDotCom_Success()
     {
+        // If running on GitHub Actions, since it has no access to internet, the exit code will be 1
         int expectedExitCode = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") is null ? 0 : 1;
         int exitCode = Sut.Run($"{PingParameter} 4 google.com").ExitCode;
         Assert.AreEqual<int>(expectedExitCode, exitCode);
@@ -251,23 +253,6 @@ PING * * bytes*
 rtt min/avg/max/mdev = */*/*/* ms
 ".Trim();
 
-    string test = @"
-PING localhost (127.0.0.1) 56(84) bytes of data.
-64 bytes from localhost (127.0.0.1): icmp_seq=1 ttl=64 time=2.17 ms
-64 bytes from localhost (127.0.0.1): icmp_seq=2 ttl=64 time=0.262 ms
-64 bytes from localhost (127.0.0.1): icmp_seq=3 ttl=64 time=0.087 ms
-64 bytes from localhost (127.0.0.1): icmp_seq=4 ttl=64 time=0.049 ms
-
---- localhost ping statistics ---
-4 packets transmitted, 4 received, 0% packet loss, time 3088ms
-rtt min/avg/max/mdev = 0.049/0.641/2.166/0.884 ms
-".Trim();
-
-    [TestMethod]
-    public void Test()
-    {
-        AssertValidPingOutput(0, test);
-    }
     private void AssertValidPingOutput(int exitCode, string? stdOutput)
     {
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
