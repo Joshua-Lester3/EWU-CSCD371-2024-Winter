@@ -6,6 +6,8 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 namespace Assignment.Tests;
 
@@ -161,7 +163,7 @@ public class PingProcessTests
         int exitCode = await Sut.RunLongRunningAsync(startInfo,outputAction, errorAction, default);
 
         // Assert
-        AssertValidPingOutput(exitCode, stringBuilderOutput.ToString(), stringBuilderError.ToString());
+        AssertValidPingOutput(exitCode, stringBuilderOutput.ToString());
     }
 
     // Not sure why this method is here so I'm commenting it out for the time being
@@ -247,16 +249,34 @@ PING * * bytes*
 * packets transmitted, * received, *% packet loss, time *ms
 rtt min/avg/max/mdev = */*/*/* ms
 ".Trim();
-    private void AssertValidPingOutput(int exitCode, string? stdOutput, string? stdError)
+
+    string test = @"
+PING localhost (127.0.0.1) 56(84) bytes of data.
+64 bytes from localhost (127.0.0.1): icmp_seq=1 ttl=64 time=2.17 ms
+64 bytes from localhost (127.0.0.1): icmp_seq=2 ttl=64 time=0.262 ms
+64 bytes from localhost (127.0.0.1): icmp_seq=3 ttl=64 time=0.087 ms
+64 bytes from localhost (127.0.0.1): icmp_seq=4 ttl=64 time=0.049 ms
+
+--- localhost ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3088ms
+rtt min/avg/max/mdev = 0.049/0.641/2.166/0.884 ms
+".Trim();
+
+    [TestMethod]
+    public void Test()
+    {
+        AssertValidPingOutput(0, test);
+    }
+    private void AssertValidPingOutput(int exitCode, string? stdOutput)
     {
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
         stdOutput = WildcardPattern.NormalizeLineEndings(stdOutput!.Trim());
-        string pingOutputLikeExpression = IsUnix ? UnixPingOutputLikeExpression : WindowsPingOutputLikeExpression;
-        string? output = IsUnix ? stdError : stdOutput;
-        Assert.IsTrue(output?.IsLike(pingOutputLikeExpression)??false,
-            $"Output is unexpected: {output}");
+        //string pingOutputLikeExpression = IsUnix ? UnixPingOutputLikeExpression : WindowsPingOutputLikeExpression;
+        string pingOutputLikeExpression = UnixPingOutputLikeExpression;
+        Assert.IsTrue(stdOutput?.IsLike(pingOutputLikeExpression)??false,
+            $"Output is unexpected: {stdOutput}");
         Assert.AreEqual<int>(0, exitCode);
     }
     private void AssertValidPingOutput(PingResult result) =>
-        AssertValidPingOutput(result.ExitCode, result.StdOutput, result.StdError);
+        AssertValidPingOutput(result.ExitCode, result.StdOutput);
 }
