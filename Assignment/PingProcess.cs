@@ -18,10 +18,13 @@ public class PingProcess
     public PingResult Run(string hostNameOrAddress)
     {
         StartInfo.Arguments = hostNameOrAddress;
-        StringBuilder? stringBuilder = null;
+        StringBuilder? stringBuilderOutput = null;
+        StringBuilder? stringBuilderError = null;
         void updateStdOutput(string? line) =>
-            (stringBuilder ??= new StringBuilder()).AppendLine(line);
-        Process process = RunProcessInternal(StartInfo, updateStdOutput, default, default);
+            (stringBuilderOutput ??= new StringBuilder()).AppendLine(line);
+        void updateStdError(string? line) =>
+            (stringBuilderError ??= new StringBuilder()).AppendLine(line);
+        Process process = RunProcessInternal(StartInfo, updateStdOutput, updateStdError, default);
         return new PingResult(process.ExitCode, stringBuilder?.ToString());
     }
 
@@ -44,16 +47,19 @@ public class PingProcess
         object sync = new();
         ParallelQuery<Task<PingResult>> allResults = hostNameOrAddresses.AsParallel().WithCancellation(cancellationToken).Select(async item =>
         {
-            StringBuilder? stringBuilder = null;
+            StringBuilder? stringBuilderOutput = null;
+            StringBuilder? stringBuilderError = null;
             void updateStdOutput(string? line) =>
-                (stringBuilder ??= new StringBuilder()).AppendLine(line);
+                (stringBuilderOutput ??= new StringBuilder()).AppendLine(line);
+            void updateStdError(string? line) =>
+                (stringBuilderError ??= new StringBuilder()).AppendLine(line);
             Task<PingResult> task = Task.Run(() =>
             {
                 Process process;
                 lock (sync)
                 {
                     StartInfo.Arguments = item;
-                    process = RunProcessInternal(StartInfo, updateStdOutput, default, default);
+                    process = RunProcessInternal(StartInfo, updateStdOutput, updateStdError, default);
                 }
                 return new PingResult(process.ExitCode, stringBuilder?.ToString());
             }, cancellationToken);

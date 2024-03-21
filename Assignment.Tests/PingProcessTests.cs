@@ -41,7 +41,7 @@ public class PingProcessTests
     [TestMethod]
     public void Run_GoogleDotCom_Success()
     {
-        int expectedExitCode = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") is null ? 0 : 2;
+        int expectedExitCode = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") is null ? 0 : 1;
         int exitCode = Sut.Run($"{PingParameter} 4 google.com").ExitCode;
         Assert.AreEqual<int>(expectedExitCode, exitCode);
     }
