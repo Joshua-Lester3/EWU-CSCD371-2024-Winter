@@ -53,7 +53,7 @@ public class PingProcessTests
         (int exitCode, string? stdOutput, string? stdError) = Sut.Run("badaddress");
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
         stdOutput = WildcardPattern.NormalizeLineEndings(stdOutput!.Trim());
-        string expectedOutput = IsUnix ? "ping: badaddress: Name or service not known" :
+        string expectedOutput = IsUnix ? "ping: badaddress: Temporary failure in name resolution" :
             "Ping request could not find host badaddress. Please check the name and try again.";
         Assert.AreEqual<string?>(expectedOutput, (IsUnix ? stdError : stdOutput),
             $"Output is unexpected: {stdOutput}");
