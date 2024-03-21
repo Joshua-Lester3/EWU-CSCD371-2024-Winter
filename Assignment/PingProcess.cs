@@ -45,10 +45,10 @@ public class PingProcess
     public async Task<PingResult> RunAsync(IEnumerable<string> hostNameOrAddresses, CancellationToken cancellationToken = default)
     {
         object sync = new();
-        StringBuilder? stringBuilderOutput = null;
-        StringBuilder? stringBuilderError = null;
         ParallelQuery<Task<PingResult>> allResults = hostNameOrAddresses.AsParallel().WithCancellation(cancellationToken).Select(async item =>
         {
+            StringBuilder? stringBuilderOutput = null;
+            StringBuilder? stringBuilderError = null;
             void updateStdOutput(string? line) =>
                 (stringBuilderOutput ??= new StringBuilder()).AppendLine(line);
             void updateStdError(string? line) =>
@@ -68,12 +68,14 @@ public class PingProcess
 
         IEnumerable<PingResult> results = await Task.WhenAll(allResults);
         int total = results.Aggregate(0, (total, item) => total + item.ExitCode);
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilderOutput = new StringBuilder();
+        StringBuilder stringBuilderError = new StringBuilder();
         foreach (PingResult result in results)
         {
-            stringBuilder.Append(result.StdOutput);
+            stringBuilderOutput.Append(result.StdOutput);
+            stringBuilderError.Append(result.StdError);
         }
-        return new PingResult(total, stringBuilderOutput?.ToString(), stringBuilderError?.ToString());
+        return new PingResult(total, stringBuilderOutput.ToString(), stringBuilderError.ToString());
     }
     //5
     public async Task<int> RunLongRunningAsync(ProcessStartInfo startInfo, Action<string?>? progressOutput,
