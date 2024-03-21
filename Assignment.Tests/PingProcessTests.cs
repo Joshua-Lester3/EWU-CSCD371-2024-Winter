@@ -2,8 +2,6 @@ using IntelliTect.TestTools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Text;
@@ -254,7 +252,7 @@ rtt min/avg/max/mdev = */*/*/* ms
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
         stdOutput = WildcardPattern.NormalizeLineEndings(stdOutput!.Trim());
         string pingOutputLikeExpression = IsUnix ? UnixPingOutputLikeExpression : WindowsPingOutputLikeExpression;
-        string? output = IsUnix ? stdOutput : stdError;
+        string? output = IsUnix ? stdError : stdOutput;
         Assert.IsTrue(output?.IsLike(pingOutputLikeExpression)??false,
             $"Output is unexpected: {output}");
         Assert.AreEqual<int>(0, exitCode);
