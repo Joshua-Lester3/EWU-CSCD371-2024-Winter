@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Assignment;
 
-public record struct PingResult(int ExitCode, string? StdOutput);
+public record struct PingResult(int ExitCode, string? StdOutput, string? StdError);
 
 public class PingProcess
 {
@@ -25,7 +25,7 @@ public class PingProcess
         void updateStdError(string? line) =>
             (stringBuilderError ??= new StringBuilder()).AppendLine(line);
         Process process = RunProcessInternal(StartInfo, updateStdOutput, updateStdError, default);
-        return new PingResult(process.ExitCode, stringBuilder?.ToString());
+        return new PingResult(process.ExitCode, stringBuilderOutput?.ToString(), stringBuilderError?.ToString());
     }
 
     public Task<PingResult> RunTaskAsync(string hostNameOrAddress)
@@ -45,10 +45,10 @@ public class PingProcess
     public async Task<PingResult> RunAsync(IEnumerable<string> hostNameOrAddresses, CancellationToken cancellationToken = default)
     {
         object sync = new();
+        StringBuilder? stringBuilderOutput = null;
+        StringBuilder? stringBuilderError = null;
         ParallelQuery<Task<PingResult>> allResults = hostNameOrAddresses.AsParallel().WithCancellation(cancellationToken).Select(async item =>
         {
-            StringBuilder? stringBuilderOutput = null;
-            StringBuilder? stringBuilderError = null;
             void updateStdOutput(string? line) =>
                 (stringBuilderOutput ??= new StringBuilder()).AppendLine(line);
             void updateStdError(string? line) =>
@@ -61,7 +61,7 @@ public class PingProcess
                     StartInfo.Arguments = item;
                     process = RunProcessInternal(StartInfo, updateStdOutput, updateStdError, default);
                 }
-                return new PingResult(process.ExitCode, stringBuilder?.ToString());
+                return new PingResult(process.ExitCode, stringBuilderOutput?.ToString(), stringBuilderError?.ToString());
             }, cancellationToken);
             return await task;
         });
@@ -73,7 +73,7 @@ public class PingProcess
         {
             stringBuilder.Append(result.StdOutput);
         }
-        return new PingResult(total, stringBuilder.ToString());
+        return new PingResult(total, stringBuilderOutput?.ToString(), stringBuilderError?.ToString());
     }
     //5
     public async Task<int> RunLongRunningAsync(ProcessStartInfo startInfo, Action<string?>? progressOutput,
