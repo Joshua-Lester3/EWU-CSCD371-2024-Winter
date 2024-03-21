@@ -154,15 +154,16 @@ public class PingProcessTests
     {
         // Arrange
         var startInfo = new ProcessStartInfo("ping", $"{PingParameter} 4 localhost");
-        StringBuilder stringBuilder = new();
-        var outputAction = new Action<string?>(input => stringBuilder.AppendLine(input));
-        var errorAction = new Action<string?>(input => Console.WriteLine($"Error: {input}"));
+        StringBuilder stringBuilderOutput = new();
+        StringBuilder stringBuilderError = new();
+        var outputAction = new Action<string?>(input => stringBuilderOutput.AppendLine(input));
+        var errorAction = new Action<string?>(input => stringBuilderError.AppendLine(input));
         
         // Act
         int exitCode = await Sut.RunLongRunningAsync(startInfo,outputAction, errorAction, default);
 
         // Assert
-        AssertValidPingOutput(exitCode, stringBuilder.ToString());
+        AssertValidPingOutput(exitCode, stringBuilderOutput.ToString(), stringBuilderError.ToString());
     }
 
     // Not sure why this method is here so I'm commenting it out for the time being
@@ -248,15 +249,16 @@ PING * * bytes*
 * packets transmitted, * received, *% packet loss, time *ms
 rtt min/avg/max/mdev = */*/*/* ms
 ".Trim();
-    private void AssertValidPingOutput(int exitCode, string? stdOutput)
+    private void AssertValidPingOutput(int exitCode, string? stdOutput, string? stdError)
     {
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
         stdOutput = WildcardPattern.NormalizeLineEndings(stdOutput!.Trim());
         string pingOutputLikeExpression = IsUnix ? UnixPingOutputLikeExpression : WindowsPingOutputLikeExpression;
-        Assert.IsTrue(stdOutput?.IsLike(pingOutputLikeExpression)??false,
-            $"Output is unexpected: {stdOutput}");
+        string? output = IsUnix ? stdOutput : stdError;
+        Assert.IsTrue(output?.IsLike(pingOutputLikeExpression)??false,
+            $"Output is unexpected: {output}");
         Assert.AreEqual<int>(0, exitCode);
     }
     private void AssertValidPingOutput(PingResult result) =>
-        AssertValidPingOutput(result.ExitCode, result.StdOutput);
+        AssertValidPingOutput(result.ExitCode, result.StdOutput, result.StdError);
 }
