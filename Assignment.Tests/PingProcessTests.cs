@@ -225,6 +225,33 @@ public class PingProcessTests
         }
 
     }
+    //Extra Credit
+    [TestMethod]
+    public async Task RunAsyncProgress_Progress_ValidOutput()
+    {
+        //Arrange
+        var progress = new Progress<string>();
+
+        //Act
+        PingResult result = await Sut.RunAsyncProgress($"{PingParameter} 4 localhost", progress);
+
+        //Assert
+        AssertValidPingOutput(result);
+    }
+    [TestMethod]
+    public async Task RunAsyncProgress_Success()
+    {
+        //Arrange
+        var progress = new Progress<string>();
+        string message = "";
+        progress.ProgressChanged += (sender, e) => message += e; //message.Append(e)
+
+        //Act
+        PingResult result = await Sut.RunAsyncProgress($"{PingParameter} 4 localhost", progress);
+
+        //Assert
+        AssertValidPingOutput(result);
+    }
 
     // Windows version:
     readonly string WindowsPingOutputLikeExpression = @"

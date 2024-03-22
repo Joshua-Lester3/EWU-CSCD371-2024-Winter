@@ -86,7 +86,32 @@ public class PingProcess
             token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
 
     }
+    //Extra Credit
+    public PingResult RunProgress(string hostNameOrAddress, IProgress<string> progress)
+    {
+        StartInfo.Arguments = hostNameOrAddress;
+        StringBuilder? stringBuilderOutput = null;
+        StringBuilder? stringBuilderError = null;
+        void updateStdOutput(string? line)
+        {
+            (stringBuilderOutput ??= new StringBuilder()).AppendLine(line);
+            if (line != null)
+            {
+                progress.Report(line);
+            }
+        }
+        void updateStdError(string? line) =>
+            (stringBuilderError ??= new StringBuilder()).AppendLine(line);
+        Process process = RunProcessInternal(StartInfo, updateStdOutput, updateStdError, default);
+        return new PingResult(process.ExitCode, stringBuilderOutput?.ToString(), stringBuilderError?.ToString());
+    }
+    public async Task<PingResult> RunAsyncProgress(string hostNameOrAddress, IProgress<string> progress, CancellationToken cancellationToken = default)
+    {
 
+        cancellationToken.ThrowIfCancellationRequested();
+        Task<PingResult> task = Task.Run(() => RunProgress(hostNameOrAddress, progress), cancellationToken);
+        return await task;
+    }
     private Process RunProcessInternal(
         ProcessStartInfo startInfo,
         Action<string?>? progressOutput,
