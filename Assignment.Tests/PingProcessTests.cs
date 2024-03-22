@@ -227,6 +227,18 @@ public class PingProcessTests
     }
     //Extra Credit
     [TestMethod]
+    public void RunAsyncProgress_UsingTaskReturn_Success()
+    {
+        // Arrange
+        Progress<string> progress = new Progress<string>();
+        // Act
+        Task<PingResult> task = Sut.RunAsyncProgress($"{PingParameter} 4 localhost",progress);
+        PingResult result = task.Result;
+
+        // Assert
+        AssertValidPingOutput(result);
+    }
+        [TestMethod]
     public async Task RunAsyncProgress_Progress_ValidOutput()
     {
         //Arrange
@@ -251,6 +263,7 @@ public class PingProcessTests
 
         //Assert
         AssertValidPingOutput(result);
+        //to tired and too afraid to change the readonly string OutputExpressions to fit a string comaprison(sorry Josh)
     }
 
     // Windows version:
